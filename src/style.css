@@ -197,12 +197,15 @@ button {
 .answer-input {
   width: 100%;
   height: 300px;
+  min-height: 300px;
   padding: 15px;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 18px;
   line-height: 1.6;
   font-family: "Times New Roman", serif;
+  resize: vertical;
+  overflow-y: hidden;
 }
 
 .footer-controls {

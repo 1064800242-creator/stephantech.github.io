@@ -1,5 +1,5 @@
 <script setup>
-import { computed, onBeforeUnmount, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const timeInputMinutes = ref(10);
 const remainingSeconds = ref(600);
@@ -8,6 +8,7 @@ const hasStarted = ref(false);
 const questionText = ref("");
 const answerText = ref("");
 const imagePreview = ref("");
+const answerTextarea = ref(null);
 
 let timerId = null;
 
@@ -112,6 +113,16 @@ const handleQuestionPaste = (event) => {
   }
 };
 
+const autoResizeAnswer = () => {
+  const element = answerTextarea.value;
+  if (!element) {
+    return;
+  }
+
+  element.style.height = "auto";
+  element.style.height = `${Math.max(element.scrollHeight, 300)}px`;
+};
+
 const escapeHtml = (text) => {
   return text
     .replace(/&/g, "&amp;")
@@ -152,6 +163,15 @@ const exportAndCopy = async () => {
 
 onBeforeUnmount(() => {
   stopTimer();
+});
+
+onMounted(() => {
+  autoResizeAnswer();
+});
+
+watch(answerText, async () => {
+  await nextTick();
+  autoResizeAnswer();
 });
 </script>
 
@@ -210,6 +230,7 @@ onBeforeUnmount(() => {
     <div class="section-title">作答区 (下载后自动复制作文)</div>
     <div class="answer-area">
       <textarea
+        ref="answerTextarea"
         v-model="answerText"
         class="answer-input"
         placeholder="开始你的写作..."
