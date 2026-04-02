@@ -12,6 +12,8 @@ const answerTextarea = ref(null);
 const toField = ref("");
 const subjectField = ref("");
 const showWordCount = ref(true);
+const showAiWarning = ref(false);
+const showDownloadConfirm = ref(false);
 
 let timerId = null;
 
@@ -68,6 +70,9 @@ const toggleTimer = () => {
   if (!hasStarted.value) {
     timeInputMinutes.value = normalizeMinutes(timeInputMinutes.value);
     remainingSeconds.value = timeInputMinutes.value * 60;
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen().catch(() => {});
+    }
   }
   hasStarted.value = true;
   isRunning.value = true;
@@ -101,6 +106,7 @@ const handleQuestionPaste = (event) => {
   const items = event.clipboardData?.items || [];
   for (const item of items) {
     if (item.type?.startsWith("image/")) {
+      event.preventDefault();
       const file = item.getAsFile();
       if (file) {
         readImageFile(file);
@@ -167,18 +173,24 @@ const redoText = () => {
   document.execCommand("redo");
 };
 
-const exportAndCopy = async () => {
+const triggerExport = () => {
   if (!answerText.value.trim()) {
     window.alert("内容为空！");
     return;
   }
-  try {
-    await navigator.clipboard.writeText(answerText.value);
-    window.alert("✅ 内容已自动复制！\n\n请点击下方紫色按钮去豆包直接粘贴。");
-  } catch {
-    window.alert("复制失败，请手动复制后继续。");
-  }
+  showDownloadConfirm.value = true;
+};
 
+const buildDownloadFilename = () => {
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const timestamp = `${now.getFullYear()}${pad(now.getMonth() + 1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
+  const subject = subjectField.value.trim().replace(/[\\/:*?"<>|]/g, "_");
+  return subject ? `TOEFL_Practice_${subject}_${timestamp}.doc` : `TOEFL_Practice_${timestamp}.doc`;
+};
+
+const confirmDownload = () => {
+  showDownloadConfirm.value = false;
   const topic = questionText.value || "未填写题目";
   const html = `<html><meta charset="utf-8"><body>
     <h2 style="color:#4a90e2;">TOEFL Practice Report</h2>
@@ -190,9 +202,28 @@ const exportAndCopy = async () => {
   const blob = new Blob(["\ufeff", html], { type: "application/msword" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
-  link.download = "TOEFL_Practice.doc";
+  link.download = buildDownloadFilename();
   link.click();
   window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+};
+
+const triggerAiGrading = async () => {
+  if (!answerText.value.trim()) {
+    window.alert("内容为空！");
+    return;
+  }
+  showAiWarning.value = true;
+};
+
+const confirmAiGrading = async () => {
+  showAiWarning.value = false;
+  try {
+    await navigator.clipboard.writeText(answerText.value);
+    window.alert("✅ 内容已自动复制！\n\n请在豆包中直接粘贴。");
+  } catch {
+    window.alert("复制失败，请手动复制后继续。");
+  }
+  window.open("https://doubao.com/bot/vy4SxUh5", "_blank", "noreferrer");
 };
 
 onBeforeUnmount(() => {
@@ -299,14 +330,40 @@ watch(answerText, async () => {
         ></textarea>
 
         <div class="response-footer">
-          <button class="footer-btn btn-export" @click="exportAndCopy">Download .doc</button>
-          <a
-            href="https://doubao.com/bot/vy4SxUh5"
-            target="_blank"
-            rel="noreferrer"
-            class="footer-btn btn-ai"
-          >AI 批改 (Doubao)</a>
+          <button class="footer-btn btn-export" @click="triggerExport">Download .doc</button>
+          <button class="footer-btn btn-ai" @click="triggerAiGrading">AI 批改 (Doubao)</button>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI grading warning modal -->
+  <div v-if="showAiWarning" class="modal-overlay" @click.self="showAiWarning = false">
+    <div class="modal-box">
+      <div class="modal-icon">⚠️</div>
+      <h2 class="modal-title">AI 批改提示</h2>
+      <p class="modal-body">
+        本文件将用于 AI 批改。请注意，AI 评分仅供参考，不代表真实考试成绩。
+        请勿将 AI 批改结果作为最终成绩依据。
+      </p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-cancel" @click="showAiWarning = false">取消</button>
+        <button class="modal-btn modal-btn-confirm" @click="confirmAiGrading">前往批改</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Download confirmation modal -->
+  <div v-if="showDownloadConfirm" class="modal-overlay" @click.self="showDownloadConfirm = false">
+    <div class="modal-box">
+      <div class="modal-icon">📄</div>
+      <h2 class="modal-title">下载确认</h2>
+      <p class="modal-body">
+        确认将当前内容下载为 TOEFL_Practice.doc 文件吗？
+      </p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-cancel" @click="showDownloadConfirm = false">取消</button>
+        <button class="modal-btn modal-btn-confirm" @click="confirmDownload">确认下载</button>
       </div>
     </div>
   </div>

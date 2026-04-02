@@ -384,3 +384,73 @@ textarea {
     border-bottom: 1px solid #c8c8c8;
   }
 }
+
+/* ── AI Warning Modal ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-box {
+  background: #fff;
+  border-radius: 10px;
+  padding: 32px 28px 24px;
+  max-width: 420px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.modal-icon {
+  font-size: 40px;
+  margin-bottom: 8px;
+}
+
+.modal-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0 0 14px;
+  color: #1a1a1a;
+}
+
+.modal-body {
+  font-size: 14px;
+  color: #444;
+  line-height: 1.65;
+  margin: 0 0 24px;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.modal-btn {
+  padding: 9px 24px;
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.modal-btn:hover {
+  opacity: 0.85;
+}
+
+.modal-btn-cancel {
+  background: #e5e5e5;
+  color: #333;
+}
+
+.modal-btn-confirm {
+  background: #4a90e2;
+  color: #fff;
+}
