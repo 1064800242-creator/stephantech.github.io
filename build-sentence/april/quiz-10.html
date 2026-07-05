@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4月真题10 Build a Sentence</title>
+    <style>
+        /* --- 基础样式 --- */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; padding-bottom: 100px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 40px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        
+        /* 顶部栏 */
+        .header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 2px solid #eee; position: sticky; top: 0; background: white; z-index: 100; }
+        .user-input input { padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; font-size: 16px; width: 200px; transition: border-color 0.3s; }
+        .user-input input:focus { border-color: #3498db; outline: none; }
+        .timer { font-size: 24px; font-weight: 800; padding: 8px 20px; border-radius: 8px; min-width: 100px; text-align: center; font-family: 'Courier New', monospace; }
+        .timer.normal { color: #27ae60; background: #eafaf1; border: 1px solid #27ae60; }
+        .timer.overtime { color: #c0392b; background: #fcf3cf; border: 1px solid #c0392b; animation: pulse 1s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* 题目区块 */
+        .question-block { margin-bottom: 50px; padding: 25px; background: #fff; border-radius: 12px; border: 1px solid #e0e0e0; transition: all 0.3s; position: relative; }
+        .question-block.correct { border: 2px solid #27ae60; background-color: #f0fdf4; }
+        .question-block.error { border: 2px solid #e74c3c; background-color: #fef9e7; }
+        
+        /* 题目头部 */
+        .question-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 15px; }
+        .row-question { font-size: 19px; font-weight: 600; color: #2c3e50; width: 90%; }
+        .reset-icon { cursor: pointer; color: #95a5a6; font-size: 20px; transition: color 0.3s; padding: 5px; }
+        .reset-icon:hover { color: #e74c3c; }
+
+        /* --- 答题区域 (流式布局) --- */
+        .row-answer-area { 
+            display: flex; 
+            flex-wrap: wrap; 
+            align-items: center; 
+            gap: 8px; 
+            margin-bottom: 25px; 
+            min-height: 60px; 
+            padding: 15px; 
+            background-color: #fef9e7; /* 修改点1：填空区域背景改为较浅的黄色 */
+            border-radius: 8px; 
+            border: 1px dashed #dcdcdc;
+            line-height: 1.8;
+        }
+
+        .static-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #7f8c8d;
+            padding: 0 5px;
+            border-bottom: 2px solid #bdc3c7; 
+            user-select: none;
+            background-color: #f0f3f4; 
+            border-radius: 4px;
+        }
+
+        .drop-box { 
+            min-width: 80px; 
+            height: 42px; 
+            border: 2px dashed #bdc3c7; 
+            border-radius: 6px; 
+            background-color: #fff; 
+            display: inline-flex; 
+            align-items: center; 
+            justify-content: center; 
+            transition: all 0.2s; 
+            padding: 0 5px; 
+            margin: 2px 0;
+            cursor: pointer;
+        }
+        
+        .drop-box.target-active { border-color: #3498db; background-color: rgba(52, 152, 219, 0.1); transform: scale(1.05); }
+        .drop-box.hovered { border-color: #3498db; background-color: #ebf5fb; transform: scale(1.05); }
+
+        .punctuation { font-size: 30px; font-weight: bold; color: #2c3e50; line-height: 1; margin-left: 2px; padding-bottom: 5px; }
+
+        /* --- 选项区域 --- */
+        /* 修改点2：备选词区域背景改为稍深一点的黄色 */
+        .row-options { padding: 15px; background-color: #fcf3cf; border-radius: 8px; display: flex; flex-wrap: wrap; gap: 10px; min-height: 50px; border: 1px solid #bdc3c7; }
+        
+        .draggable { 
+            background-color: #fff; 
+            color: #2c3e50; 
+            border: 1px solid #95a5a6; 
+            padding: 8px 15px; 
+            border-radius: 5px; 
+            cursor: pointer; 
+            user-select: none; 
+            font-size: 16px; 
+            font-weight: 500; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
+            white-space: nowrap; 
+            transition: all 0.2s;
+        }
+        
+        .draggable.selected {
+            background-color: #f1c40f;
+            border-color: #f39c12;
+            color: #fff;
+            transform: translateY(-3px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .drop-box .draggable { 
+            background-color: #3498db; 
+            color: white; 
+            border: none; 
+            box-shadow: none; 
+            margin: 0; 
+            width: 100%; 
+            text-align: center; 
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .draggable:active { cursor: grabbing; }
+        .draggable.dragging { opacity: 0.4; }
+
+        .submit-btn { display: block; width: 100%; padding: 18px; background-color: #2c3e50; color: white; border: none; border-radius: 8px; font-size: 20px; font-weight: bold; cursor: pointer; transition: background 0.3s; margin-top: 30px; box-shadow: 0 4px 15px rgba(44, 62, 80, 0.2); }
+        .submit-btn:hover { background-color: #34495e; transform: translateY(-2px); }
+        
+        #result-display { text-align: center; font-size: 22px; margin-top: 25px; font-weight: bold; min-height: 30px; }
+        
+        /* 错题与后台展示区样式 */
+        .btn-mistakes { background: #e67e22; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; display: block; margin: 20px auto 0; padding: 12px 25px; transition: opacity 0.3s; }
+        .btn-mistakes:hover { opacity: 0.8; }
+        
+        #mistakes-section { display: none; margin-top: 30px; padding: 25px; background: #fff; border: 2px solid #e74c3c; border-radius: 12px; box-shadow: 0 5px 15px rgba(231, 76, 60, 0.1); }
+        .section-title { margin-top: 0; padding-bottom: 10px; border-bottom: 2px solid #eee; }
+        
+        .mistake-item { margin-bottom: 15px; padding-bottom: 10px; border-bottom: 1px dashed #ccc; line-height: 1.6; }
+        .mistake-item strong { color: #2c3e50; }
+        .mistake-user { color: #e74c3c; }
+
+        /* 合并进来的后台日志样式 */
+        .dashboard-area { margin-top: 40px; padding-top: 20px; border-top: 3px solid #34495e; }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .btn-clear { background: #c0392b; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; font-size: 14px; }
+        .btn-clear:hover { opacity: 0.8; }
+        
+        .log-container { background: #2c3e50; color: #ecf0f1; font-family: 'Courier New', monospace; border-radius: 8px; padding: 15px; }
+        .log-entry { border-bottom: 1px solid #465c71; padding: 10px 0; display: grid; grid-template-columns: 1.5fr 1.5fr 1fr 1fr; gap: 15px; }
+        .log-header { font-weight: bold; color: #f1c40f; border-bottom: 2px solid #f1c40f; }
+    </style>
+</head>
+<body>
+
+<script>
+    const rawQuizText = `
+1. Why didn't you attend the workshop?
+______ ______ ______ ______ ______ ______ fully ______.
+the session / join / wanted / that I / to / was / booked
+The session that I wanted to join was fully booked.
+
+2. Did you enjoy the lecture on modern art?
+______ did ______ ______ ______ ______ ______.
+find / very / I / not / engaging / it
+I did not find it very engaging.
+
+3. Did you submit the assignment on time?
+______, ______ couldn't ______ ______ ______.
+no / the / deadline / I / meet
+No, I could not meet the deadline.
+
+4. Did you finish your homework?
+______, ______ haven't ______ ______.
+I / completed / no / it yet
+No, I haven't completed it yet.
+
+5. The science fair last night was very impressive.
+Can ______ ______ ______ ______ ______ ______?
+me whether / you tell / held again / year / next / it will be
+Can you tell me whether it will be held again next year?
+
+6. Have you thought about joining the debate club?
+______ decided ______, ______ ______ ______.
+yet / interesting / does sound / but it / I haven't
+I haven't decided yet, but it does sound interesting.
+
+7. Why did you choose to take this course?
+______ ______ it ______ ______ ______.
+would benefit / my future / career plans / I / thought
+I thought it would benefit my future career plans.
+
+8. Did you finish reading that book?
+______ ______ ______ ______ ______ I have no time ______?
+I told / have / the reason / for reading anymore / why / you
+Have I told you the reason why I have no time for reading anymore?
+
+9. Who did you ask to help with the event planning?
+______ ______ ______ ______ ______ time ______.
+I was / to see if / planning / Sam / would have / to assist
+I was planning to see if Sam would have time to assist.
+
+10. Why did you vote for that candidate?
+______ ______ ______ ______ ______ the most reliable.
+education / who / seemed / promised to improve / the one
+The one who promised to improve education seemed the most reliable.
+`;
+
+    const DB_KEY = 'quiz_records_build_sentence_4m_10'; 
+</script>
+
+<div class="container">
+    <div class="header-bar">
+        <div class="user-input">
+            <label for="username">Name: </label>
+            <input type="text" id="username" placeholder="Enter your name">
+        </div>
+        <div class="timer normal" id="timer">00:00</div>
+    </div>
+
+    <form id="quiz-form">
+        <div id="questions-container"></div>
+        <button type="button" class="submit-btn" onclick="checkAnswers()">Submit Answers</button>
+        <div id="result-display"></div>
+        
+        <!-- 查看错题和后台记录按钮 -->
+        <button type="button" id="show-mistakes-btn" class="btn-mistakes" style="display:none;" onclick="showMistakesWithPassword()">View Mistakes & Records (Password)</button>
+        
+        <!-- 错题与后台记录展示区 -->
+        <div id="mistakes-section">
+            <h3 class="section-title" style="color: #c0392b;">Current Attempt Mistakes</h3>
+            <div id="mistakes-list"></div>
+            
+            <div class="dashboard-area">
+                <div class="dashboard-header">
+                    <h3 class="section-title" style="color: #34495e; margin: 0; border: none;">All Users Records</h3>
+                    <button type="button" class="btn-clear" onclick="clearData()">Clear All Data</button>
+                </div>
+                <div class="log-container">
+                    <div class="log-entry log-header">
+                        <div>Name</div>
+                        <div>Time Used</div>
+                        <div>Score</div>
+                        <div>Attempt</div>
+                    </div>
+                    <div id="log-content">No records found.</div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script>
+    let quizData = [];
+    let selectedWord = null;
+    let currentMistakes = []; 
+
+    function parseRawText() {
+        const blocks = rawQuizText.split(/\n\s*\n/);
+        quizData = blocks.map((block, index) => {
+            const lines = block.trim().split('\n').map(l => l.trim()).filter(l => l.length > 0);
+            
+            if (lines.length < 4) return null;
+
+            const q = lines[0]; 
+            const rawContext = lines[1]; 
+            const w = lines[2].split('/').map(word => word.trim()).filter(word => word.length > 0); 
+            const a = lines[3]; 
+
+            let c = rawContext.replace(/_+/g, '').replace(/[.?!]+$/, '').replace(/\s+/g, ' ').trim();
+
+            if(q && a && w.length > 0) {
+                return { id: "q" + (index + 1), question: q, rawContext: rawContext, context: c, correctAnswer: a, words: w };
+            }
+            return null;
+        }).filter(item => item !== null);
+    }
+
+    function initQuiz() {
+        parseRawText(); 
+        const container = document.getElementById('questions-container');
+        let htmlContent = '';
+
+        quizData.forEach(item => {
+            const answerAreaHTML = renderAnswerAreaFromRawContext(item.rawContext);
+
+            htmlContent += `
+            <div class="question-block" id="${item.id}">
+                <div class="question-header">
+                    <div class="row-question">${item.question}</div>
+                    <div class="reset-icon" onclick="resetQuestion('${item.id}')" title="Reset Question">↺</div>
+                </div>
+                <div class="row-answer-area" data-correct="${item.correctAnswer}">
+                    ${answerAreaHTML}
+                </div>
+                <div class="row-options source-zone">
+                    ${shuffleArray(item.words).map(word => `<span class="draggable" draggable="true">${escapeHTML(word)}</span>`).join('')}
+                </div>
+            </div>
+            `;
+        });
+        container.innerHTML = htmlContent;
+        bindEvents(); 
+    }
+
+    function escapeHTML(str) {
+        return str.replace(/[&<>"]/g, ch => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;'}[ch]));
+    }
+
+    function renderAnswerAreaFromRawContext(rawContext) {
+        const parts = rawContext.split(/(_+)/g);
+        return parts.map(part => {
+            if (/^_+$/.test(part)) return '<div class="drop-box"></div>';
+            const cleaned = part.replace(/\s+/g, ' ').trim();
+            if (!cleaned) return '';
+            return `<span class="static-text">${escapeHTML(cleaned)}</span>`;
+        }).join('');
+    }
+
+    function cleanContextText(contextStr) {
+        if (!contextStr) return '';
+        let s = contextStr.replace(/$[^$]*\)/g, '').replace(/[\.…]+/g, ' ').replace(/\s+/g, ' ').trim();
+        return s;
+    }
+
+    function countBoxesForSegment(segmentText, wordBank) {
+        let count = 0;
+        let tempSegment = segmentText.toLowerCase();
+        const sortedWords = [...wordBank].sort((a, b) => b.length - a.length);
+
+        sortedWords.forEach(word => {
+            const lowerWord = word.toLowerCase();
+            if (tempSegment.includes(lowerWord)) {
+                count++;
+                tempSegment = tempSegment.replace(lowerWord, ' '); 
+            }
+        });
+        return count;
+    }
+
+    function shuffleArray(array) {
+        let newArr = [...array];
+        for (let i = newArr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArr[i], newArr[j]] = [newArr[j], newArr[i]];
+        }
+        return newArr;
+    }
+
+    function generateDropBoxes(count) {
+        let boxes = '';
+        for(let i=0; i<count; i++) {
+            boxes += '<div class="drop-box"></div>';
+        }
+        return boxes;
+    }
+
+    function bindEvents() {
+        const draggables = document.querySelectorAll('.draggable');
+        const dropBoxes = document.querySelectorAll('.drop-box');
+        const sourceZones = document.querySelectorAll('.source-zone');
+
+        draggables.forEach(draggable => {
+            draggable.addEventListener('dragstart', () => {
+                draggable.classList.add('dragging');
+                clearSelection(); 
+            });
+            draggable.addEventListener('dragend', () => {
+                draggable.classList.remove('dragging');
+                dropBoxes.forEach(box => box.classList.remove('hovered'));
+            });
+            
+            draggable.addEventListener('click', (e) => {
+                if (draggable.parentElement.classList.contains('drop-box')) {
+                    const questionBlock = draggable.closest('.question-block');
+                    const sourceZone = questionBlock.querySelector('.source-zone');
+                    sourceZone.appendChild(draggable);
+                    clearSelection();
+                } else {
+                    if (selectedWord === draggable) {
+                        clearSelection(); 
+                    } else {
+                        clearSelection();
+                        selectedWord = draggable;
+                        draggable.classList.add('selected');
+                        highlightEmptyBoxes(draggable.closest('.question-block'), true);
+                    }
+                }
+                e.stopPropagation();
+            });
+        });
+
+        dropBoxes.forEach(box => {
+            box.addEventListener('dragover', e => {
+                e.preventDefault();
+                box.classList.add('hovered');
+            });
+            box.addEventListener('dragleave', () => box.classList.remove('hovered'));
+            
+            box.addEventListener('drop', e => {
+                e.preventDefault();
+                box.classList.remove('hovered');
+                const draggable = document.querySelector('.dragging');
+                if (draggable) {
+                    handleMove(draggable, box);
+                }
+            });
+
+            box.addEventListener('click', () => {
+                if (selectedWord) {
+                    if (box.closest('.question-block') === selectedWord.closest('.question-block')) {
+                        handleMove(selectedWord, box);
+                        clearSelection();
+                    }
+                } else if (box.children.length > 0) {
+                    const child = box.querySelector('.draggable');
+                    if (child) {
+                        const questionBlock = box.closest('.question-block');
+                        questionBlock.querySelector('.source-zone').appendChild(child);
+                    }
+                }
+            });
+        });
+
+        sourceZones.forEach(zone => {
+            zone.addEventListener('dragover', e => e.preventDefault());
+            zone.addEventListener('drop', e => {
+                e.preventDefault();
+                const draggable = document.querySelector('.dragging');
+                if(draggable) zone.appendChild(draggable);
+            });
+        });
+        
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.draggable') && !e.target.closest('.drop-box')) {
+                clearSelection();
+            }
+        });
+    }
+
+    function handleMove(wordElement, targetBox) {
+        if (targetBox.children.length > 0) {
+            const existingChild = targetBox.querySelector('.draggable');
+            if (existingChild) {
+                const questionBlock = targetBox.closest('.question-block');
+                questionBlock.querySelector('.source-zone').appendChild(existingChild);
+            }
+        }
+        targetBox.appendChild(wordElement);
+    }
+
+    function clearSelection() {
+        if (selectedWord) {
+            selectedWord.classList.remove('selected');
+            selectedWord = null;
+        }
+        document.querySelectorAll('.drop-box').forEach(b => b.classList.remove('target-active'));
+    }
+
+    function highlightEmptyBoxes(block, isActive) {
+        const boxes = block.querySelectorAll('.drop-box');
+        boxes.forEach(box => {
+            if (box.children.length === 0) {
+                if(isActive) box.classList.add('target-active');
+                else box.classList.remove('target-active');
+            }
+        });
+    }
+
+    function resetQuestion(blockId) {
+        const block = document.getElementById(blockId);
+        const sourceZone = block.querySelector('.source-zone');
+        const boxes = block.querySelectorAll('.drop-box');
+        
+        boxes.forEach(box => {
+            if (box.children.length > 0) {
+                const word = box.querySelector('.draggable');
+                sourceZone.appendChild(word);
+            }
+        });
+        block.classList.remove('correct', 'error');
+    }
+
+    const TIME_LIMIT = 410; 
+    let secondsElapsed = 0;
+    let timerInterval = null;
+    const timerElement = document.getElementById('timer');
+
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        secondsElapsed = 0;
+        updateTimerDisplay();
+        timerInterval = setInterval(() => {
+            secondsElapsed++;
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        let displaySeconds = 0;
+        let isOvertime = false;
+        if (secondsElapsed <= TIME_LIMIT) {
+            displaySeconds = TIME_LIMIT - secondsElapsed;
+            timerElement.className = "timer normal";
+        } else {
+            displaySeconds = secondsElapsed - TIME_LIMIT;
+            timerElement.className = "timer overtime";
+            isOvertime = true;
+        }
+        const minutes = Math.floor(displaySeconds / 60);
+        const seconds = displaySeconds % 60;
+        timerElement.textContent = (isOvertime ? "+" : "") + 
+            `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+    }
+
+    function getFormattedTimeUsed() {
+        const minutes = Math.floor(secondsElapsed / 60);
+        const seconds = secondsElapsed % 60;
+        return `${minutes}m ${seconds}s`;
+    }
+
+    let attemptCount = 0;
+    function checkAnswers() {
+        const username = document.getElementById('username').value.trim();
+        if (!username) { alert("Please enter your name first!"); return; }
+
+        let correctCount = 0;
+        currentMistakes = []; 
+        const totalQuestions = quizData.length;
+        const questionBlocks = document.querySelectorAll('.question-block');
+
+        questionBlocks.forEach(block => {
+            const answerArea = block.querySelector('.row-answer-area');
+            const correctAnswer = answerArea.getAttribute('data-correct');
+            const cleanCorrectAnswer = correctAnswer.toLowerCase().replace(/[^a-z0-9]/g, '');
+            
+            let userAnswerStr = "";
+            let userDisplayArr = []; 
+            
+            const children = answerArea.children;
+            for (let i = 0; i < children.length; i++) {
+                const child = children[i];
+                if (child.classList.contains('drop-box')) {
+                    if (child.textContent) {
+                        userAnswerStr += child.textContent.trim();
+                        userDisplayArr.push(child.textContent.trim());
+                    } else {
+                        userDisplayArr.push("___"); 
+                    }
+                } else if (child.classList.contains('static-text')) {
+                    userAnswerStr += child.textContent.trim();
+                    userDisplayArr.push(child.textContent.trim());
+                }
+            }
+
+            const cleanUserAnswer = userAnswerStr.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+            block.classList.remove('error', 'correct');
+            if (cleanUserAnswer === cleanCorrectAnswer) {
+                correctCount++;
+                block.classList.add('correct');
+            } else {
+                block.classList.add('error');
+                currentMistakes.push({
+                    question: block.querySelector('.row-question').textContent,
+                    userAnswer: userDisplayArr.join(' '),
+                    correctAnswer: correctAnswer
+                });
+            }
+        });
+
+        const accuracy = Math.round((correctCount / totalQuestions) * 100);
+        attemptCount++;
+        const timeUsedStr = getFormattedTimeUsed();
+
+        const resultDisplay = document.getElementById('result-display');
+        resultDisplay.textContent = `Attempt #${attemptCount}: Correct: ${correctCount}/${totalQuestions} (${accuracy}%)`;
+        resultDisplay.style.color = accuracy === 100 ? '#27ae60' : '#c0392b';
+
+        document.getElementById('show-mistakes-btn').style.display = 'block';
+        document.getElementById('mistakes-section').style.display = 'none';
+
+        saveToDatabase(username, accuracy, attemptCount, timeUsedStr);
+        startTimer(); 
+    }
+
+    function showMistakesWithPassword() {
+        const pwd = prompt("Enter password to view mistakes and records (Default: admin888):");
+        if (pwd === "admin888") { 
+            const mistakesSection = document.getElementById('mistakes-section');
+            const mistakesList = document.getElementById('mistakes-list');
+            
+            if (currentMistakes.length === 0) {
+                mistakesList.innerHTML = "<p style='color: #27ae60; font-weight: bold;'>All correct! Great job!</p>";
+            } else {
+                mistakesList.innerHTML = currentMistakes.map(m => `
+                    <div class="mistake-item">
+                        <strong>Q: ${m.question}</strong><br>
+                        <span class="mistake-user">Your Answer: ${m.userAnswer}</span>
+                    </div>
+                `).join('');
+            }
+            
+            renderLogs();
+            
+            mistakesSection.style.display = 'block';
+            document.getElementById('show-mistakes-btn').style.display = 'none'; 
+            mistakesSection.scrollIntoView({behavior: "smooth"});
+        } else if (pwd !== null) {
+            alert("Incorrect password!");
+        }
+    }
+
+    function saveToDatabase(name, score, attempt, timeUsed) {
+        const record = { name, score, attempt, timeUsed, timestamp: new Date().getTime() };
+        let existingData = JSON.parse(localStorage.getItem(DB_KEY)) || [];
+        existingData.push(record);
+        localStorage.setItem(DB_KEY, JSON.stringify(existingData));
+        
+        if(document.getElementById('mistakes-section').style.display === 'block') {
+            renderLogs();
+        }
+    }
+
+    function renderLogs() {
+        const logDiv = document.getElementById('log-content');
+        let data = JSON.parse(localStorage.getItem(DB_KEY)) || [];
+        if (data.length === 0) { logDiv.innerHTML = "No records found yet."; return; }
+        data.sort((a, b) => b.timestamp - a.timestamp);
+        logDiv.innerHTML = data.map(item => `
+            <div class="log-entry">
+                <div><strong>${item.name}</strong></div>
+                <div>${item.timeUsed}</div>
+                <div>${item.score}%</div>
+                <div>#${item.attempt}</div>
+            </div>`).join('');
+    }
+
+    function clearData() {
+        if(confirm("Delete ALL records?")) {
+            localStorage.removeItem(DB_KEY);
+            renderLogs();
+        }
+    }
+
+    window.onload = function() {
+        initQuiz();
+        startTimer();
+    };
+</script>
+</body>
+</html>

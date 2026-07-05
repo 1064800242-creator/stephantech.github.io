@@ -7,7 +7,7 @@ const router = useRouter();
 <template>
   <div class="welcome-page">
     <header class="welcome-header">
-      <span class="welcome-logo">小智写作练习室</span>
+      <span class="welcome-logo">TOEFL Writing Improver</span>
     </header>
 
     <main class="welcome-main">
@@ -42,7 +42,7 @@ const router = useRouter();
     </main>
 
     <footer class="welcome-footer">
-      <span>© 2025 小智写作练习室 · 让每一次练习都有意义</span>
+      <span>© 2025 TOEFL Writing Improver · 让每一次练习都有意义</span>
     </footer>
   </div>
 </template>
