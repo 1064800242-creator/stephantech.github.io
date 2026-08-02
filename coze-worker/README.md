@@ -11,7 +11,7 @@
 
 1. Cloudflare 账号
 2. Coze API Token
-3. Coze 智能体的 Bot ID
+3. Coze 项目的 Project ID 和 stream_run 地址
 
 ## Cloudflare Worker 环境变量
 
@@ -20,7 +20,8 @@
 | 名称 | 类型 | 说明 |
 | --- | --- | --- |
 | `COZE_API_TOKEN` | Secret | Coze API Token |
-| `COZE_BOT_ID` | Variable | 批改智能体的 Bot ID |
+| `COZE_PROJECT_ID` | Variable | `7658702600073855030` |
+| `COZE_PROJECT_API_URL` | Variable | `https://ph9r33tt3t.coze.site/stream_run` |
 | `ALLOWED_ORIGIN` | Variable | `https://1064800242-creator.github.io` |
 
 部署后，把 Worker 地址填到网站构建环境变量：
@@ -30,4 +31,3 @@ VITE_COZE_GRADER_API_URL=https://你的-worker地址.workers.dev/grade
 ```
 
 然后重新运行网站构建并上传到 GitHub Pages。
-
