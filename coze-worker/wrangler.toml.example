@@ -1,0 +1,12 @@
+name = "toefl-writing-grader"
+main = "src/worker.js"
+compatibility_date = "2026-08-02"
+
+[vars]
+ALLOWED_ORIGIN = "https://1064800242-creator.github.io"
+COZE_API_BASE_URL = "https://api.coze.cn"
+
+# Set these in Cloudflare Dashboard as variables/secrets:
+# COZE_BOT_ID = "your_bot_id"
+# COZE_API_TOKEN = "your_token"
+
