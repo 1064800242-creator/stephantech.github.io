@@ -28,7 +28,8 @@ const readCozeStream = async (response) => {
   const chunks = [];
 
   const pickContent = (value) => {
-    if (!value) return "";
+    if (value === null || value === undefined) return "";
+    if (typeof value === "number" || typeof value === "boolean") return String(value);
     if (typeof value === "string") {
       try {
         return pickContent(JSON.parse(value));
@@ -62,7 +63,7 @@ const readCozeStream = async (response) => {
     try {
       const event = JSON.parse(raw);
       const content = pickContent(event);
-      if (typeof content === "string" && content.trim()) chunks.push(content);
+      if (typeof content === "string" && content.length) chunks.push(content);
     } catch {
       if (raw.trim()) chunks.push(raw);
     }
@@ -116,8 +117,13 @@ export default {
     if (request.method === "OPTIONS") return cors(allowedOrigin);
     if (request.method !== "POST") return json({ error: "Only POST is supported." }, 405, allowedOrigin);
 
-    if (!env.COZE_API_TOKEN || !env.COZE_PROJECT_ID || !env.COZE_PROJECT_API_URL) {
-      return json({ error: "Coze project URL, project ID, or API Token is not configured." }, 500, allowedOrigin);
+    const missingVariables = [
+      ["COZE_PROJECT_API_URL", env.COZE_PROJECT_API_URL],
+      ["COZE_PROJECT_ID", env.COZE_PROJECT_ID],
+      ["COZE_API_TOKEN", env.COZE_API_TOKEN],
+    ].filter(([, value]) => !value).map(([name]) => name);
+    if (missingVariables.length) {
+      return json({ error: `Missing Worker variables: ${missingVariables.join(", ")}` }, 500, allowedOrigin);
     }
 
     let body;
