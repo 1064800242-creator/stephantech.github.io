@@ -8,7 +8,7 @@ import NavBar from "../components/NavBar.vue";
 const { user, userProfile, guestMode } = useAuth();
 
 // ── Screen state ──
-const currentScreen = ref("start"); // 'start' | 'ai-setup' | 'exam'
+const currentScreen = ref("start"); // 'start' | 'ai-setup' | 'exam' | 'sentence-builder'
 // examState: 'idle' (before Start), 'running' (in progress), 'submitted'
 const examState = ref("idle");
 const startTime = ref(null);
@@ -31,8 +31,6 @@ const stopTimer = () => {
   if (timerInterval) { clearInterval(timerInterval); timerInterval = null; }
 };
 
-onUnmounted(stopTimer);
-
 // ── Content ──
 const questionText = ref("");
 const answerText = ref("");
@@ -45,9 +43,12 @@ const showTimer = ref(true);
 
 // ── Modals ──
 const showAiWarning = ref(false);
+const showCozeGrader = ref(false);
+const showLoginRequired = ref(false);
 const showDownloadConfirm = ref(false);
 const showSubmitConfirm = ref(false);
 const submitLoading = ref(false);
+const loginRequiredMessage = ref("");
 
 // ── AI-setup state ──
 const aiResponseText = ref("");
@@ -79,6 +80,100 @@ Rules:
 - Use **bold** markdown for the "Write an email…" instruction line.
 - Use * (asterisk + space) for each bullet point.
 - Do not use any other markdown.`;
+
+const COZE_GRADER_URL = "https://code.coze.cn/web-sdk/7658702600073855030";
+const BUILD_SENTENCE_BASE_URL = `${import.meta.env.BASE_URL}build-sentence/`;
+const BUILD_SENTENCE_QUIZZES = [
+  ...Array.from({ length: 23 }, (_, index) => {
+    const number = index + 1;
+    return {
+      label: `3月真题${number}`,
+      file: `march/quiz-${String(number).padStart(2, "0")}.html`,
+    };
+  }),
+  ...Array.from({ length: 11 }, (_, index) => {
+    const number = index + 1;
+    return {
+      label: `4月真题${number}`,
+      file: `april/quiz-${String(number).padStart(2, "0")}.html`,
+    };
+  }),
+];
+const DEFAULT_BUILD_SENTENCE_QUIZ = "april/quiz-01.html";
+const selectedBuildSentenceQuiz = ref(DEFAULT_BUILD_SENTENCE_QUIZ);
+const selectedBuildSentenceUrl = computed(() => `${BUILD_SENTENCE_BASE_URL}${selectedBuildSentenceQuiz.value}`);
+const selectedBuildSentenceLabel = computed(() => (
+  BUILD_SENTENCE_QUIZZES.find((quiz) => quiz.file === selectedBuildSentenceQuiz.value)?.label || "Build a Sentence"
+));
+
+// ── Build a sentence practice ──
+const SENTENCE_EXERCISES = [
+  {
+    chinese: "我写信是想询问是否可以延长项目截止日期。",
+    cues: ["I am writing to ask", "whether", "extend the deadline"],
+    sample: "I am writing to ask whether I could extend the deadline for my project.",
+  },
+  {
+    chinese: "这个活动能让学生更了解不同文化。",
+    cues: ["help students", "learn more about", "different cultures"],
+    sample: "This activity can help students learn more about different cultures.",
+  },
+  {
+    chinese: "如果我们提前计划，就能避免很多问题。",
+    cues: ["If we plan ahead", "avoid", "problems"],
+    sample: "If we plan ahead, we can avoid many problems.",
+  },
+  {
+    chinese: "我认为这个建议更实际，因为它不需要太多钱。",
+    cues: ["I think", "more practical", "does not require much money"],
+    sample: "I think this suggestion is more practical because it does not require much money.",
+  },
+  {
+    chinese: "参加志愿活动可以培养学生的责任感。",
+    cues: ["taking part in", "volunteer activities", "sense of responsibility"],
+    sample: "Taking part in volunteer activities can develop students' sense of responsibility.",
+  },
+  {
+    chinese: "线上课程的一个优点是学生可以更灵活地安排时间。",
+    cues: ["one advantage of", "online classes", "arrange their time flexibly"],
+    sample: "One advantage of online classes is that students can arrange their time more flexibly.",
+  },
+  {
+    chinese: "这家博物馆很适合学生，因为门票便宜而且交通方便。",
+    cues: ["suitable for students", "affordable tickets", "convenient transportation"],
+    sample: "This museum is suitable for students because it has affordable tickets and convenient transportation.",
+  },
+  {
+    chinese: "我建议学校邀请专业人士来分享他们的经验。",
+    cues: ["suggest that", "invite professionals", "share their experience"],
+    sample: "I suggest that the school invite professionals to share their experience.",
+  },
+];
+const sentenceTimerMinutes = ref(8);
+const sentenceSeconds = ref(0);
+const sentenceState = ref("idle"); // 'idle' | 'running' | 'finished'
+const sentenceIndex = ref(0);
+const sentenceAnswers = ref([]);
+const currentSentenceAnswer = ref("");
+let sentenceTimerInterval = null;
+
+const sentenceFormattedTimer = computed(() => {
+  const m = Math.floor(sentenceSeconds.value / 60);
+  const s = sentenceSeconds.value % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+});
+const sentenceTimerWarning = computed(() => sentenceSeconds.value <= 60 && sentenceSeconds.value > 0 && sentenceState.value === "running");
+const currentSentence = computed(() => SENTENCE_EXERCISES[sentenceIndex.value]);
+const sentenceProgress = computed(() => `${sentenceIndex.value + 1} / ${SENTENCE_EXERCISES.length}`);
+
+const stopSentenceTimer = () => {
+  if (sentenceTimerInterval) { clearInterval(sentenceTimerInterval); sentenceTimerInterval = null; }
+};
+
+onUnmounted(() => {
+  stopTimer();
+  stopSentenceTimer();
+});
 
 // ── Computed ──
 const wordCount = computed(() => {
@@ -120,6 +215,86 @@ const escapeHtml = (text) =>
   text
     .replace(/&/g, "&amp;").replace(/</g, "&lt;")
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+
+const buildGradingPayload = () => {
+  const parts = ["题型：邮件"];
+  parts.push(`题目：\n${questionText.value.trim() || "缺少题目"}`);
+  if (toField.value.trim()) parts.push(`To：${toField.value.trim()}`);
+  if (subjectField.value.trim()) parts.push(`Subject：${subjectField.value.trim()}`);
+  parts.push(`学生作文：\n${answerText.value.trim() || "缺少学生作文"}`);
+  parts.push("是否需要老师模式：否");
+  return parts.join("\n\n");
+};
+
+const saveCurrentSentenceAnswer = () => {
+  sentenceAnswers.value[sentenceIndex.value] = currentSentenceAnswer.value;
+};
+
+const startSentencePractice = () => {
+  stopTimer();
+  stopSentenceTimer();
+  sentenceAnswers.value = Array(SENTENCE_EXERCISES.length).fill("");
+  currentSentenceAnswer.value = "";
+  sentenceIndex.value = 0;
+  sentenceSeconds.value = sentenceTimerMinutes.value * 60;
+  sentenceState.value = "running";
+  sentenceTimerInterval = setInterval(() => {
+    if (sentenceSeconds.value > 0) {
+      sentenceSeconds.value--;
+    } else {
+      saveCurrentSentenceAnswer();
+      stopSentenceTimer();
+      sentenceState.value = "finished";
+    }
+  }, 1000);
+};
+
+const goToNextSentence = () => {
+  saveCurrentSentenceAnswer();
+  if (sentenceIndex.value >= SENTENCE_EXERCISES.length - 1) {
+    stopSentenceTimer();
+    sentenceState.value = "finished";
+    return;
+  }
+  sentenceIndex.value++;
+  currentSentenceAnswer.value = sentenceAnswers.value[sentenceIndex.value] || "";
+};
+
+const goToPreviousSentence = () => {
+  saveCurrentSentenceAnswer();
+  if (sentenceIndex.value === 0) return;
+  sentenceIndex.value--;
+  currentSentenceAnswer.value = sentenceAnswers.value[sentenceIndex.value] || "";
+};
+
+const finishSentencePractice = () => {
+  saveCurrentSentenceAnswer();
+  stopSentenceTimer();
+  sentenceState.value = "finished";
+};
+
+const resetSentencePractice = () => {
+  stopSentenceTimer();
+  sentenceState.value = "idle";
+  sentenceSeconds.value = 0;
+  sentenceIndex.value = 0;
+  sentenceAnswers.value = [];
+  currentSentenceAnswer.value = "";
+};
+
+const copySentenceResults = async () => {
+  const rows = SENTENCE_EXERCISES.map((item, index) => [
+    `${index + 1}. ${item.chinese}`,
+    `我的句子：${sentenceAnswers.value[index] || "未作答"}`,
+    `参考句：${item.sample}`,
+  ].join("\n"));
+  try {
+    await navigator.clipboard.writeText(`Build a Sentence 限时练习\n\n${rows.join("\n\n")}`);
+    window.alert("✅ 练习结果已复制。");
+  } catch {
+    window.alert("复制失败，请手动复制结果。");
+  }
+};
 
 // ── Start practice ──
 const startPractice = () => {
@@ -212,18 +387,57 @@ const confirmDownload = () => {
 };
 
 // ── AI grading ──
+const requireLoginForFeature = (featureName) => {
+  loginRequiredMessage.value = `${featureName}仅限登录用户使用，请先登录或注册。`;
+  showLoginRequired.value = true;
+};
+
+const openAiWarning = () => {
+  if (guestMode.value) {
+    requireLoginForFeature("AI 批改功能");
+    return;
+  }
+  showAiWarning.value = true;
+};
+
 const confirmAiGrading = async () => {
+  if (guestMode.value) {
+    showAiWarning.value = false;
+    requireLoginForFeature("AI 批改功能");
+    return;
+  }
   showAiWarning.value = false;
+  showCozeGrader.value = true;
+  const gradingPayload = buildGradingPayload();
   try {
-    await navigator.clipboard.writeText(answerText.value);
-    window.alert("✅ 内容已自动复制！\n\n请在豆包中直接粘贴。");
+    await navigator.clipboard.writeText(gradingPayload);
+    window.setTimeout(() => {
+      window.alert("✅ 题目和作文已复制。\n\n请在右侧 Coze 批改窗口中粘贴发送。");
+    }, 100);
   } catch { window.alert("复制失败，请手动复制后继续。"); }
-  window.open("https://doubao.com/bot/vy4SxUh5", "_blank", "noreferrer");
+};
+
+const copyGradingPayload = async () => {
+  try {
+    await navigator.clipboard.writeText(buildGradingPayload());
+    window.alert("✅ 已重新复制。");
+  } catch {
+    window.alert("复制失败，请手动复制左侧内容。");
+  }
+};
+
+const goToLogin = () => {
+  showLoginRequired.value = false;
+  window.location.hash = "#/login";
 };
 
 // ── Submit ──
 const autoSubmit = async () => {
-  if (guestMode.value || !answerText.value.trim()) return;
+  if (!answerText.value.trim()) return;
+  if (guestMode.value) {
+    examState.value = "submitted";
+    return;
+  }
   submitLoading.value = true;
   try {
     await addDoc(collection(db, "submissions"), {
@@ -251,6 +465,13 @@ const triggerSubmit = () => {
   if (!answerText.value.trim()) { window.alert("内容为空！"); return; }
   showSubmitConfirm.value = true;
 };
+
+const finishGuestPractice = () => {
+  if (!answerText.value.trim()) { window.alert("内容为空！"); return; }
+  stopTimer();
+  examState.value = "submitted";
+};
+
 const confirmSubmit = async () => {
   showSubmitConfirm.value = false;
   submitLoading.value = true;
@@ -286,6 +507,7 @@ const newPractice = () => {
   examState.value = "idle";
   startTime.value = null;
   currentScreen.value = "start";
+  showCozeGrader.value = false;
   questionText.value = "";
   answerText.value = "";
   imagePreview.value = "";
@@ -314,8 +536,18 @@ const parseAndStart = () => {
 };
 const goToExamManual = () => { aiGeneratedFields.value = false; currentScreen.value = "exam"; };
 const goToAiSetup = () => { currentScreen.value = "ai-setup"; };
+const goToSentenceBuilder = () => {
+  if (guestMode.value) {
+    requireLoginForFeature("Build a Sentence 限时练习");
+    return;
+  }
+  selectedBuildSentenceQuiz.value = DEFAULT_BUILD_SENTENCE_QUIZ;
+  resetSentencePractice();
+  currentScreen.value = "sentence-builder";
+};
 const backToStart = () => {
   currentScreen.value = "start";
+  resetSentencePractice();
   aiResponseText.value = "";
   aiGeneratedFields.value = false;
   toField.value = "";
@@ -344,6 +576,16 @@ watch(answerText, async () => { await nextTick(); autoResizeAnswer(); });
           <div class="option-icon">🤖</div>
           <div class="option-label">AI 生成题目</div>
           <div class="option-desc">借助 Claude / ChatGPT / 豆包 一键生成托福写作题</div>
+        </button>
+        <button
+          class="option-card"
+          :class="{ 'option-card-locked': guestMode }"
+          :disabled="guestMode"
+          @click="goToSentenceBuilder"
+        >
+          <div class="option-icon">⏱️</div>
+          <div class="option-label">Build a Sentence 限时练习</div>
+          <div class="option-desc">{{ guestMode ? "登录后可使用此练习" : "根据中文提示和关键词，限时写出完整英文句子" }}</div>
         </button>
       </div>
     </div>
@@ -378,6 +620,39 @@ watch(answerText, async () => { await nextTick(); autoResizeAnswer(); });
           <button class="ai-parse-btn" @click="parseAndStart">解析并开始练习 →</button>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- ── Build a sentence screen ── -->
+  <div v-else-if="currentScreen === 'sentence-builder'" class="sentence-wrapper">
+    <div class="sentence-card sentence-embed-card">
+      <div class="sentence-topbar">
+        <button class="back-btn" @click="backToStart">← 返回</button>
+        <div class="sentence-embed-heading">
+          <h2 class="sentence-title">Build a Sentence 限时练习</h2>
+          <p class="sentence-lead">选择真题后，在下方原版页面中完成拖拽补句练习。</p>
+        </div>
+      </div>
+
+      <div class="sentence-quiz-picker">
+        <button
+          v-for="quiz in BUILD_SENTENCE_QUIZZES"
+          :key="quiz.file"
+          class="sentence-quiz-btn"
+          :class="{ active: selectedBuildSentenceQuiz === quiz.file }"
+          @click="selectedBuildSentenceQuiz = quiz.file"
+        >
+          {{ quiz.label }}
+        </button>
+      </div>
+
+      <div class="sentence-iframe-title">{{ selectedBuildSentenceLabel }}</div>
+      <iframe
+        :key="selectedBuildSentenceQuiz"
+        class="sentence-iframe"
+        :src="selectedBuildSentenceUrl"
+        title="Build a Sentence timed practice"
+      ></iframe>
     </div>
   </div>
 
@@ -482,11 +757,13 @@ watch(answerText, async () => { await nextTick(); autoResizeAnswer(); });
           <div class="response-footer">
             <template v-if="examState === 'running'">
               <button v-if="!guestMode" class="footer-btn btn-submit" @click="triggerSubmit">提交作答</button>
-              <span v-else class="guest-submit-hint">登录后可提交给老师</span>
+              <button v-else class="footer-btn btn-submit" @click="finishGuestPractice">完成练习</button>
             </template>
             <template v-if="examState === 'submitted'">
               <button class="footer-btn btn-export" @click="showDownloadConfirm = true">Download .doc</button>
-              <button class="footer-btn btn-ai" @click="showAiWarning = true">AI 批改 (Doubao)</button>
+              <button class="footer-btn btn-ai" :class="{ 'btn-locked': guestMode }" :disabled="guestMode" @click="openAiWarning">
+                {{ guestMode ? "登录后 AI 批改" : "AI 批改" }}
+              </button>
             </template>
           </div>
         </template>
@@ -502,7 +779,14 @@ watch(answerText, async () => { await nextTick(); autoResizeAnswer(); });
       <p class="completion-stats">共写 <strong>{{ wordCount }}</strong> 词 &nbsp;·&nbsp; 用时 <strong>{{ formattedTimer }}</strong></p>
       <div class="completion-actions">
         <button class="completion-btn completion-btn-download" @click="showDownloadConfirm = true">Download .doc</button>
-        <button class="completion-btn completion-btn-ai" @click="showAiWarning = true">AI 批改 (豆包)</button>
+        <button
+          class="completion-btn completion-btn-ai"
+          :class="{ 'completion-btn-locked': guestMode }"
+          :disabled="guestMode"
+          @click="openAiWarning"
+        >
+          {{ guestMode ? "登录后 AI 批改" : "AI 批改" }}
+        </button>
         <button class="completion-btn completion-btn-new" @click="newPractice">新练习</button>
       </div>
     </div>
@@ -513,10 +797,49 @@ watch(answerText, async () => { await nextTick(); autoResizeAnswer(); });
     <div class="modal-box">
       <div class="modal-icon">⚠️</div>
       <h2 class="modal-title">AI 批改提示</h2>
-      <p class="modal-body">AI 评分仅供参考，不代表真实考试成绩。内容将自动复制到剪贴板。</p>
+      <p class="modal-body">AI 评分仅供参考，不代表真实考试成绩。题目和作文将复制到剪贴板，并在本站打开 Coze 批改窗口。</p>
       <div class="modal-actions">
         <button class="modal-btn modal-btn-cancel" @click="showAiWarning = false">取消</button>
-        <button class="modal-btn modal-btn-confirm" @click="confirmAiGrading">前往批改</button>
+        <button class="modal-btn modal-btn-confirm" @click="confirmAiGrading">开始批改</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login required modal -->
+  <div v-if="showLoginRequired" class="modal-overlay" @click.self="showLoginRequired = false">
+    <div class="modal-box">
+      <div class="modal-icon">🔒</div>
+      <h2 class="modal-title">需要登录</h2>
+      <p class="modal-body">{{ loginRequiredMessage }}</p>
+      <div class="modal-actions">
+        <button class="modal-btn modal-btn-cancel" @click="showLoginRequired = false">知道了</button>
+        <button class="modal-btn modal-btn-confirm" @click="goToLogin">去登录 / 注册</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coze grading panel -->
+  <div v-if="showCozeGrader" class="grader-overlay">
+    <div class="grader-shell">
+      <div class="grader-topbar">
+        <div>
+          <div class="grader-title">AI 批改</div>
+          <div class="grader-subtitle">已复制题目和作文，请在右侧窗口粘贴发送</div>
+        </div>
+        <button class="grader-close-btn" @click="showCozeGrader = false">关闭</button>
+      </div>
+      <div class="grader-body">
+        <div class="grader-context">
+          <div class="grader-section-label">将发送给批改智能体的内容</div>
+          <textarea class="grader-payload" :value="buildGradingPayload()" readonly></textarea>
+          <button class="grader-copy-btn" @click="copyGradingPayload">重新复制</button>
+        </div>
+        <iframe
+          class="grader-frame"
+          :src="COZE_GRADER_URL"
+          title="Coze AI grader"
+          allow="clipboard-read; clipboard-write; microphone"
+        ></iframe>
       </div>
     </div>
   </div>

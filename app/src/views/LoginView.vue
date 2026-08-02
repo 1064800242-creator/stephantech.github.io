@@ -86,7 +86,7 @@ const friendlyError = (code) => {
 <template>
   <div class="login-page">
     <div class="login-card">
-      <h1 class="login-title">小智写作练习室</h1>
+      <h1 class="login-title">TOEFL Writing Improver</h1>
 
       <div class="login-tabs">
         <button class="login-tab" :class="{ active: tab === 'login' }" @click="tab = 'login'; errorMsg = ''">登录</button>

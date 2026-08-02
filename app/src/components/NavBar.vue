@@ -66,7 +66,7 @@ const handleChangePw = async () => {
 
 <template>
   <div class="nav-bar">
-    <span class="nav-title">小智写作练习室</span>
+    <span class="nav-title">TOEFL Writing Improver</span>
     <div class="nav-right">
       <template v-if="guestMode">
         <span class="nav-user nav-guest-label">访客模式</span>
