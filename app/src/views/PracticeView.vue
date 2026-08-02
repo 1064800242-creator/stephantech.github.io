@@ -345,7 +345,11 @@ const submissionTeacherId = () => {
   return userProfile.value?.teacherId || null;
 };
 
+const isTeacherAccount = computed(() => userProfile.value?.role === "teacher");
+const shouldSaveSubmission = computed(() => !guestMode.value && !isTeacherAccount.value);
+
 const ensureSubmissionTarget = () => {
+  if (isTeacherAccount.value) return true;
   if (submissionTeacherId()) return true;
   window.alert("当前账号没有绑定老师，无法保存提交记录。请使用邀请码注册学生账号，或使用老师账号重新登录。");
   return false;
@@ -519,6 +523,11 @@ const submitBuildSentenceAttempt = async () => {
     return;
   }
   if (!ensureSubmissionTarget()) return;
+  if (!shouldSaveSubmission.value) {
+    buildSentenceSubmitNotice.value = "老师测试模式：未保存记录";
+    window.alert("✅ 老师账号测试完成，不会保存到学生提交记录。");
+    return;
+  }
   buildSentenceSubmitLoading.value = true;
   buildSentenceSubmitNotice.value = "";
   try {
@@ -706,6 +715,13 @@ const submitMistakePracticeAttempt = async () => {
     return;
   }
   if (!ensureSubmissionTarget()) return;
+  if (!shouldSaveSubmission.value) {
+    stopMistakePracticeTimer();
+    mistakePracticeState.value = "finished";
+    mistakePracticeNotice.value = "老师测试模式：未保存记录";
+    window.alert("✅ 老师账号测试完成，不会保存到学生提交记录。");
+    return;
+  }
   stopMistakePracticeTimer();
   mistakePracticeSubmitting.value = true;
   mistakePracticeNotice.value = "";
@@ -882,6 +898,10 @@ const autoSubmit = async () => {
     return;
   }
   if (!ensureSubmissionTarget()) return;
+  if (!shouldSaveSubmission.value) {
+    examState.value = "submitted";
+    return;
+  }
   submitLoading.value = true;
   try {
     await addDoc(collection(db, "submissions"), {
@@ -919,6 +939,11 @@ const finishGuestPractice = () => {
 const confirmSubmit = async () => {
   showSubmitConfirm.value = false;
   if (!ensureSubmissionTarget()) return;
+  if (!shouldSaveSubmission.value) {
+    stopTimer();
+    examState.value = "submitted";
+    return;
+  }
   submitLoading.value = true;
   try {
     stopTimer();
@@ -1114,7 +1139,7 @@ watch(selectedBuildSentenceQuiz, () => {
         <div class="sentence-embed-heading">
           <h2 class="sentence-title">Build a Sentence 限时练习</h2>
           <p class="sentence-lead">
-            {{ selectedBuildSentenceQuiz ? "完成练习后提交给老师，后台会同步记录正确率、用时和错题。" : "先选择一套真题。选择前不会加载练习页，倒计时也不会开始。" }}
+            {{ selectedBuildSentenceQuiz ? (isTeacherAccount ? "老师账号可测试练习流程，但不会保存到学生提交记录。" : "完成练习后提交给老师，后台会同步记录正确率、用时和错题。") : "先选择一套真题。选择前不会加载练习页，倒计时也不会开始。" }}
           </p>
         </div>
       </div>
@@ -1155,14 +1180,14 @@ watch(selectedBuildSentenceQuiz, () => {
 
         <div class="sentence-iframe-title">{{ selectedBuildSentenceLabel }}</div>
         <div class="sentence-submit-row">
-          <span class="sentence-submit-hint">完成练习后提交，老师会在 dashboard 看到正确率、用时和逐题作答。</span>
+          <span class="sentence-submit-hint">{{ isTeacherAccount ? "老师测试模式：提交后只结束本次练习，不写入 dashboard。" : "完成练习后提交，老师会在 dashboard 看到正确率、用时和逐题作答。" }}</span>
           <span v-if="buildSentenceSubmitNotice" class="sentence-submit-notice">{{ buildSentenceSubmitNotice }}</span>
           <button
             class="sentence-submit-btn"
             :disabled="buildSentenceSubmitLoading"
             @click="submitBuildSentenceAttempt"
           >
-            {{ buildSentenceSubmitLoading ? "提交中…" : "提交给老师" }}
+          {{ buildSentenceSubmitLoading ? "提交中…" : (isTeacherAccount ? "完成测试" : "提交给老师") }}
           </button>
         </div>
         <iframe
@@ -1184,7 +1209,7 @@ watch(selectedBuildSentenceQuiz, () => {
         <button class="back-btn" @click="backToStart">← 返回</button>
         <div class="sentence-embed-heading">
           <h2 class="sentence-title">我的 Build Sentence 错题本</h2>
-          <p class="sentence-lead">这里会实时收录你曾经做错过的题。错题练习不提供答案，提交后老师会在 dashboard 看到记录。</p>
+          <p class="sentence-lead">{{ isTeacherAccount ? "老师账号可查看测试流程；学生账号会在这里看到自己的错题本。" : "这里会实时收录你曾经做错过的题。错题练习不提供答案，提交后老师会在 dashboard 看到记录。" }}</p>
         </div>
         <div
           v-if="mistakePracticeState === 'running'"
@@ -1246,7 +1271,7 @@ watch(selectedBuildSentenceQuiz, () => {
             :disabled="mistakePracticeSubmitting"
             @click="submitMistakePracticeAttempt"
           >
-            {{ mistakePracticeSubmitting ? "提交中…" : "提交给老师" }}
+            {{ mistakePracticeSubmitting ? "提交中…" : (isTeacherAccount ? "完成测试" : "提交给老师") }}
           </button>
           <button v-else class="sentence-change-btn" @click="resetMistakePractice">返回错题本</button>
         </div>
@@ -1502,11 +1527,11 @@ watch(selectedBuildSentenceQuiz, () => {
     <div class="modal-box">
       <div class="modal-icon">📤</div>
       <h2 class="modal-title">提交确认</h2>
-      <p class="modal-body">确认将当前作答提交给老师吗？提交后将无法继续编辑。</p>
+      <p class="modal-body">{{ isTeacherAccount ? "确认结束本次老师测试吗？不会保存到学生提交记录。" : "确认将当前作答提交给老师吗？提交后将无法继续编辑。" }}</p>
       <div class="modal-actions">
         <button class="modal-btn modal-btn-cancel" @click="showSubmitConfirm = false">取消</button>
         <button class="modal-btn modal-btn-confirm" :disabled="submitLoading" @click="confirmSubmit">
-          {{ submitLoading ? "提交中…" : "确认提交" }}
+          {{ submitLoading ? "提交中…" : (isTeacherAccount ? "确认结束" : "确认提交") }}
         </button>
       </div>
     </div>
