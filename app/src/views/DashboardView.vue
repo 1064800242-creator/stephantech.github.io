@@ -85,6 +85,24 @@ const todayCount = computed(() => {
   ).length;
 });
 
+const isBuildSentence = (submission) => submission.type === "build-sentence";
+
+const submissionTitle = (submission) => {
+  if (isBuildSentence(submission)) return submission.subjectField || "Build a Sentence";
+  return submission.subjectField || submission.toField || "—";
+};
+
+const submissionMetric = (submission) => {
+  if (isBuildSentence(submission)) {
+    return `${submission.correctCount ?? 0}/${submission.totalQuestions ?? "—"} (${submission.accuracy ?? "—"}%)`;
+  }
+  return submission.wordCount ?? "—";
+};
+
+const submissionTypeLabel = (submission) => (
+  isBuildSentence(submission) ? "Build a Sentence" : "写作"
+);
+
 // ── Codes computed ──
 const availableCodes = computed(() => codes.value.filter((c) => !c.used).length);
 
@@ -167,11 +185,12 @@ const downloadSubmission = (s) => {
   const html = `<html><meta charset="utf-8"><body>
     <h2 style="color:#4a90e2;">TOEFL Practice Report</h2>
     <p><b>Student:</b> ${escapeHtml(s.studentName)}</p>
+    <p><b>Type:</b> ${escapeHtml(submissionTypeLabel(s))}</p>
     <p><b>To:</b> ${escapeHtml(s.toField || "—")} &nbsp;&nbsp; <b>Subject:</b> ${escapeHtml(s.subjectField || "—")}</p>
-    <p><b>Word Count:</b> ${s.wordCount ?? "—"} &nbsp;&nbsp; <b>Time Used:</b> ${formatTime(s.timeUsedSeconds)}</p>
+    <p><b>${isBuildSentence(s) ? "Score" : "Word Count"}:</b> ${escapeHtml(String(submissionMetric(s)))} &nbsp;&nbsp; <b>Time Used:</b> ${formatTime(s.timeUsedSeconds)}</p>
     <p><b>Submitted:</b> ${formatDate(s.submittedAt)}</p>
-    ${s.question ? `<hr><h3>Question:</h3><p>${escapeHtml(s.question).replace(/\n/g,"<br>")}</p>` : ""}
-    <hr><h3>Student Response:</h3><p>${escapeHtml(s.answer).replace(/\n/g,"<br>")}</p>
+    ${s.question ? `<hr><h3>${isBuildSentence(s) ? "Practice" : "Question"}:</h3><p>${escapeHtml(s.question).replace(/\n/g,"<br>")}</p>` : ""}
+    <hr><h3>${isBuildSentence(s) ? "Build a Sentence Record" : "Student Response"}:</h3><p>${escapeHtml(s.answer).replace(/\n/g,"<br>")}</p>
   </body></html>`;
 
   const blob = new Blob(["\ufeff", html], { type: "application/msword" });
@@ -239,7 +258,7 @@ const formatTime = (seconds) => {
             <tr>
               <th>学生</th>
               <th>主题 / Subject</th>
-              <th>字数</th>
+              <th>字数 / 正确率</th>
               <th>用时</th>
               <th>提交时间</th>
             </tr>
@@ -247,8 +266,11 @@ const formatTime = (seconds) => {
           <tbody>
             <tr v-for="s in filtered" :key="s.id" class="dash-row" @click="selected = s">
               <td>{{ s.studentName }}</td>
-              <td>{{ s.subjectField || s.toField || "—" }}</td>
-              <td>{{ s.wordCount ?? "—" }}</td>
+              <td>
+                <span v-if="isBuildSentence(s)" class="submission-type-badge">Build</span>
+                {{ submissionTitle(s) }}
+              </td>
+              <td>{{ submissionMetric(s) }}</td>
               <td>{{ formatTime(s.timeUsedSeconds) }}</td>
               <td>{{ formatDate(s.submittedAt) }}</td>
             </tr>
@@ -319,11 +341,11 @@ const formatTime = (seconds) => {
         <div class="detail-topbar-left">
           <span class="detail-student">{{ selected.studentName }}</span>
           <span class="detail-topbar-sep">|</span>
-          <span class="detail-topbar-meta">To: {{ selected.toField || "—" }}</span>
+          <span class="detail-topbar-meta">{{ submissionTypeLabel(selected) }}</span>
           <span class="detail-topbar-sep">|</span>
           <span class="detail-topbar-meta">Subject: {{ selected.subjectField || "—" }}</span>
           <span class="detail-topbar-sep">|</span>
-          <span class="detail-topbar-meta">{{ selected.wordCount }} 词</span>
+          <span class="detail-topbar-meta">{{ isBuildSentence(selected) ? submissionMetric(selected) : `${selected.wordCount} 词` }}</span>
           <span class="detail-topbar-sep">|</span>
           <span class="detail-topbar-meta">用时 {{ formatTime(selected.timeUsedSeconds) }}</span>
           <span class="detail-topbar-sep">|</span>
@@ -338,11 +360,11 @@ const formatTime = (seconds) => {
       <!-- Two-column body: question left, answer right -->
       <div class="detail-body">
         <div v-if="selected.question" class="detail-col detail-col-question">
-          <div class="detail-col-title">题目</div>
+          <div class="detail-col-title">{{ isBuildSentence(selected) ? "练习" : "题目" }}</div>
           <div class="detail-question-text" v-html="renderMarkdown(selected.question)"></div>
         </div>
         <div class="detail-col detail-col-answer" :class="{ 'detail-col-full': !selected.question }">
-          <div class="detail-col-title">学生作答</div>
+          <div class="detail-col-title">{{ isBuildSentence(selected) ? "逐题记录" : "学生作答" }}</div>
           <div class="detail-answer-text">{{ selected.answer }}</div>
         </div>
       </div>

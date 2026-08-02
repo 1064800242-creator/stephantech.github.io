@@ -101,6 +101,9 @@ const BUILD_SENTENCE_QUIZZES = [
 ];
 const DEFAULT_BUILD_SENTENCE_QUIZ = "april/quiz-01.html";
 const selectedBuildSentenceQuiz = ref(DEFAULT_BUILD_SENTENCE_QUIZ);
+const buildSentenceIframe = ref(null);
+const buildSentenceSubmitLoading = ref(false);
+const buildSentenceSubmitNotice = ref("");
 const selectedBuildSentenceUrl = computed(() => `${BUILD_SENTENCE_BASE_URL}${selectedBuildSentenceQuiz.value}`);
 const selectedBuildSentenceLabel = computed(() => (
   BUILD_SENTENCE_QUIZZES.find((quiz) => quiz.file === selectedBuildSentenceQuiz.value)?.label || "Build a Sentence"
@@ -293,6 +296,123 @@ const copySentenceResults = async () => {
     window.alert("✅ 练习结果已复制。");
   } catch {
     window.alert("复制失败，请手动复制结果。");
+  }
+};
+
+const cleanSentenceForCompare = (text = "") =>
+  text.toLowerCase().replace(/[^a-z0-9]/g, "");
+
+const parseBuildSentenceTimer = (doc) => {
+  const timerText = doc.querySelector("#timer")?.textContent?.trim() || "";
+  const scriptText = Array.from(doc.scripts).map((script) => script.textContent || "").join("\n");
+  const limit = Number(scriptText.match(/const\s+TIME_LIMIT\s*=\s*(\d+)/)?.[1] || 410);
+  const match = timerText.match(/^(\+)?(\d{1,2}):(\d{2})$/);
+  if (!match) return null;
+  const shownSeconds = Number(match[2]) * 60 + Number(match[3]);
+  return match[1] ? limit + shownSeconds : Math.max(0, limit - shownSeconds);
+};
+
+const syncBuildSentenceStudentName = () => {
+  const doc = buildSentenceIframe.value?.contentDocument;
+  const input = doc?.querySelector("#username");
+  if (input) input.value = userProfile.value?.name || user.value?.email || "";
+};
+
+const collectBuildSentenceAttempt = () => {
+  const doc = buildSentenceIframe.value?.contentDocument;
+  if (!doc) throw new Error("练习页面还没有加载完成。");
+  const questionBlocks = Array.from(doc.querySelectorAll(".question-block"));
+  if (questionBlocks.length === 0) throw new Error("没有读取到练习题，请稍后再试。");
+
+  let correctCount = 0;
+  let emptyCount = 0;
+  const answers = questionBlocks.map((block, index) => {
+    const answerArea = block.querySelector(".row-answer-area");
+    const correctAnswer = answerArea?.getAttribute("data-correct") || "";
+    const pieces = Array.from(answerArea?.children || []).map((child) => {
+      if (child.classList.contains("drop-box")) {
+        const text = child.textContent.trim();
+        if (!text) emptyCount++;
+        return text || "___";
+      }
+      return child.textContent.trim();
+    }).filter(Boolean);
+    const userAnswer = pieces.join(" ");
+    const isCorrect = cleanSentenceForCompare(userAnswer) === cleanSentenceForCompare(correctAnswer);
+    if (isCorrect) correctCount++;
+    return {
+      number: index + 1,
+      question: block.querySelector(".row-question")?.textContent?.trim() || `Question ${index + 1}`,
+      userAnswer,
+      correctAnswer,
+      isCorrect,
+    };
+  });
+
+  return {
+    answers,
+    correctCount,
+    totalQuestions: answers.length,
+    emptyCount,
+    accuracy: Math.round((correctCount / answers.length) * 100),
+    timeUsedSeconds: parseBuildSentenceTimer(doc),
+  };
+};
+
+const formatBuildSentenceAnswer = (attempt) => [
+  `${selectedBuildSentenceLabel.value}`,
+  `Score: ${attempt.correctCount}/${attempt.totalQuestions} (${attempt.accuracy}%)`,
+  "",
+  ...attempt.answers.map((item) => [
+    `${item.number}. ${item.question}`,
+    `Student: ${item.userAnswer}`,
+    `Correct: ${item.correctAnswer}`,
+    `Result: ${item.isCorrect ? "Correct" : "Incorrect"}`,
+  ].join("\n")),
+].join("\n\n");
+
+const submitBuildSentenceAttempt = async () => {
+  if (guestMode.value) {
+    requireLoginForFeature("Build a Sentence 提交记录");
+    return;
+  }
+  let attempt;
+  try {
+    attempt = collectBuildSentenceAttempt();
+  } catch (err) {
+    window.alert(err.message);
+    return;
+  }
+  if (attempt.emptyCount > 0) {
+    window.alert("还有空格没有完成，请填完后再提交给老师。");
+    return;
+  }
+  buildSentenceSubmitLoading.value = true;
+  buildSentenceSubmitNotice.value = "";
+  try {
+    await addDoc(collection(db, "submissions"), {
+      type: "build-sentence",
+      studentId: user.value.uid,
+      studentName: userProfile.value?.name || user.value.email,
+      teacherId: userProfile.value?.teacherId || null,
+      question: selectedBuildSentenceLabel.value,
+      toField: "Build a Sentence",
+      subjectField: `Build a Sentence - ${selectedBuildSentenceLabel.value}`,
+      answer: formatBuildSentenceAnswer(attempt),
+      buildSentenceAnswers: attempt.answers,
+      correctCount: attempt.correctCount,
+      totalQuestions: attempt.totalQuestions,
+      accuracy: attempt.accuracy,
+      wordCount: null,
+      timeUsedSeconds: attempt.timeUsedSeconds,
+      submittedAt: serverTimestamp(),
+    });
+    buildSentenceSubmitNotice.value = "已提交给老师";
+    window.alert("✅ Build a Sentence 记录已提交给老师。");
+  } catch (err) {
+    window.alert(`提交失败：${err.message}`);
+  } finally {
+    buildSentenceSubmitLoading.value = false;
   }
 };
 
@@ -542,6 +662,7 @@ const goToSentenceBuilder = () => {
     return;
   }
   selectedBuildSentenceQuiz.value = DEFAULT_BUILD_SENTENCE_QUIZ;
+  buildSentenceSubmitNotice.value = "";
   resetSentencePractice();
   currentScreen.value = "sentence-builder";
 };
@@ -557,6 +678,9 @@ const backToStart = () => {
 
 onMounted(() => autoResizeAnswer());
 watch(answerText, async () => { await nextTick(); autoResizeAnswer(); });
+watch(selectedBuildSentenceQuiz, () => {
+  buildSentenceSubmitNotice.value = "";
+});
 </script>
 
 <template>
@@ -647,11 +771,24 @@ watch(answerText, async () => { await nextTick(); autoResizeAnswer(); });
       </div>
 
       <div class="sentence-iframe-title">{{ selectedBuildSentenceLabel }}</div>
+      <div class="sentence-submit-row">
+        <span class="sentence-submit-hint">完成练习后提交，老师会在 dashboard 看到正确率、用时和逐题作答。</span>
+        <span v-if="buildSentenceSubmitNotice" class="sentence-submit-notice">{{ buildSentenceSubmitNotice }}</span>
+        <button
+          class="sentence-submit-btn"
+          :disabled="buildSentenceSubmitLoading"
+          @click="submitBuildSentenceAttempt"
+        >
+          {{ buildSentenceSubmitLoading ? "提交中…" : "提交给老师" }}
+        </button>
+      </div>
       <iframe
+        ref="buildSentenceIframe"
         :key="selectedBuildSentenceQuiz"
         class="sentence-iframe"
         :src="selectedBuildSentenceUrl"
         title="Build a Sentence timed practice"
+        @load="syncBuildSentenceStudentName"
       ></iframe>
     </div>
   </div>

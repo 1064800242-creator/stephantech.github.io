@@ -325,6 +325,19 @@ textarea {
   color: #1a1a1a;
 }
 
+.submission-type-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  padding: 2px 7px;
+  border-radius: 5px;
+  background: #eef4fd;
+  color: #2c6dbf;
+  font-size: 11px;
+  font-weight: 700;
+  vertical-align: middle;
+}
+
 .dash-empty {
   text-align: center;
   color: #888;
@@ -1310,6 +1323,52 @@ textarea {
   color: #666;
   font-size: 13px;
   font-weight: 700;
+}
+
+.sentence-submit-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 14px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.sentence-submit-hint {
+  flex: 1;
+  min-width: 240px;
+  color: #555;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.sentence-submit-notice {
+  color: #219a52;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.sentence-submit-btn {
+  flex-shrink: 0;
+  padding: 9px 18px;
+  border: none;
+  border-radius: 6px;
+  background: #27ae60;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.sentence-submit-btn:hover {
+  background: #219a52;
+}
+
+.sentence-submit-btn:disabled {
+  background: #9a9a9a;
+  cursor: not-allowed;
 }
 
 .sentence-iframe {
