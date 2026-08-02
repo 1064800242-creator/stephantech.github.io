@@ -105,7 +105,7 @@ const submissionTypeLabel = (submission) => (
 );
 
 const buildSentenceSubmissions = computed(() =>
-  submissions.value.filter((s) => isBuildSentence(s) && Array.isArray(s.buildSentenceAnswers))
+  submissions.value.filter((s) => isBuildSentence(s) && s.source !== "mistake-book" && Array.isArray(s.buildSentenceAnswers))
 );
 
 const mistakeBookItems = computed(() => {
@@ -268,65 +268,6 @@ const downloadSubmission = (s) => {
   window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 };
 
-const buildMistakeBookFilename = () => {
-  const now = new Date();
-  const pad = (n) => String(n).padStart(2, "0");
-  const ts = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
-  const student = mistakeStudents.value.find((item) => item.id === selectedMistakeStudentId.value);
-  const safeName = (student?.name || "All_Students").replace(/[\\/:*?"<>|]/g, "_");
-  return `${safeName}_Build_Sentence_错题本_${ts}.doc`;
-};
-
-const formatSecondsAsMinutes = (seconds) => {
-  const s = Math.max(0, Math.round(seconds));
-  return `${Math.floor(s / 60)}分${String(s % 60).padStart(2, "0")}秒`;
-};
-
-const downloadMistakeBook = () => {
-  const items = filteredMistakeBook.value;
-  if (items.length === 0) {
-    window.alert("当前没有可导出的 Build Sentence 错题。");
-    return;
-  }
-  const groups = [];
-  for (let i = 0; i < items.length; i += 10) {
-    groups.push(items.slice(i, i + 10));
-  }
-  const htmlGroups = groups.map((group, groupIndex) => {
-    const suggestedSeconds = group.length * 41;
-    const rows = group.map((item, index) => `
-      <div style="margin: 0 0 18px;">
-        <p><b>${groupIndex * 10 + index + 1}. ${escapeHtml(item.quizLabel)} - 第 ${escapeHtml(String(item.number))} 题</b></p>
-        <p>${escapeHtml(item.question)}</p>
-        ${item.blankSentence ? `<p>${escapeHtml(item.blankSentence)}</p>` : ""}
-        ${item.wordBank.length ? `<p><b>Word Bank:</b> ${escapeHtml(item.wordBank.join(" / "))}</p>` : ""}
-      </div>
-    `).join("");
-    return `
-      <h3>第 ${groupIndex + 1} 组：${group.length} 题，建议限时 ${formatSecondsAsMinutes(suggestedSeconds)}</h3>
-      ${rows}
-      <hr>
-    `;
-  }).join("");
-
-  const student = mistakeStudents.value.find((item) => item.id === selectedMistakeStudentId.value);
-  const html = `<html><meta charset="utf-8"><body>
-    <h2 style="color:#1a1a1a;">Build a Sentence 错题本</h2>
-    <p><b>学生:</b> ${escapeHtml(student?.name || "全部学生")}</p>
-    <p><b>说明:</b> 本错题本只收录曾经做错的题目，不含正确答案。每 10 题为一组；不足 10 题按每题 41 秒建议计时。</p>
-    <p><b>错题数量:</b> ${items.length}</p>
-    <hr>
-    ${htmlGroups}
-  </body></html>`;
-
-  const blob = new Blob(["\ufeff", html], { type: "application/msword" });
-  const link = document.createElement("a");
-  link.href = URL.createObjectURL(blob);
-  link.download = buildMistakeBookFilename();
-  link.click();
-  window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
-};
-
 // ── Formatters ──
 const formatDate = (ts) => {
   if (!ts?.toDate) return "—";
@@ -370,7 +311,7 @@ const formatTime = (seconds) => {
     <!-- Tabs -->
     <div class="dash-tabs">
       <button class="dash-tab" :class="{ active: activeTab === 'submissions' }" @click="activeTab = 'submissions'">学生作答</button>
-      <button class="dash-tab" :class="{ active: activeTab === 'mistakes' }" @click="activeTab = 'mistakes'">错题本</button>
+      <button class="dash-tab" :class="{ active: activeTab === 'mistakes' }" @click="activeTab = 'mistakes'">学生错题集</button>
       <button class="dash-tab" :class="{ active: activeTab === 'codes' }" @click="activeTab = 'codes'">邀请码管理</button>
     </div>
 
@@ -413,8 +354,8 @@ const formatTime = (seconds) => {
     <template v-else-if="activeTab === 'mistakes'">
       <div class="mistake-book-toolbar">
         <div>
-          <div class="mistake-book-title">Build a Sentence 错题本</div>
-          <div class="mistake-book-hint">只收录学生曾经做错的题，不展示正确答案。后续改对也会保留在错题本里。</div>
+          <div class="mistake-book-title">学生 Build Sentence 错题集</div>
+          <div class="mistake-book-hint">这里展示学生曾经做错过的原始真题。学生后续在前台重做错题，也不会把这些历史错题删掉。</div>
         </div>
         <div class="mistake-book-actions">
           <select v-model="selectedMistakeStudentId" class="mistake-student-select">
@@ -423,12 +364,11 @@ const formatTime = (seconds) => {
               {{ student.name }}（{{ student.count }}题）
             </option>
           </select>
-          <button class="mistake-download-btn" @click="downloadMistakeBook">下载错题本 .doc</button>
         </div>
       </div>
 
       <div class="mistake-book-note">
-        计时建议：每 10 题一组，每组 6 分 50 秒；最后不足 10 题按每题 41 秒计时。
+        这个页面只用于老师查看错题来源；学生在练习首页的“我的错题本”里直接拖拽重做。
       </div>
 
       <div class="dash-table-wrap">

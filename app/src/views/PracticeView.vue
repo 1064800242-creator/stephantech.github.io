@@ -1,6 +1,6 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../composables/useAuth";
 import NavBar from "../components/NavBar.vue";
@@ -8,7 +8,7 @@ import NavBar from "../components/NavBar.vue";
 const { user, userProfile, guestMode } = useAuth();
 
 // ── Screen state ──
-const currentScreen = ref("start"); // 'start' | 'ai-setup' | 'exam' | 'sentence-builder'
+const currentScreen = ref("start"); // 'start' | 'ai-setup' | 'exam' | 'sentence-builder' | 'mistake-book'
 // examState: 'idle' (before Start), 'running' (in progress), 'submitted'
 const examState = ref("idle");
 const startTime = ref(null);
@@ -110,6 +110,114 @@ const selectedBuildSentenceLabel = computed(() => (
   BUILD_SENTENCE_QUIZZES.find((quiz) => quiz.file === selectedBuildSentenceQuiz.value)?.label || "请选择一套真题"
 ));
 
+// ── Student mistake book ──
+const studentSubmissions = ref([]);
+const mistakeBookLoading = ref(false);
+const mistakeBookError = ref("");
+const mistakePracticeState = ref("list"); // 'list' | 'running' | 'finished'
+const mistakePracticeItems = ref([]);
+const mistakePracticeAnswers = ref([]);
+const mistakePracticeSeconds = ref(0);
+const mistakePracticeStartTime = ref(null);
+const mistakePracticeSubmitting = ref(false);
+const mistakePracticeNotice = ref("");
+let unsubStudentSubmissions = null;
+let mistakePracticeTimerInterval = null;
+
+const normalizeWordBank = (answer) => {
+  if (Array.isArray(answer.wordBank) && answer.wordBank.length) return answer.wordBank;
+  return String(answer.correctAnswer || "")
+    .replace(/[?.!,]/g, "")
+    .split(/\s+/)
+    .filter(Boolean);
+};
+
+const buildFallbackBlankSentence = (answer) => {
+  if (answer.blankSentence) return answer.blankSentence;
+  const count = normalizeWordBank(answer).length || 1;
+  return Array(count).fill("_____").join(" ");
+};
+
+const studentMistakeBookItems = computed(() => {
+  const itemsByQuestion = new Map();
+  studentSubmissions.value
+    .filter((submission) =>
+      submission.type === "build-sentence" &&
+      submission.source !== "mistake-book" &&
+      Array.isArray(submission.buildSentenceAnswers)
+    )
+    .forEach((submission) => {
+      submission.buildSentenceAnswers
+        .filter((answer) => answer && answer.isCorrect === false)
+        .forEach((answer) => {
+          const key = [
+            submission.quizFile || submission.question || submission.subjectField || "Build a Sentence",
+            answer.number || answer.question || "",
+          ].join("|");
+          const existing = itemsByQuestion.get(key);
+          const submittedSeconds = submission.submittedAt?.seconds ?? 0;
+          const item = {
+            key,
+            quizLabel: submission.question || submission.subjectField || "Build a Sentence",
+            quizFile: submission.quizFile || "",
+            number: answer.number || "—",
+            question: answer.question || "",
+            blankSentence: buildFallbackBlankSentence(answer),
+            wordBank: normalizeWordBank(answer),
+            correctAnswer: answer.correctAnswer || "",
+            firstWrongAt: existing?.firstWrongAt || submission.submittedAt,
+            lastWrongAt: submission.submittedAt,
+            lastWrongSeconds: submittedSeconds,
+            wrongCount: (existing?.wrongCount || 0) + 1,
+          };
+          if (existing && (existing.lastWrongSeconds || 0) > submittedSeconds) {
+            item.lastWrongAt = existing.lastWrongAt;
+            item.lastWrongSeconds = existing.lastWrongSeconds;
+          }
+          itemsByQuestion.set(key, item);
+        });
+    });
+
+  return Array.from(itemsByQuestion.values()).sort((a, b) => {
+    const quizCompare = a.quizLabel.localeCompare(b.quizLabel, "zh-CN");
+    if (quizCompare) return quizCompare;
+    return Number(a.number) - Number(b.number);
+  });
+});
+
+const mistakePracticeTotalSeconds = computed(() => Math.max(41, mistakePracticeItems.value.length * 41));
+const mistakePracticeFormattedTimer = computed(() => {
+  const m = Math.floor(mistakePracticeSeconds.value / 60);
+  const s = mistakePracticeSeconds.value % 60;
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+});
+const mistakePracticeTimerWarning = computed(() => mistakePracticeSeconds.value <= 60 && mistakePracticeSeconds.value > 0);
+
+const stopMistakePracticeTimer = () => {
+  if (mistakePracticeTimerInterval) {
+    clearInterval(mistakePracticeTimerInterval);
+    mistakePracticeTimerInterval = null;
+  }
+};
+
+const subscribeStudentSubmissions = (uid) => {
+  if (unsubStudentSubmissions) unsubStudentSubmissions();
+  if (!uid || guestMode.value) return;
+  mistakeBookLoading.value = true;
+  mistakeBookError.value = "";
+  const q = query(collection(db, "submissions"), where("studentId", "==", uid));
+  unsubStudentSubmissions = onSnapshot(q, (snap) => {
+    const docs = snap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    docs.sort((a, b) => (b.submittedAt?.seconds ?? 0) - (a.submittedAt?.seconds ?? 0));
+    studentSubmissions.value = docs;
+    mistakeBookLoading.value = false;
+  }, (err) => {
+    console.error("student submissions listener:", err);
+    mistakeBookError.value = "暂时无法读取错题本，请稍后刷新页面重试。";
+    mistakeBookLoading.value = false;
+  });
+};
+
 // ── Build a sentence practice ──
 const SENTENCE_EXERCISES = [
   {
@@ -177,6 +285,8 @@ const stopSentenceTimer = () => {
 onUnmounted(() => {
   stopTimer();
   stopSentenceTimer();
+  stopMistakePracticeTimer();
+  if (unsubStudentSubmissions) unsubStudentSubmissions();
 });
 
 // ── Computed ──
@@ -424,6 +534,195 @@ const submitBuildSentenceAttempt = async () => {
     window.alert(`提交失败：${err.message}`);
   } finally {
     buildSentenceSubmitLoading.value = false;
+  }
+};
+
+const formatMistakePracticeAnswer = (attempt) => [
+  "Build a Sentence 错题本再练",
+  `Score: ${attempt.correctCount}/${attempt.totalQuestions} (${attempt.accuracy}%)`,
+  "",
+  ...attempt.answers.map((item) => [
+    `${item.number}. ${item.question}`,
+    `Student: ${item.userAnswer}`,
+    `Correct: ${item.correctAnswer}`,
+    `Result: ${item.isCorrect ? "Correct" : "Incorrect"}`,
+  ].join("\n")),
+].join("\n\n");
+
+const startMistakePractice = () => {
+  if (guestMode.value) {
+    requireLoginForFeature("错题本");
+    return;
+  }
+  const items = studentMistakeBookItems.value;
+  if (items.length === 0) {
+    window.alert("目前还没有 Build a Sentence 错题。");
+    return;
+  }
+  stopMistakePracticeTimer();
+  mistakePracticeItems.value = items.map((item) => ({
+    ...item,
+    wordBank: [...item.wordBank],
+  }));
+  mistakePracticeAnswers.value = mistakePracticeItems.value.map(() => []);
+  mistakePracticeSeconds.value = Math.max(41, mistakePracticeItems.value.length * 41);
+  mistakePracticeStartTime.value = Date.now();
+  mistakePracticeState.value = "running";
+  mistakePracticeNotice.value = "";
+  mistakePracticeTimerInterval = setInterval(() => {
+    if (mistakePracticeSeconds.value > 0) {
+      mistakePracticeSeconds.value--;
+    } else {
+      stopMistakePracticeTimer();
+      mistakePracticeState.value = "finished";
+    }
+  }, 1000);
+};
+
+const resetMistakePractice = () => {
+  stopMistakePracticeTimer();
+  mistakePracticeState.value = "list";
+  mistakePracticeItems.value = [];
+  mistakePracticeAnswers.value = [];
+  mistakePracticeSeconds.value = 0;
+  mistakePracticeStartTime.value = null;
+  mistakePracticeNotice.value = "";
+};
+
+const mistakeBlankTokens = (item) =>
+  String(item.blankSentence || "")
+    .split(/(_____)/g)
+    .map((part) => part.trim())
+    .filter(Boolean);
+
+const availableMistakeWords = (item, index) => {
+  const used = mistakePracticeAnswers.value[index] || [];
+  return item.wordBank.filter((word, wordIndex) => !used.some((answer) => answer.word === word && answer.wordIndex === wordIndex));
+};
+
+const availableMistakeWordOptions = (item, index) => {
+  const used = mistakePracticeAnswers.value[index] || [];
+  return item.wordBank
+    .map((word, wordIndex) => ({ word, wordIndex }))
+    .filter((option) => !used.some((answer) => answer.word === option.word && answer.wordIndex === option.wordIndex));
+};
+
+const placeMistakeWord = (itemIndex, word, wordIndex) => {
+  if (mistakePracticeState.value !== "running") return;
+  const answers = [...(mistakePracticeAnswers.value[itemIndex] || [])];
+  const blankCount = mistakeBlankTokens(mistakePracticeItems.value[itemIndex]).filter((part) => part === "_____").length;
+  if (answers.length >= blankCount) return;
+  answers.push({ word, wordIndex });
+  mistakePracticeAnswers.value[itemIndex] = answers;
+};
+
+const removeMistakeWord = (itemIndex, answerIndex) => {
+  if (mistakePracticeState.value !== "running") return;
+  const answers = [...(mistakePracticeAnswers.value[itemIndex] || [])];
+  answers.splice(answerIndex, 1);
+  mistakePracticeAnswers.value[itemIndex] = answers;
+};
+
+const handleMistakeDragStart = (event, word, wordIndex) => {
+  event.dataTransfer.effectAllowed = "move";
+  event.dataTransfer.setData("text/plain", JSON.stringify({ word, wordIndex }));
+};
+
+const handleMistakeDrop = (event, itemIndex) => {
+  event.preventDefault();
+  try {
+    const payload = JSON.parse(event.dataTransfer.getData("text/plain"));
+    placeMistakeWord(itemIndex, payload.word, payload.wordIndex);
+  } catch {
+    // Ignore malformed drag payloads.
+  }
+};
+
+const renderMistakeAnswerParts = (item, itemIndex) => {
+  const answers = mistakePracticeAnswers.value[itemIndex] || [];
+  let answerCursor = 0;
+  return mistakeBlankTokens(item).map((part) => {
+    if (part !== "_____") return { type: "text", text: part };
+    const answer = answers[answerCursor];
+    const currentIndex = answerCursor;
+    answerCursor++;
+    return {
+      type: "blank",
+      text: answer?.word || "",
+      answerIndex: currentIndex,
+    };
+  });
+};
+
+const collectMistakePracticeAttempt = () => {
+  let correctCount = 0;
+  const answers = mistakePracticeItems.value.map((item, index) => {
+    const userAnswer = renderMistakeAnswerParts(item, index)
+      .map((part) => part.type === "blank" ? (part.text || "___") : part.text)
+      .join(" ");
+    const isCorrect = cleanSentenceForCompare(userAnswer) === cleanSentenceForCompare(item.correctAnswer);
+    if (isCorrect) correctCount++;
+    return {
+      number: item.number,
+      question: item.question,
+      blankSentence: item.blankSentence,
+      wordBank: item.wordBank,
+      userAnswer,
+      correctAnswer: item.correctAnswer,
+      isCorrect,
+    };
+  });
+
+  return {
+    answers,
+    correctCount,
+    totalQuestions: answers.length,
+    accuracy: Math.round((correctCount / answers.length) * 100),
+    timeUsedSeconds: Math.round((Date.now() - mistakePracticeStartTime.value) / 1000),
+  };
+};
+
+const submitMistakePracticeAttempt = async () => {
+  if (guestMode.value) {
+    requireLoginForFeature("错题本提交记录");
+    return;
+  }
+  const attempt = collectMistakePracticeAttempt();
+  const hasEmpty = attempt.answers.some((answer) => answer.userAnswer.includes("___"));
+  if (hasEmpty) {
+    window.alert("还有空格没有完成，请填完后再提交。");
+    return;
+  }
+  stopMistakePracticeTimer();
+  mistakePracticeSubmitting.value = true;
+  mistakePracticeNotice.value = "";
+  try {
+    await addDoc(collection(db, "submissions"), {
+      type: "build-sentence",
+      source: "mistake-book",
+      studentId: user.value.uid,
+      studentName: userProfile.value?.name || user.value.email,
+      teacherId: userProfile.value?.teacherId || null,
+      question: "Build a Sentence 错题本再练",
+      quizFile: "mistake-book",
+      toField: "Build a Sentence",
+      subjectField: "Build a Sentence - 错题本再练",
+      answer: formatMistakePracticeAnswer(attempt),
+      buildSentenceAnswers: attempt.answers,
+      correctCount: attempt.correctCount,
+      totalQuestions: attempt.totalQuestions,
+      accuracy: attempt.accuracy,
+      wordCount: null,
+      timeUsedSeconds: attempt.timeUsedSeconds,
+      submittedAt: serverTimestamp(),
+    });
+    mistakePracticeState.value = "finished";
+    mistakePracticeNotice.value = "已提交给老师";
+    window.alert("✅ 错题本练习记录已提交给老师。");
+  } catch (err) {
+    window.alert(`提交失败：${err.message}`);
+  } finally {
+    mistakePracticeSubmitting.value = false;
   }
 };
 
@@ -677,6 +976,14 @@ const goToSentenceBuilder = () => {
   resetSentencePractice();
   currentScreen.value = "sentence-builder";
 };
+const goToMistakeBook = () => {
+  if (guestMode.value) {
+    requireLoginForFeature("错题本");
+    return;
+  }
+  resetMistakePractice();
+  currentScreen.value = "mistake-book";
+};
 const startBuildSentenceQuiz = (quiz) => {
   selectedBuildSentenceQuiz.value = quiz.file;
   buildSentenceSubmitNotice.value = "";
@@ -688,6 +995,7 @@ const backToBuildSentencePicker = () => {
 const backToStart = () => {
   currentScreen.value = "start";
   selectedBuildSentenceQuiz.value = "";
+  resetMistakePractice();
   resetSentencePractice();
   aiResponseText.value = "";
   aiGeneratedFields.value = false;
@@ -696,7 +1004,13 @@ const backToStart = () => {
   questionText.value = "";
 };
 
-onMounted(() => autoResizeAnswer());
+onMounted(() => {
+  autoResizeAnswer();
+  if (user.value?.uid && !guestMode.value) subscribeStudentSubmissions(user.value.uid);
+});
+watch(user, (nextUser) => {
+  if (nextUser?.uid && !guestMode.value) subscribeStudentSubmissions(nextUser.uid);
+});
 watch(answerText, async () => { await nextTick(); autoResizeAnswer(); });
 watch(selectedBuildSentenceQuiz, () => {
   buildSentenceSubmitNotice.value = "";
@@ -730,6 +1044,16 @@ watch(selectedBuildSentenceQuiz, () => {
           <div class="option-icon">⏱️</div>
           <div class="option-label">Build a Sentence 限时练习</div>
           <div class="option-desc">{{ guestMode ? "登录后可使用此练习" : "根据中文提示和关键词，限时写出完整英文句子" }}</div>
+        </button>
+        <button
+          class="option-card"
+          :class="{ 'option-card-locked': guestMode }"
+          :disabled="guestMode"
+          @click="goToMistakeBook"
+        >
+          <div class="option-icon">📒</div>
+          <div class="option-label">我的错题本</div>
+          <div class="option-desc">{{ guestMode ? "登录后可查看错题本" : "查看并重做自己曾经错过的 Build Sentence 题" }}</div>
         </button>
       </div>
     </div>
@@ -834,6 +1158,125 @@ watch(selectedBuildSentenceQuiz, () => {
           title="Build a Sentence timed practice"
           @load="syncBuildSentenceStudentName"
         ></iframe>
+      </template>
+    </div>
+  </div>
+
+  <!-- ── Student mistake book screen ── -->
+  <div v-else-if="currentScreen === 'mistake-book'" class="sentence-wrapper">
+    <div class="sentence-card mistake-practice-card">
+      <div class="sentence-topbar">
+        <button class="back-btn" @click="backToStart">← 返回</button>
+        <div class="sentence-embed-heading">
+          <h2 class="sentence-title">我的 Build Sentence 错题本</h2>
+          <p class="sentence-lead">这里会实时收录你曾经做错过的题。错题练习不提供答案，提交后老师会在 dashboard 看到记录。</p>
+        </div>
+        <div
+          v-if="mistakePracticeState === 'running'"
+          class="sentence-timer"
+          :class="{ 'timer-warning': mistakePracticeTimerWarning }"
+        >
+          {{ mistakePracticeFormattedTimer }}
+        </div>
+      </div>
+
+      <div v-if="mistakeBookError" class="mistake-practice-alert">{{ mistakeBookError }}</div>
+
+      <template v-if="mistakePracticeState === 'list'">
+        <div class="mistake-practice-summary">
+          <div>
+            <div class="mistake-summary-num">{{ studentMistakeBookItems.length }}</div>
+            <div class="mistake-summary-label">当前错题数</div>
+          </div>
+          <div>
+            <div class="mistake-summary-num">{{ formatTime(studentMistakeBookItems.length * 41) }}</div>
+            <div class="mistake-summary-label">建议限时</div>
+          </div>
+          <button
+            class="sentence-submit-btn"
+            :disabled="mistakeBookLoading || studentMistakeBookItems.length === 0"
+            @click="startMistakePractice"
+          >
+            {{ mistakeBookLoading ? "读取中…" : "开始错题练习" }}
+          </button>
+        </div>
+
+        <div class="mistake-book-note">
+          计时按每题 41 秒计算；错题数量不必凑满 10 题，系统会按当前错题数自动给时间。
+        </div>
+
+        <div class="mistake-preview-list">
+          <div v-for="item in studentMistakeBookItems" :key="item.key" class="mistake-preview-item">
+            <div class="mistake-preview-head">
+              <span>{{ item.quizLabel }} - 第 {{ item.number }} 题</span>
+              <span>错过 {{ item.wrongCount }} 次</span>
+            </div>
+            <div class="mistake-preview-question">{{ item.question }}</div>
+            <div class="mistake-blank-sentence">{{ item.blankSentence }}</div>
+            <div class="mistake-wordbank">{{ item.wordBank.join(" / ") }}</div>
+          </div>
+          <div v-if="!mistakeBookLoading && studentMistakeBookItems.length === 0" class="dash-empty">
+            目前还没有 Build Sentence 错题。完成并提交一次 Build Sentence 后，这里会自动更新。
+          </div>
+        </div>
+      </template>
+
+      <template v-else>
+        <div class="mistake-practice-toolbar">
+          <span>{{ mistakePracticeItems.length }} 题 · 建议限时 {{ formatTime(mistakePracticeTotalSeconds) }}</span>
+          <span v-if="mistakePracticeNotice" class="sentence-submit-notice">{{ mistakePracticeNotice }}</span>
+          <button
+            v-if="mistakePracticeState === 'running'"
+            class="sentence-submit-btn"
+            :disabled="mistakePracticeSubmitting"
+            @click="submitMistakePracticeAttempt"
+          >
+            {{ mistakePracticeSubmitting ? "提交中…" : "提交给老师" }}
+          </button>
+          <button v-else class="sentence-change-btn" @click="resetMistakePractice">返回错题本</button>
+        </div>
+
+        <div class="mistake-drill-list">
+          <div v-for="(item, itemIndex) in mistakePracticeItems" :key="item.key" class="mistake-drill-item">
+            <div class="mistake-preview-head">
+              <span>{{ itemIndex + 1 }}. {{ item.quizLabel }} - 第 {{ item.number }} 题</span>
+              <span>{{ item.question }}</span>
+            </div>
+            <div
+              class="mistake-answer-area"
+              @dragover.prevent
+              @drop="handleMistakeDrop($event, itemIndex)"
+            >
+              <template v-for="(part, partIndex) in renderMistakeAnswerParts(item, itemIndex)" :key="`${item.key}-${partIndex}`">
+                <span v-if="part.type === 'text'" class="mistake-static-text">{{ part.text }}</span>
+                <button
+                  v-else
+                  type="button"
+                  class="mistake-drop-box"
+                  :class="{ filled: part.text }"
+                  @click="part.text && removeMistakeWord(itemIndex, part.answerIndex)"
+                >
+                  {{ part.text || "拖到这里" }}
+                </button>
+              </template>
+            </div>
+            <div class="mistake-word-zone">
+              <span
+                v-for="option in availableMistakeWordOptions(item, itemIndex)"
+                :key="`${item.key}-${option.wordIndex}`"
+                class="mistake-draggable"
+                draggable="true"
+                @dragstart="handleMistakeDragStart($event, option.word, option.wordIndex)"
+                @click="placeMistakeWord(itemIndex, option.word, option.wordIndex)"
+              >
+                {{ option.word }}
+              </span>
+            </div>
+            <div v-if="mistakePracticeState === 'finished'" class="mistake-result-line">
+              {{ collectMistakePracticeAttempt().answers[itemIndex]?.isCorrect ? "Correct" : "Incorrect" }}
+            </div>
+          </div>
+        </div>
       </template>
     </div>
   </div>
