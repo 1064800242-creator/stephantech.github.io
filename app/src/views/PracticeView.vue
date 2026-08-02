@@ -340,6 +340,17 @@ const buildGradingPayload = () => {
   return parts.join("\n\n");
 };
 
+const submissionTeacherId = () => {
+  if (userProfile.value?.role === "teacher") return user.value?.uid || null;
+  return userProfile.value?.teacherId || null;
+};
+
+const ensureSubmissionTarget = () => {
+  if (submissionTeacherId()) return true;
+  window.alert("当前账号没有绑定老师，无法保存提交记录。请使用邀请码注册学生账号，或使用老师账号重新登录。");
+  return false;
+};
+
 const saveCurrentSentenceAnswer = () => {
   sentenceAnswers.value[sentenceIndex.value] = currentSentenceAnswer.value;
 };
@@ -507,6 +518,7 @@ const submitBuildSentenceAttempt = async () => {
     window.alert("还有空格没有完成，请填完后再提交给老师。");
     return;
   }
+  if (!ensureSubmissionTarget()) return;
   buildSentenceSubmitLoading.value = true;
   buildSentenceSubmitNotice.value = "";
   try {
@@ -514,7 +526,7 @@ const submitBuildSentenceAttempt = async () => {
       type: "build-sentence",
       studentId: user.value.uid,
       studentName: userProfile.value?.name || user.value.email,
-      teacherId: userProfile.value?.teacherId || null,
+      teacherId: submissionTeacherId(),
       question: selectedBuildSentenceLabel.value,
       quizFile: selectedBuildSentenceQuiz.value,
       toField: "Build a Sentence",
@@ -693,6 +705,7 @@ const submitMistakePracticeAttempt = async () => {
     window.alert("还有空格没有完成，请填完后再提交。");
     return;
   }
+  if (!ensureSubmissionTarget()) return;
   stopMistakePracticeTimer();
   mistakePracticeSubmitting.value = true;
   mistakePracticeNotice.value = "";
@@ -702,7 +715,7 @@ const submitMistakePracticeAttempt = async () => {
       source: "mistake-book",
       studentId: user.value.uid,
       studentName: userProfile.value?.name || user.value.email,
-      teacherId: userProfile.value?.teacherId || null,
+      teacherId: submissionTeacherId(),
       question: "Build a Sentence 错题本再练",
       quizFile: "mistake-book",
       toField: "Build a Sentence",
@@ -868,12 +881,13 @@ const autoSubmit = async () => {
     examState.value = "submitted";
     return;
   }
+  if (!ensureSubmissionTarget()) return;
   submitLoading.value = true;
   try {
     await addDoc(collection(db, "submissions"), {
       studentId: user.value.uid,
       studentName: userProfile.value?.name || user.value.email,
-      teacherId: userProfile.value?.teacherId || null,
+      teacherId: submissionTeacherId(),
       question: questionText.value,
       toField: toField.value,
       subjectField: subjectField.value,
@@ -904,13 +918,14 @@ const finishGuestPractice = () => {
 
 const confirmSubmit = async () => {
   showSubmitConfirm.value = false;
+  if (!ensureSubmissionTarget()) return;
   submitLoading.value = true;
   try {
     stopTimer();
     await addDoc(collection(db, "submissions"), {
       studentId: user.value.uid,
       studentName: userProfile.value?.name || user.value.email,
-      teacherId: userProfile.value?.teacherId || null,
+      teacherId: submissionTeacherId(),
       question: questionText.value,
       toField: toField.value,
       subjectField: subjectField.value,
