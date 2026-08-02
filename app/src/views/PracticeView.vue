@@ -1,6 +1,6 @@
 <script setup>
 import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
-import { collection, addDoc, serverTimestamp, query, where, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, doc, updateDoc, serverTimestamp, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../composables/useAuth";
 import NavBar from "../components/NavBar.vue";
@@ -36,6 +36,7 @@ const questionText = ref("");
 const answerText = ref("");
 const imagePreview = ref("");
 const answerTextarea = ref(null);
+const writingType = ref("email");
 const toField = ref("");
 const subjectField = ref("");
 const showWordCount = ref(true);
@@ -53,6 +54,7 @@ const graderLoading = ref(false);
 const graderResult = ref("");
 const graderError = ref("");
 const graderPayload = ref("");
+const currentWritingSubmissionId = ref("");
 
 // ── AI-setup state ──
 const aiResponseText = ref("");
@@ -113,6 +115,9 @@ const selectedBuildSentenceUrl = computed(() => (
 ));
 const selectedBuildSentenceLabel = computed(() => (
   BUILD_SENTENCE_QUIZZES.find((quiz) => quiz.file === selectedBuildSentenceQuiz.value)?.label || "请选择一套真题"
+));
+const writingTypeLabel = computed(() => (
+  writingType.value === "academic-discussion" ? "学术讨论" : "邮件"
 ));
 
 // ── Student mistake book ──
@@ -189,6 +194,19 @@ const studentMistakeBookItems = computed(() => {
     return Number(a.number) - Number(b.number);
   });
 });
+
+const buildSentencePracticeCounts = computed(() => {
+  const counts = new Map();
+  studentSubmissions.value
+    .filter((submission) => submission.type === "build-sentence" && submission.source !== "mistake-book")
+    .forEach((submission) => {
+      if (!submission.quizFile) return;
+      counts.set(submission.quizFile, (counts.get(submission.quizFile) || 0) + 1);
+    });
+  return counts;
+});
+
+const buildSentencePracticeCount = (quizFile) => buildSentencePracticeCounts.value.get(quizFile) || 0;
 
 const mistakePracticeTotalSeconds = computed(() => Math.max(41, mistakePracticeItems.value.length * 41));
 const mistakePracticeFormattedTimer = computed(() => {
@@ -336,13 +354,26 @@ const escapeHtml = (text) =>
     .replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
 
 const buildGradingPayload = () => {
-  const parts = ["题型：邮件"];
+  const parts = [`题型：${writingTypeLabel.value}`];
   parts.push(`题目：\n${questionText.value.trim() || "缺少题目"}`);
   if (toField.value.trim()) parts.push(`To：${toField.value.trim()}`);
   if (subjectField.value.trim()) parts.push(`Subject：${subjectField.value.trim()}`);
   parts.push(`学生作文：\n${answerText.value.trim() || "缺少学生作文"}`);
   parts.push("是否需要老师模式：否");
   return parts.join("\n\n");
+};
+
+const extractAiScore = (text) => {
+  const raw = String(text || "");
+  const scoreLine = raw.match(/(?:分数|预估分数|得分)\s*[:：]\s*([^\n]+)/i);
+  if (scoreLine?.[1]) {
+    const conciseScore = scoreLine[1].match(/\d+(?:\.\d+)?(?:\s*\/\s*\d+(?:\.\d+)?)?/);
+    if (conciseScore?.[0]) return conciseScore[0].replace(/\s+/g, "");
+  }
+  const scoreFraction = raw.match(/(\d+(?:\.\d+)?)\s*\/\s*(?:5|30|100)\b/);
+  if (scoreFraction?.[0]) return scoreFraction[0].trim();
+  const scoreNumber = raw.match(/(?:score|评分)\s*[:：]?\s*(\d+(?:\.\d+)?)/i);
+  return scoreNumber?.[1] || "";
 };
 
 const submissionTeacherId = () => {
@@ -762,6 +793,7 @@ const submitMistakePracticeAttempt = async () => {
 
 // ── Start practice ──
 const startPractice = () => {
+  currentWritingSubmissionId.value = "";
   startTime.value = Date.now();
   timerSeconds.value = timerMinutes.value * 60;
   timeIsUp.value = false;
@@ -871,6 +903,10 @@ const confirmAiGrading = async () => {
     return;
   }
   showAiWarning.value = false;
+  await startAiGrading();
+};
+
+const startAiGrading = async () => {
   showCozeGrader.value = true;
   graderPayload.value = buildGradingPayload();
   graderResult.value = "";
@@ -904,6 +940,17 @@ const runAiGrading = async () => {
       throw new Error(data.error || "批改服务暂时没有返回结果。");
     }
     graderResult.value = data.result || "AI 没有返回可显示的批改内容，请稍后再试。";
+    if (currentWritingSubmissionId.value && graderResult.value) {
+      try {
+        await updateDoc(doc(db, "submissions", currentWritingSubmissionId.value), {
+          aiScore: extractAiScore(graderResult.value),
+          aiFeedback: graderResult.value,
+          aiGradedAt: serverTimestamp(),
+        });
+      } catch (saveError) {
+        console.error("save AI score:", saveError);
+      }
+    }
   } catch (err) {
     graderError.value = err.message || "批改失败，请稍后重试。";
   } finally {
@@ -944,12 +991,14 @@ const autoSubmit = async () => {
   }
   if (!ensureSubmissionTarget()) return;
   if (!shouldSaveSubmission.value) {
+    currentWritingSubmissionId.value = "";
     examState.value = "submitted";
     return;
   }
   submitLoading.value = true;
   try {
-    await addDoc(collection(db, "submissions"), {
+    const submissionRef = await addDoc(collection(db, "submissions"), {
+      type: writingType.value,
       studentId: user.value.uid,
       studentName: userProfile.value?.name || user.value.email,
       teacherId: submissionTeacherId(),
@@ -962,7 +1011,9 @@ const autoSubmit = async () => {
       aiGenerated: aiGeneratedFields.value,
       submittedAt: serverTimestamp(),
     });
+    currentWritingSubmissionId.value = submissionRef.id;
     examState.value = "submitted";
+    if (GRADER_API_URL) startAiGrading();
   } catch {
     window.alert("自动提交失败，请手动提交。");
   } finally {
@@ -985,6 +1036,7 @@ const confirmSubmit = async () => {
   showSubmitConfirm.value = false;
   if (!ensureSubmissionTarget()) return;
   if (!shouldSaveSubmission.value) {
+    currentWritingSubmissionId.value = "";
     stopTimer();
     examState.value = "submitted";
     return;
@@ -992,7 +1044,8 @@ const confirmSubmit = async () => {
   submitLoading.value = true;
   try {
     stopTimer();
-    await addDoc(collection(db, "submissions"), {
+    const submissionRef = await addDoc(collection(db, "submissions"), {
+      type: writingType.value,
       studentId: user.value.uid,
       studentName: userProfile.value?.name || user.value.email,
       teacherId: submissionTeacherId(),
@@ -1005,7 +1058,9 @@ const confirmSubmit = async () => {
       aiGenerated: aiGeneratedFields.value,
       submittedAt: serverTimestamp(),
     });
+    currentWritingSubmissionId.value = submissionRef.id;
     examState.value = "submitted";
+    if (GRADER_API_URL) startAiGrading();
   } catch {
     window.alert("提交失败，请重试。");
   } finally {
@@ -1069,6 +1124,13 @@ const goToMistakeBook = () => {
   resetMistakePractice();
   currentScreen.value = "mistake-book";
 };
+const goToRecords = () => {
+  if (guestMode.value) {
+    requireLoginForFeature("我的练习记录");
+    return;
+  }
+  window.location.hash = "#/records";
+};
 const startBuildSentenceQuiz = (quiz) => {
   selectedBuildSentenceQuiz.value = quiz.file;
   buildSentenceSubmitNotice.value = "";
@@ -1084,6 +1146,8 @@ const backToStart = () => {
   resetSentencePractice();
   aiResponseText.value = "";
   aiGeneratedFields.value = false;
+  writingType.value = "email";
+  currentWritingSubmissionId.value = "";
   toField.value = "";
   subjectField.value = "";
   questionText.value = "";
@@ -1139,6 +1203,16 @@ watch(selectedBuildSentenceQuiz, () => {
           <div class="option-icon">📒</div>
           <div class="option-label">我的错题本</div>
           <div class="option-desc">{{ guestMode ? "登录后可查看错题本" : "查看并重做自己曾经错过的 Build Sentence 题" }}</div>
+        </button>
+        <button
+          class="option-card"
+          :class="{ 'option-card-locked': guestMode }"
+          :disabled="guestMode"
+          @click="goToRecords"
+        >
+          <div class="option-icon">📊</div>
+          <div class="option-label">我的练习记录</div>
+          <div class="option-desc">{{ guestMode ? "登录后可查看记录" : "查看每一次练习、正确率和 AI 评分" }}</div>
         </button>
       </div>
     </div>
@@ -1202,9 +1276,12 @@ watch(selectedBuildSentenceQuiz, () => {
             v-for="quiz in BUILD_SENTENCE_QUIZZES"
             :key="quiz.file"
             class="sentence-quiz-btn sentence-picker-btn"
+            :class="{ practiced: buildSentencePracticeCount(quiz.file) > 0 }"
             @click="startBuildSentenceQuiz(quiz)"
           >
-            {{ quiz.label }}
+            <span>{{ quiz.label }}</span>
+            <small v-if="buildSentencePracticeCount(quiz.file) > 0">再次练习 · 已练 {{ buildSentencePracticeCount(quiz.file) }} 次</small>
+            <small v-else>第一次练习</small>
           </button>
         </div>
       </div>
@@ -1216,10 +1293,10 @@ watch(selectedBuildSentenceQuiz, () => {
             v-for="quiz in BUILD_SENTENCE_QUIZZES"
             :key="quiz.file"
             class="sentence-quiz-btn"
-            :class="{ active: selectedBuildSentenceQuiz === quiz.file }"
+            :class="{ active: selectedBuildSentenceQuiz === quiz.file, practiced: buildSentencePracticeCount(quiz.file) > 0 }"
             @click="startBuildSentenceQuiz(quiz)"
           >
-            {{ quiz.label }}
+            {{ quiz.label }}<span v-if="buildSentencePracticeCount(quiz.file) > 0"> · 再次</span>
           </button>
         </div>
 
@@ -1371,6 +1448,25 @@ watch(selectedBuildSentenceQuiz, () => {
     <div class="exam-body">
       <!-- Left: Question panel -->
       <div class="question-panel">
+        <div class="writing-type-switch">
+          <span class="writing-type-label">题型</span>
+          <button
+            class="writing-type-btn"
+            :class="{ active: writingType === 'email' }"
+            :disabled="examState === 'submitted'"
+            @click="writingType = 'email'"
+          >
+            邮件
+          </button>
+          <button
+            class="writing-type-btn"
+            :class="{ active: writingType === 'academic-discussion' }"
+            :disabled="examState === 'submitted'"
+            @click="writingType = 'academic-discussion'"
+          >
+            学术讨论
+          </button>
+        </div>
         <div class="question-inner">
           <div v-if="aiGeneratedFields" class="question-rendered" v-html="renderMarkdown(questionText)"></div>
           <textarea

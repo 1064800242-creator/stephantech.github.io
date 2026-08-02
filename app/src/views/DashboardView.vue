@@ -97,11 +97,13 @@ const submissionMetric = (submission) => {
   if (isBuildSentence(submission)) {
     return `${submission.correctCount ?? 0}/${submission.totalQuestions ?? "—"} (${submission.accuracy ?? "—"}%)`;
   }
-  return submission.wordCount ?? "—";
+  return submission.aiScore ? `${submission.aiScore} · ${submission.wordCount ?? "—"} 词` : `${submission.wordCount ?? "—"} 词`;
 };
 
 const submissionTypeLabel = (submission) => (
-  isBuildSentence(submission) ? "Build a Sentence" : "写作"
+  isBuildSentence(submission)
+    ? "Build a Sentence"
+    : submission.type === "academic-discussion" ? "学术讨论" : "邮件"
 );
 
 const buildSentenceSubmissions = computed(() =>

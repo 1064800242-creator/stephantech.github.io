@@ -20,6 +20,11 @@ const router = createRouter({
       meta: { requiresAuth: true, allowGuest: true },
     },
     {
+      path: "/records",
+      component: () => import("../views/RecordsView.vue"),
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/dashboard",
       component: () => import("../views/DashboardView.vue"),
       meta: { requiresAuth: true, teacherOnly: true },
@@ -42,6 +47,7 @@ router.beforeEach(async (to) => {
 
   if (to.meta.requiresAuth && !loggedIn && !isGuest) return "/login";
   if (to.meta.teacherOnly && !isTeacher) return "/practice";
+  if (to.path === "/records" && (isGuest || isTeacher)) return isTeacher ? "/dashboard" : "/practice";
 
   // After login, redirect to role home
   if (to.path === "/login" && (loggedIn || isGuest)) {

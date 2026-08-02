@@ -640,6 +640,45 @@ textarea {
   overflow-y: auto;
 }
 
+.writing-type-switch {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px;
+  border: 1px solid #d8d8d8;
+  border-radius: 8px;
+  background: #f7f7f7;
+  align-self: flex-start;
+}
+
+.writing-type-label {
+  padding: 0 6px;
+  color: #666;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.writing-type-btn {
+  padding: 5px 10px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: #444;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.writing-type-btn.active {
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.writing-type-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.75;
+}
+
 .question-inner {
   flex: 1;
   border: 1px solid #ccc;
@@ -1371,9 +1410,31 @@ textarea {
   color: #2c6dbf;
 }
 
+.sentence-quiz-btn.practiced {
+  border-color: #39a36a;
+  background: #f0fbf5;
+  color: #17663a;
+}
+
 .sentence-picker-btn {
   min-height: 42px;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 3px;
+  text-align: left;
+}
+
+.sentence-picker-btn small {
+  color: #777;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.sentence-picker-btn.practiced small {
+  color: #1f7a45;
 }
 
 .sentence-change-btn {
@@ -2351,6 +2412,208 @@ textarea {
 
 .codes-row-new {
   background: #f0faf4;
+}
+
+/* ── Student records ── */
+.records-wrapper {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding: 28px 24px 44px;
+}
+
+.records-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 20px;
+}
+
+.records-title {
+  margin: 0 0 6px;
+  font-size: 28px;
+  color: #1a1a1a;
+}
+
+.records-lead {
+  margin: 0;
+  color: #666;
+  line-height: 1.6;
+}
+
+.records-practice-link {
+  flex-shrink: 0;
+  padding: 9px 16px;
+  border-radius: 7px;
+  background: #1a1a1a;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.records-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.record-stat-card {
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  background: #fff;
+}
+
+.record-stat-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #1a1a1a;
+}
+
+.record-stat-label {
+  margin-top: 5px;
+  color: #666;
+  font-size: 13px;
+}
+
+.records-panel {
+  border: 1px solid #d8d8d8;
+  border-radius: 10px;
+  background: #fff;
+  overflow: hidden;
+}
+
+.records-filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  padding: 14px;
+  border-bottom: 1px solid #e6e6e6;
+  background: #fafafa;
+}
+
+.record-filter-btn {
+  padding: 7px 12px;
+  border: 1px solid #d0d0d0;
+  border-radius: 999px;
+  background: #fff;
+  color: #444;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.record-filter-btn.active {
+  border-color: #1a1a1a;
+  background: #1a1a1a;
+  color: #fff;
+}
+
+.records-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.record-row {
+  display: grid;
+  grid-template-columns: 132px minmax(0, 1fr) 120px;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 14px 16px;
+  border: 0;
+  border-bottom: 1px solid #eee;
+  background: #fff;
+  text-align: left;
+  cursor: pointer;
+}
+
+.record-row:hover {
+  background: #f7fbff;
+}
+
+.record-type-badge {
+  width: max-content;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #eef4fd;
+  color: #2f6abf;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.record-type-badge.build {
+  background: #f0fbf5;
+  color: #17663a;
+}
+
+.record-type-badge.academic {
+  background: #fff7ed;
+  color: #9a5214;
+}
+
+.record-main {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.record-main strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.record-main small {
+  color: #777;
+}
+
+.record-score {
+  justify-self: end;
+  font-size: 18px;
+  font-weight: 800;
+  color: #17663a;
+}
+
+.record-score.pending {
+  color: #999;
+  font-size: 13px;
+}
+
+.records-empty {
+  padding: 28px;
+  color: #777;
+  text-align: center;
+}
+
+.records-detail-body {
+  grid-template-columns: minmax(220px, 0.9fr) minmax(260px, 1.1fr) minmax(260px, 1.1fr);
+}
+
+@media (max-width: 860px) {
+  .records-header {
+    flex-direction: column;
+  }
+
+  .records-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .record-row {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .record-score {
+    justify-self: start;
+  }
+
+  .records-detail-body {
+    grid-template-columns: 1fr;
+  }
 }
 
 /* ── Exam start overlay ── */
