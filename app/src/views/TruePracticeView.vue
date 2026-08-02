@@ -115,11 +115,32 @@ const gradeSubmission = async () => {
     const data = await response.json().catch(() => ({}));
     if (!response.ok) throw new Error(data.error || "AI 批改暂时不可用。");
     gradingResult.value = data.result || "AI 暂未返回批改内容。";
-    await updateDoc(doc(db, "submissions", submissionId.value), {
+    const gradingFields = {
       aiScore: extractScore(gradingResult.value),
       aiFeedback: gradingResult.value,
       aiGradedAt: serverTimestamp(),
-    });
+    };
+    try {
+      await updateDoc(doc(db, "submissions", submissionId.value), gradingFields);
+    } catch (saveError) {
+      console.error("save true-practice AI score:", saveError);
+      await addDoc(collection(db, "submissions"), {
+        type: "ai-grading",
+        parentSubmissionId: submissionId.value,
+        studentId: user.value.uid,
+        studentName: userProfile.value?.name || user.value.email,
+        teacherId: userProfile.value?.teacherId || null,
+        question: questionText(selectedQuestion.value),
+        toField: kind.value === "email" ? selectedQuestion.value.to : "Academic Discussion",
+        subjectField: kind.value === "email" ? selectedQuestion.value.subject : selectedQuestion.value.title,
+        answer: answer.value,
+        wordCount: wordCount.value,
+        timeUsedSeconds: selectedQuestion.value.minutes * 60 - secondsLeft.value,
+        aiGenerated: false,
+        ...gradingFields,
+        submittedAt: serverTimestamp(),
+      });
+    }
   } catch (error) {
     gradingError.value = error.message || "AI 批改失败，请稍后重试。";
   } finally {
@@ -140,9 +161,6 @@ const submitPractice = async (automatic = false) => {
     if (!guestMode.value && userProfile.value?.role !== "teacher") {
       const reference = await addDoc(collection(db, "submissions"), {
         type: kind.value === "email" ? "email" : "academic-discussion",
-        source: "true-question-bank",
-        questionId: selectedQuestion.value.id,
-        questionCategory: selectedQuestion.value.category,
         question: questionText(selectedQuestion.value),
         studentId: user.value.uid,
         studentName: userProfile.value?.name || user.value.email,
@@ -152,6 +170,7 @@ const submitPractice = async (automatic = false) => {
         answer: answer.value,
         wordCount: wordCount.value,
         timeUsedSeconds: selectedQuestion.value.minutes * 60 - secondsLeft.value,
+        aiGenerated: false,
         submittedAt: serverTimestamp(),
       });
       submissionId.value = reference.id;
