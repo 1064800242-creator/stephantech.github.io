@@ -25,6 +25,7 @@ const submitting = ref(false);
 const grading = ref(false);
 const gradingResult = ref("");
 const gradingError = ref("");
+const recordSaveError = ref("");
 const submissionId = ref("");
 let timer = null;
 
@@ -64,6 +65,7 @@ const startQuestion = async () => {
   answer.value = "";
   gradingResult.value = "";
   gradingError.value = "";
+  recordSaveError.value = "";
   submissionId.value = "";
   secondsLeft.value = selectedQuestion.value.minutes * 60;
   screen.value = "exam";
@@ -103,7 +105,7 @@ const extractScore = (text) => {
 };
 
 const gradeSubmission = async () => {
-  if (guestMode.value || !submissionId.value) return;
+  if (guestMode.value) return;
   grading.value = true;
   gradingError.value = "";
   try {
@@ -120,26 +122,33 @@ const gradeSubmission = async () => {
       aiFeedback: gradingResult.value,
       aiGradedAt: serverTimestamp(),
     };
-    try {
-      await updateDoc(doc(db, "submissions", submissionId.value), gradingFields);
-    } catch (saveError) {
-      console.error("save true-practice AI score:", saveError);
-      await addDoc(collection(db, "submissions"), {
-        type: "ai-grading",
-        parentSubmissionId: submissionId.value,
-        studentId: user.value.uid,
-        studentName: userProfile.value?.name || user.value.email,
-        teacherId: userProfile.value?.teacherId || null,
-        question: questionText(selectedQuestion.value),
-        toField: kind.value === "email" ? selectedQuestion.value.to : "Academic Discussion",
-        subjectField: kind.value === "email" ? selectedQuestion.value.subject : selectedQuestion.value.title,
-        answer: answer.value,
-        wordCount: wordCount.value,
-        timeUsedSeconds: selectedQuestion.value.minutes * 60 - secondsLeft.value,
-        aiGenerated: false,
-        ...gradingFields,
-        submittedAt: serverTimestamp(),
-      });
+    if (submissionId.value) {
+      try {
+        await updateDoc(doc(db, "submissions", submissionId.value), gradingFields);
+      } catch (saveError) {
+        console.error("save true-practice AI score:", saveError);
+        try {
+          await addDoc(collection(db, "submissions"), {
+            type: "ai-grading",
+            parentSubmissionId: submissionId.value,
+            studentId: user.value.uid,
+            studentName: userProfile.value?.name || user.value.email,
+            teacherId: userProfile.value?.teacherId || null,
+            question: questionText(selectedQuestion.value),
+            toField: kind.value === "email" ? selectedQuestion.value.to : "Academic Discussion",
+            subjectField: kind.value === "email" ? selectedQuestion.value.subject : selectedQuestion.value.title,
+            answer: answer.value,
+            wordCount: wordCount.value,
+            timeUsedSeconds: selectedQuestion.value.minutes * 60 - secondsLeft.value,
+            aiGenerated: false,
+            ...gradingFields,
+            submittedAt: serverTimestamp(),
+          });
+        } catch (fallbackError) {
+          console.error("save true-practice grading fallback:", fallbackError);
+          recordSaveError.value = "AI 批改已完成，但本次记录暂未保存。";
+        }
+      }
     }
   } catch (error) {
     gradingError.value = error.message || "AI 批改失败，请稍后重试。";
@@ -157,8 +166,9 @@ const submitPractice = async (automatic = false) => {
   if (!automatic && !window.confirm("确认提交本次练习吗？")) return;
   stopTimer();
   submitting.value = true;
-  try {
-    if (!guestMode.value && userProfile.value?.role !== "teacher") {
+  recordSaveError.value = "";
+  if (!guestMode.value && userProfile.value?.role !== "teacher") {
+    try {
       const reference = await addDoc(collection(db, "submissions"), {
         type: kind.value === "email" ? "email" : "academic-discussion",
         question: questionText(selectedQuestion.value),
@@ -174,15 +184,14 @@ const submitPractice = async (automatic = false) => {
         submittedAt: serverTimestamp(),
       });
       submissionId.value = reference.id;
+    } catch (error) {
+      console.error("save true-practice submission:", error);
+      recordSaveError.value = "本次练习记录暂未保存，但仍可继续 AI 批改。";
     }
-    screen.value = "result";
-    if (!guestMode.value && submissionId.value) await gradeSubmission();
-  } catch (error) {
-    window.alert(`提交失败：${error.message}`);
-    if (secondsLeft.value > 0) startTimerAgain();
-  } finally {
-    submitting.value = false;
   }
+  screen.value = "result";
+  if (!guestMode.value) await gradeSubmission();
+  submitting.value = false;
 };
 
 const startTimerAgain = () => {
@@ -336,7 +345,8 @@ onBeforeUnmount(stopTimer);
         <div v-else-if="gradingError" class="true-grading-error">{{ gradingError }}</div>
         <pre v-else-if="gradingResult" class="true-grading-result">{{ gradingResult }}</pre>
         <p v-else-if="guestMode">访客练习不会保存记录或调用 AI 批改。</p>
-        <div class="true-result-actions"><button @click="backToPicker">返回题库</button><button v-if="gradingError && submissionId" @click="gradeSubmission">重新批改</button></div>
+        <p v-if="recordSaveError" class="true-record-warning">{{ recordSaveError }}</p>
+        <div class="true-result-actions"><button @click="backToPicker">返回题库</button><button v-if="gradingError" @click="gradeSubmission">重新批改</button></div>
       </section>
     </div>
   </main>
