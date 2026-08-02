@@ -3,6 +3,7 @@ import { computed, onBeforeUnmount, onMounted, ref } from "vue";
 import { collection, onSnapshot, query, where } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../composables/useAuth";
+import { mergeSubmissionGrades } from "../utils/submissionGrades";
 import NavBar from "../components/NavBar.vue";
 
 const { user, guestMode } = useAuth();
@@ -26,7 +27,7 @@ const subscribeRecords = () => {
   error.value = "";
   const q = query(collection(db, "submissions"), where("studentId", "==", user.value.uid));
   unsubscribe = onSnapshot(q, (snap) => {
-    const docs = snap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    const docs = mergeSubmissionGrades(snap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() })));
     docs.sort((a, b) => (b.submittedAt?.seconds ?? 0) - (a.submittedAt?.seconds ?? 0));
     submissions.value = docs;
     loading.value = false;

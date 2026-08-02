@@ -3,6 +3,7 @@ import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { collection, addDoc, doc, updateDoc, serverTimestamp, query, where, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase";
 import { useAuth } from "../composables/useAuth";
+import { mergeSubmissionGrades } from "../utils/submissionGrades";
 import NavBar from "../components/NavBar.vue";
 
 const { user, userProfile, guestMode } = useAuth();
@@ -53,6 +54,7 @@ const loginRequiredMessage = ref("");
 const graderLoading = ref(false);
 const graderResult = ref("");
 const graderError = ref("");
+const graderSaveNotice = ref("");
 const graderPayload = ref("");
 const currentWritingSubmissionId = ref("");
 
@@ -231,7 +233,7 @@ const subscribeStudentSubmissions = (uid) => {
   mistakeBookError.value = "";
   const q = query(collection(db, "submissions"), where("studentId", "==", uid));
   unsubStudentSubmissions = onSnapshot(q, (snap) => {
-    const docs = snap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() }));
+    const docs = mergeSubmissionGrades(snap.docs.map((docSnap) => ({ id: docSnap.id, ...docSnap.data() })));
     docs.sort((a, b) => (b.submittedAt?.seconds ?? 0) - (a.submittedAt?.seconds ?? 0));
     studentSubmissions.value = docs;
     mistakeBookLoading.value = false;
@@ -926,6 +928,7 @@ const startAiGrading = async () => {
 const runAiGrading = async () => {
   graderLoading.value = true;
   graderError.value = "";
+  graderSaveNotice.value = "";
   graderResult.value = "";
   try {
     const response = await fetch(GRADER_API_URL, {
@@ -950,6 +953,29 @@ const runAiGrading = async () => {
         });
       } catch (saveError) {
         console.error("save AI score:", saveError);
+        try {
+          await addDoc(collection(db, "submissions"), {
+            type: "ai-grading",
+            parentSubmissionId: currentWritingSubmissionId.value,
+            studentId: user.value.uid,
+            studentName: userProfile.value?.name || user.value.email,
+            teacherId: submissionTeacherId(),
+            question: questionText.value,
+            toField: toField.value,
+            subjectField: subjectField.value,
+            answer: answerText.value,
+            wordCount: wordCount.value,
+            timeUsedSeconds: timerMinutes.value * 60 - timerSeconds.value,
+            aiGenerated: aiGeneratedFields.value,
+            aiScore: extractAiScore(graderResult.value),
+            aiFeedback: graderResult.value,
+            aiGradedAt: serverTimestamp(),
+            submittedAt: serverTimestamp(),
+          });
+        } catch (fallbackError) {
+          console.error("save linked AI grading:", fallbackError);
+          graderSaveNotice.value = "批改已完成，但评分记录保存失败。请联系老师检查数据库权限。";
+        }
       }
     }
   } catch (err) {
@@ -1667,6 +1693,7 @@ watch(selectedBuildSentenceQuiz, () => {
               <button class="grader-copy-btn" @click="copyGradingResult">复制结果</button>
             </div>
             <pre>{{ graderResult }}</pre>
+            <p v-if="graderSaveNotice" class="grader-save-notice">{{ graderSaveNotice }}</p>
           </div>
           <div v-else class="grader-empty">点击“开始批改”后，结果会显示在这里。</div>
         </div>

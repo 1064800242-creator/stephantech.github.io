@@ -6,6 +6,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../firebase";
 import { user, userProfile } from "../composables/useAuth";
+import { mergeSubmissionGrades } from "../utils/submissionGrades";
 import NavBar from "../components/NavBar.vue";
 
 // ── Tabs ──
@@ -28,7 +29,7 @@ const subscribeSubmissions = (uid) => {
   if (unsubSubmissions) unsubSubmissions();
   const q = query(collection(db, "submissions"), where("teacherId", "==", uid));
   unsubSubmissions = onSnapshot(q, (snap) => {
-    const docs = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    const docs = mergeSubmissionGrades(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
     docs.sort((a, b) => (b.submittedAt?.seconds ?? 0) - (a.submittedAt?.seconds ?? 0));
     submissions.value = docs;
   }, (err) => {
