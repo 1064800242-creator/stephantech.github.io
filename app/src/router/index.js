@@ -25,6 +25,11 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/true-practice/:kind?",
+      component: () => import("../views/TruePracticeView.vue"),
+      meta: { requiresAuth: true, allowGuest: true },
+    },
+    {
       path: "/dashboard",
       component: () => import("../views/DashboardView.vue"),
       meta: { requiresAuth: true, teacherOnly: true },

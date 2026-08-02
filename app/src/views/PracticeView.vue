@@ -1175,6 +1175,16 @@ watch(selectedBuildSentenceQuiz, () => {
     <div class="start-card-outer">
       <p class="start-subtitle">选择题目来源，开始练习</p>
       <div class="start-options">
+        <button class="option-card" @click="$router.push('/true-practice/email')">
+          <div class="option-icon option-icon-text">E</div>
+          <div class="option-label">Email 真题练习</div>
+          <div class="option-desc">按情景标签选择真题，进入 7 分钟模考界面</div>
+        </button>
+        <button class="option-card" @click="$router.push('/true-practice/academic')">
+          <div class="option-icon option-icon-text">A</div>
+          <div class="option-label">学术讨论真题练习</div>
+          <div class="option-desc">按主题与讨论类型选题，进入 10 分钟模考界面</div>
+        </button>
         <button class="option-card" @click="goToExamManual">
           <div class="option-icon">✏️</div>
           <div class="option-label">手动输入题目</div>
