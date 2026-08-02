@@ -99,14 +99,15 @@ const BUILD_SENTENCE_QUIZZES = [
     };
   }),
 ];
-const DEFAULT_BUILD_SENTENCE_QUIZ = "april/quiz-01.html";
-const selectedBuildSentenceQuiz = ref(DEFAULT_BUILD_SENTENCE_QUIZ);
+const selectedBuildSentenceQuiz = ref("");
 const buildSentenceIframe = ref(null);
 const buildSentenceSubmitLoading = ref(false);
 const buildSentenceSubmitNotice = ref("");
-const selectedBuildSentenceUrl = computed(() => `${BUILD_SENTENCE_BASE_URL}${selectedBuildSentenceQuiz.value}`);
+const selectedBuildSentenceUrl = computed(() => (
+  selectedBuildSentenceQuiz.value ? `${BUILD_SENTENCE_BASE_URL}${selectedBuildSentenceQuiz.value}` : ""
+));
 const selectedBuildSentenceLabel = computed(() => (
-  BUILD_SENTENCE_QUIZZES.find((quiz) => quiz.file === selectedBuildSentenceQuiz.value)?.label || "Build a Sentence"
+  BUILD_SENTENCE_QUIZZES.find((quiz) => quiz.file === selectedBuildSentenceQuiz.value)?.label || "请选择一套真题"
 ));
 
 // ── Build a sentence practice ──
@@ -329,6 +330,10 @@ const collectBuildSentenceAttempt = () => {
   const answers = questionBlocks.map((block, index) => {
     const answerArea = block.querySelector(".row-answer-area");
     const correctAnswer = answerArea?.getAttribute("data-correct") || "";
+    const blankPieces = Array.from(answerArea?.children || []).map((child) => {
+      if (child.classList.contains("drop-box")) return "_____";
+      return child.textContent.trim();
+    }).filter(Boolean);
     const pieces = Array.from(answerArea?.children || []).map((child) => {
       if (child.classList.contains("drop-box")) {
         const text = child.textContent.trim();
@@ -340,9 +345,14 @@ const collectBuildSentenceAttempt = () => {
     const userAnswer = pieces.join(" ");
     const isCorrect = cleanSentenceForCompare(userAnswer) === cleanSentenceForCompare(correctAnswer);
     if (isCorrect) correctCount++;
+    const wordBank = Array.from(block.querySelectorAll(".draggable"))
+      .map((item) => item.textContent.trim())
+      .filter(Boolean);
     return {
       number: index + 1,
       question: block.querySelector(".row-question")?.textContent?.trim() || `Question ${index + 1}`,
+      blankSentence: blankPieces.join(" "),
+      wordBank,
       userAnswer,
       correctAnswer,
       isCorrect,
@@ -396,6 +406,7 @@ const submitBuildSentenceAttempt = async () => {
       studentName: userProfile.value?.name || user.value.email,
       teacherId: userProfile.value?.teacherId || null,
       question: selectedBuildSentenceLabel.value,
+      quizFile: selectedBuildSentenceQuiz.value,
       toField: "Build a Sentence",
       subjectField: `Build a Sentence - ${selectedBuildSentenceLabel.value}`,
       answer: formatBuildSentenceAnswer(attempt),
@@ -661,13 +672,22 @@ const goToSentenceBuilder = () => {
     requireLoginForFeature("Build a Sentence 限时练习");
     return;
   }
-  selectedBuildSentenceQuiz.value = DEFAULT_BUILD_SENTENCE_QUIZ;
+  selectedBuildSentenceQuiz.value = "";
   buildSentenceSubmitNotice.value = "";
   resetSentencePractice();
   currentScreen.value = "sentence-builder";
 };
+const startBuildSentenceQuiz = (quiz) => {
+  selectedBuildSentenceQuiz.value = quiz.file;
+  buildSentenceSubmitNotice.value = "";
+};
+const backToBuildSentencePicker = () => {
+  selectedBuildSentenceQuiz.value = "";
+  buildSentenceSubmitNotice.value = "";
+};
 const backToStart = () => {
   currentScreen.value = "start";
+  selectedBuildSentenceQuiz.value = "";
   resetSentencePractice();
   aiResponseText.value = "";
   aiGeneratedFields.value = false;
@@ -754,42 +774,67 @@ watch(selectedBuildSentenceQuiz, () => {
         <button class="back-btn" @click="backToStart">← 返回</button>
         <div class="sentence-embed-heading">
           <h2 class="sentence-title">Build a Sentence 限时练习</h2>
-          <p class="sentence-lead">选择真题后，在下方原版页面中完成拖拽补句练习。</p>
+          <p class="sentence-lead">
+            {{ selectedBuildSentenceQuiz ? "完成练习后提交给老师，后台会同步记录正确率、用时和错题。" : "先选择一套真题。选择前不会加载练习页，倒计时也不会开始。" }}
+          </p>
         </div>
       </div>
 
-      <div class="sentence-quiz-picker">
-        <button
-          v-for="quiz in BUILD_SENTENCE_QUIZZES"
-          :key="quiz.file"
-          class="sentence-quiz-btn"
-          :class="{ active: selectedBuildSentenceQuiz === quiz.file }"
-          @click="selectedBuildSentenceQuiz = quiz.file"
-        >
-          {{ quiz.label }}
-        </button>
+      <div v-if="!selectedBuildSentenceQuiz" class="sentence-picker-panel">
+        <div class="sentence-picker-heading">
+          <div>
+            <h3 class="sentence-picker-title">选择真题套题</h3>
+            <p class="sentence-picker-lead">每套题进入后按原考试节奏计时：10 题，6 分 50 秒。</p>
+          </div>
+          <span class="sentence-picker-count">{{ BUILD_SENTENCE_QUIZZES.length }} 套</span>
+        </div>
+        <div class="sentence-picker-grid">
+          <button
+            v-for="quiz in BUILD_SENTENCE_QUIZZES"
+            :key="quiz.file"
+            class="sentence-quiz-btn sentence-picker-btn"
+            @click="startBuildSentenceQuiz(quiz)"
+          >
+            {{ quiz.label }}
+          </button>
+        </div>
       </div>
 
-      <div class="sentence-iframe-title">{{ selectedBuildSentenceLabel }}</div>
-      <div class="sentence-submit-row">
-        <span class="sentence-submit-hint">完成练习后提交，老师会在 dashboard 看到正确率、用时和逐题作答。</span>
-        <span v-if="buildSentenceSubmitNotice" class="sentence-submit-notice">{{ buildSentenceSubmitNotice }}</span>
-        <button
-          class="sentence-submit-btn"
-          :disabled="buildSentenceSubmitLoading"
-          @click="submitBuildSentenceAttempt"
-        >
-          {{ buildSentenceSubmitLoading ? "提交中…" : "提交给老师" }}
-        </button>
-      </div>
-      <iframe
-        ref="buildSentenceIframe"
-        :key="selectedBuildSentenceQuiz"
-        class="sentence-iframe"
-        :src="selectedBuildSentenceUrl"
-        title="Build a Sentence timed practice"
-        @load="syncBuildSentenceStudentName"
-      ></iframe>
+      <template v-else>
+        <div class="sentence-quiz-picker sentence-quiz-picker-active">
+          <button class="sentence-change-btn" @click="backToBuildSentencePicker">← 重新选题</button>
+          <button
+            v-for="quiz in BUILD_SENTENCE_QUIZZES"
+            :key="quiz.file"
+            class="sentence-quiz-btn"
+            :class="{ active: selectedBuildSentenceQuiz === quiz.file }"
+            @click="startBuildSentenceQuiz(quiz)"
+          >
+            {{ quiz.label }}
+          </button>
+        </div>
+
+        <div class="sentence-iframe-title">{{ selectedBuildSentenceLabel }}</div>
+        <div class="sentence-submit-row">
+          <span class="sentence-submit-hint">完成练习后提交，老师会在 dashboard 看到正确率、用时和逐题作答。</span>
+          <span v-if="buildSentenceSubmitNotice" class="sentence-submit-notice">{{ buildSentenceSubmitNotice }}</span>
+          <button
+            class="sentence-submit-btn"
+            :disabled="buildSentenceSubmitLoading"
+            @click="submitBuildSentenceAttempt"
+          >
+            {{ buildSentenceSubmitLoading ? "提交中…" : "提交给老师" }}
+          </button>
+        </div>
+        <iframe
+          ref="buildSentenceIframe"
+          :key="selectedBuildSentenceQuiz"
+          class="sentence-iframe"
+          :src="selectedBuildSentenceUrl"
+          title="Build a Sentence timed practice"
+          @load="syncBuildSentenceStudentName"
+        ></iframe>
+      </template>
     </div>
   </div>
 

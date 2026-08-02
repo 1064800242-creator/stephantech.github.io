@@ -9,12 +9,13 @@ import { user, userProfile } from "../composables/useAuth";
 import NavBar from "../components/NavBar.vue";
 
 // ── Tabs ──
-const activeTab = ref("submissions"); // 'submissions' | 'codes'
+const activeTab = ref("submissions"); // 'submissions' | 'mistakes' | 'codes'
 
 // ── Submissions ──
 const submissions = ref([]);
 const searchQuery = ref("");
 const selected = ref(null);
+const selectedMistakeStudentId = ref("");
 let unsubSubmissions = null;
 
 // ── Codes ──
@@ -102,6 +103,72 @@ const submissionMetric = (submission) => {
 const submissionTypeLabel = (submission) => (
   isBuildSentence(submission) ? "Build a Sentence" : "写作"
 );
+
+const buildSentenceSubmissions = computed(() =>
+  submissions.value.filter((s) => isBuildSentence(s) && Array.isArray(s.buildSentenceAnswers))
+);
+
+const mistakeBookItems = computed(() => {
+  const itemsByQuestion = new Map();
+  buildSentenceSubmissions.value.forEach((submission) => {
+    submission.buildSentenceAnswers
+      .filter((answer) => answer && answer.isCorrect === false)
+      .forEach((answer) => {
+        const key = [
+          submission.studentId || "unknown",
+          submission.quizFile || submission.question || submission.subjectField || "Build a Sentence",
+          answer.number || answer.question || "",
+        ].join("|");
+        const existing = itemsByQuestion.get(key);
+        const submittedSeconds = submission.submittedAt?.seconds ?? 0;
+        const item = {
+          key,
+          studentId: submission.studentId || "",
+          studentName: submission.studentName || "未命名学生",
+          quizLabel: submission.question || submission.subjectField || "Build a Sentence",
+          quizFile: submission.quizFile || "",
+          number: answer.number || "—",
+          question: answer.question || "",
+          blankSentence: answer.blankSentence || "",
+          wordBank: Array.isArray(answer.wordBank) ? answer.wordBank : [],
+          firstWrongAt: existing?.firstWrongAt || submission.submittedAt,
+          lastWrongAt: submission.submittedAt,
+          lastWrongSeconds: submittedSeconds,
+          wrongCount: (existing?.wrongCount || 0) + 1,
+        };
+        if (existing && (existing.lastWrongSeconds || 0) > submittedSeconds) {
+          item.lastWrongAt = existing.lastWrongAt;
+          item.lastWrongSeconds = existing.lastWrongSeconds;
+        }
+        itemsByQuestion.set(key, item);
+      });
+  });
+
+  return Array.from(itemsByQuestion.values()).sort((a, b) => {
+    const nameCompare = a.studentName.localeCompare(b.studentName, "zh-CN");
+    if (nameCompare) return nameCompare;
+    const quizCompare = a.quizLabel.localeCompare(b.quizLabel, "zh-CN");
+    if (quizCompare) return quizCompare;
+    return Number(a.number) - Number(b.number);
+  });
+});
+
+const mistakeStudents = computed(() => {
+  const students = new Map();
+  mistakeBookItems.value.forEach((item) => {
+    const key = item.studentId || item.studentName;
+    if (!students.has(key)) {
+      students.set(key, { id: item.studentId, name: item.studentName, count: 0 });
+    }
+    students.get(key).count++;
+  });
+  return Array.from(students.values()).sort((a, b) => a.name.localeCompare(b.name, "zh-CN"));
+});
+
+const filteredMistakeBook = computed(() => {
+  if (!selectedMistakeStudentId.value) return mistakeBookItems.value;
+  return mistakeBookItems.value.filter((item) => item.studentId === selectedMistakeStudentId.value);
+});
 
 // ── Codes computed ──
 const availableCodes = computed(() => codes.value.filter((c) => !c.used).length);
@@ -201,6 +268,65 @@ const downloadSubmission = (s) => {
   window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
 };
 
+const buildMistakeBookFilename = () => {
+  const now = new Date();
+  const pad = (n) => String(n).padStart(2, "0");
+  const ts = `${now.getFullYear()}${pad(now.getMonth()+1)}${pad(now.getDate())}_${pad(now.getHours())}${pad(now.getMinutes())}`;
+  const student = mistakeStudents.value.find((item) => item.id === selectedMistakeStudentId.value);
+  const safeName = (student?.name || "All_Students").replace(/[\\/:*?"<>|]/g, "_");
+  return `${safeName}_Build_Sentence_错题本_${ts}.doc`;
+};
+
+const formatSecondsAsMinutes = (seconds) => {
+  const s = Math.max(0, Math.round(seconds));
+  return `${Math.floor(s / 60)}分${String(s % 60).padStart(2, "0")}秒`;
+};
+
+const downloadMistakeBook = () => {
+  const items = filteredMistakeBook.value;
+  if (items.length === 0) {
+    window.alert("当前没有可导出的 Build Sentence 错题。");
+    return;
+  }
+  const groups = [];
+  for (let i = 0; i < items.length; i += 10) {
+    groups.push(items.slice(i, i + 10));
+  }
+  const htmlGroups = groups.map((group, groupIndex) => {
+    const suggestedSeconds = group.length * 41;
+    const rows = group.map((item, index) => `
+      <div style="margin: 0 0 18px;">
+        <p><b>${groupIndex * 10 + index + 1}. ${escapeHtml(item.quizLabel)} - 第 ${escapeHtml(String(item.number))} 题</b></p>
+        <p>${escapeHtml(item.question)}</p>
+        ${item.blankSentence ? `<p>${escapeHtml(item.blankSentence)}</p>` : ""}
+        ${item.wordBank.length ? `<p><b>Word Bank:</b> ${escapeHtml(item.wordBank.join(" / "))}</p>` : ""}
+      </div>
+    `).join("");
+    return `
+      <h3>第 ${groupIndex + 1} 组：${group.length} 题，建议限时 ${formatSecondsAsMinutes(suggestedSeconds)}</h3>
+      ${rows}
+      <hr>
+    `;
+  }).join("");
+
+  const student = mistakeStudents.value.find((item) => item.id === selectedMistakeStudentId.value);
+  const html = `<html><meta charset="utf-8"><body>
+    <h2 style="color:#1a1a1a;">Build a Sentence 错题本</h2>
+    <p><b>学生:</b> ${escapeHtml(student?.name || "全部学生")}</p>
+    <p><b>说明:</b> 本错题本只收录曾经做错的题目，不含正确答案。每 10 题为一组；不足 10 题按每题 41 秒建议计时。</p>
+    <p><b>错题数量:</b> ${items.length}</p>
+    <hr>
+    ${htmlGroups}
+  </body></html>`;
+
+  const blob = new Blob(["\ufeff", html], { type: "application/msword" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = buildMistakeBookFilename();
+  link.click();
+  window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+};
+
 // ── Formatters ──
 const formatDate = (ts) => {
   if (!ts?.toDate) return "—";
@@ -244,6 +370,7 @@ const formatTime = (seconds) => {
     <!-- Tabs -->
     <div class="dash-tabs">
       <button class="dash-tab" :class="{ active: activeTab === 'submissions' }" @click="activeTab = 'submissions'">学生作答</button>
+      <button class="dash-tab" :class="{ active: activeTab === 'mistakes' }" @click="activeTab = 'mistakes'">错题本</button>
       <button class="dash-tab" :class="{ active: activeTab === 'codes' }" @click="activeTab = 'codes'">邀请码管理</button>
     </div>
 
@@ -276,6 +403,62 @@ const formatTime = (seconds) => {
             </tr>
             <tr v-if="filtered.length === 0">
               <td colspan="5" class="dash-empty">暂无提交记录</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </template>
+
+    <!-- ── Mistake book tab ── -->
+    <template v-else-if="activeTab === 'mistakes'">
+      <div class="mistake-book-toolbar">
+        <div>
+          <div class="mistake-book-title">Build a Sentence 错题本</div>
+          <div class="mistake-book-hint">只收录学生曾经做错的题，不展示正确答案。后续改对也会保留在错题本里。</div>
+        </div>
+        <div class="mistake-book-actions">
+          <select v-model="selectedMistakeStudentId" class="mistake-student-select">
+            <option value="">全部学生</option>
+            <option v-for="student in mistakeStudents" :key="student.id || student.name" :value="student.id">
+              {{ student.name }}（{{ student.count }}题）
+            </option>
+          </select>
+          <button class="mistake-download-btn" @click="downloadMistakeBook">下载错题本 .doc</button>
+        </div>
+      </div>
+
+      <div class="mistake-book-note">
+        计时建议：每 10 题一组，每组 6 分 50 秒；最后不足 10 题按每题 41 秒计时。
+      </div>
+
+      <div class="dash-table-wrap">
+        <table class="dash-table mistake-table">
+          <thead>
+            <tr>
+              <th>学生</th>
+              <th>真题</th>
+              <th>题号</th>
+              <th>错题</th>
+              <th>词库</th>
+              <th>错过次数</th>
+              <th>最近错题时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in filteredMistakeBook" :key="item.key">
+              <td>{{ item.studentName }}</td>
+              <td>{{ item.quizLabel }}</td>
+              <td>{{ item.number }}</td>
+              <td class="mistake-question-cell">
+                <div>{{ item.question }}</div>
+                <div v-if="item.blankSentence" class="mistake-blank-sentence">{{ item.blankSentence }}</div>
+              </td>
+              <td class="mistake-wordbank">{{ item.wordBank.join(" / ") || "—" }}</td>
+              <td>{{ item.wrongCount }}</td>
+              <td>{{ formatDate(item.lastWrongAt) }}</td>
+            </tr>
+            <tr v-if="filteredMistakeBook.length === 0">
+              <td colspan="7" class="dash-empty">暂无 Build a Sentence 错题记录</td>
             </tr>
           </tbody>
         </table>
