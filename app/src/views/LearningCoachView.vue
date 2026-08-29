@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -50,7 +50,13 @@ const quizComplete = computed(() => answers.value.every((answer) => answer !== n
 const quizScore = computed(() => answers.value.reduce((score, answer, index) => score + (answer === quizQuestions[index].correct ? 1 : 0), 0));
 const rewritePassed = computed(() => {
   const normalized = rewriteText.value.toLowerCase().replace(/\s+/g, " ");
-  return normalized.includes("used to consider") && normalized.includes("wanted to stay");
+  const hasUsedTo = normalized.includes("used to consider");
+  const hasWantedToStay = normalized.includes("wanted to stay") || normalized.includes("wanted to do was stay");
+  return hasUsedTo && hasWantedToStay;
+});
+
+watch(rewriteText, () => {
+  if (rewriteChecked.value) rewriteChecked.value = false;
 });
 
 const submitQuiz = () => {
@@ -259,7 +265,7 @@ const openMistakeMemory = () => {
                     <textarea id="rewrite-answer" v-model="rewriteText" placeholder="请在这里写出两个完整句子……"></textarea>
                     <div v-if="rewriteChecked" :class="['rewrite-feedback', { passed: rewritePassed }]">
                       <template v-if="rewritePassed">✓ 两个目标结构均已检出。错题卡已进入“同题已修复”状态。</template>
-                      <template v-else>尚未同时检出 “used to consider” 和 “wanted to stay”，请继续修改。</template>
+                      <template v-else>尚未同时检出正确的 “used to consider” 和 “wanted to … stay” 结构。修改后可以再次检查。</template>
                     </div>
                   </article>
                 </div>
