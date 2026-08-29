@@ -78,6 +78,7 @@ const handleChangePw = async () => {
         <RouterLink v-if="userProfile?.role === 'teacher'" to="/dashboard" class="nav-link">Dashboard</RouterLink>
         <RouterLink v-if="userProfile?.role === 'teacher'" to="/practice" class="nav-link">Practice</RouterLink>
         <RouterLink v-if="userProfile?.role !== 'teacher'" to="/practice" class="nav-link">练习</RouterLink>
+        <RouterLink v-if="userProfile?.role !== 'teacher'" to="/learning-coach" class="nav-link nav-coach-link">AI 学习教练 · Beta</RouterLink>
         <RouterLink v-if="userProfile?.role !== 'teacher'" to="/records" class="nav-link">我的记录</RouterLink>
         <button class="nav-logout-btn" @click="openChangePw">修改密码</button>
         <button class="nav-logout-btn" @click="handleLogout">Logout</button>

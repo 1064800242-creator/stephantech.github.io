@@ -12,13 +12,15 @@ const router = useRouter();
 
     <main class="welcome-main">
       <section class="welcome-hero">
-        <h1 class="welcome-title">专注写作，精益求精</h1>
+        <span class="welcome-kicker">NEW · AI LEARNING COACH</span>
+        <h1 class="welcome-title">AI 会批改。<br>我们让它学会决定先练什么。</h1>
         <p class="welcome-subtitle">
-          面向学生的 AI 辅助写作练习平台——在限时环境中完成真实写作任务，
-          由老师布置题目，AI 即时反馈，帮助你稳步提升写作能力。
+          一篇作文可以有十几个问题，但学生一次只需要解决最值得解决的那一个。
+          基于真实学习记录，AI 诊断、取舍，并随表现重新规划下一步训练。
         </p>
         <div class="welcome-cta">
-          <button class="btn-primary" @click="router.push('/login')">开始使用</button>
+          <button class="btn-primary" @click="router.push('/learning-coach')">观看 3 分钟真实案例</button>
+          <button class="btn-secondary" @click="router.push('/login')">进入练习平台</button>
         </div>
       </section>
 
@@ -81,10 +83,22 @@ const router = useRouter();
 }
 
 .welcome-hero {
-  max-width: 620px;
+  max-width: 760px;
   width: 100%;
   text-align: center;
   padding: 80px 0 60px;
+}
+
+.welcome-kicker {
+  display: inline-flex;
+  padding: 7px 12px;
+  margin-bottom: 18px;
+  border-radius: 999px;
+  background: #e9fff6;
+  color: #087c5b;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .12em;
 }
 
 .welcome-title {
@@ -122,6 +136,22 @@ const router = useRouter();
 
 .btn-primary:hover {
   background: #333;
+}
+
+.btn-secondary {
+  padding: 12px 28px;
+  background: #fff;
+  color: #1a1a1a;
+  border: 1px solid #cfcfcf;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+@media (max-width: 620px) {
+  .welcome-title { font-size: 30px; }
+  .welcome-cta { flex-direction: column; }
 }
 
 /* Features */
