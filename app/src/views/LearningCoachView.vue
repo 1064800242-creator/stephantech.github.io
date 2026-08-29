@@ -23,6 +23,16 @@ const next = () => {
 const jumpToDemo = () => {
   document.querySelector("#coach-demo")?.scrollIntoView({ behavior: "smooth" });
 };
+
+const openCoachHome = () => {
+  activeStage.value = 0;
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+const openMistakeMemory = () => {
+  activeStage.value = 3;
+  window.requestAnimationFrame(() => jumpToDemo());
+};
 </script>
 
 <template>
@@ -31,9 +41,9 @@ const jumpToDemo = () => {
       <button class="brand" @click="router.push('/')">TWI<span>beta</span></button>
       <nav class="side-nav">
         <button class="side-link" @click="router.push('/practice')"><i>✎</i><span>写作练习</span></button>
-        <button class="side-link active"><i>◎</i><span>AI 学习教练</span></button>
+        <button class="side-link active" @click="openCoachHome"><i>◎</i><span>AI 学习教练</span></button>
         <button class="side-link" @click="router.push('/records')"><i>▤</i><span>我的记录</span></button>
-        <button class="side-link"><i>◇</i><span>智能错题本</span><b>3</b></button>
+        <button class="side-link" @click="openMistakeMemory"><i>◇</i><span>智能错题本</span><b>3</b></button>
       </nav>
       <div class="student-profile">
         <div class="avatar">A</div>
