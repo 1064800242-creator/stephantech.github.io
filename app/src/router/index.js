@@ -20,6 +20,26 @@ const router = createRouter({
       meta: { public: true },
     },
     {
+      path: "/learning-coach/steec",
+      component: () => import("../views/SteecCoachView.vue"),
+      meta: { public: true },
+    },
+    {
+      path: "/demo-practice",
+      component: () => import("../views/DemoAcademicPracticeView.vue"),
+      meta: { public: true },
+    },
+    {
+      path: "/demo-records",
+      component: () => import("../views/DemoRecordsView.vue"),
+      meta: { public: true },
+    },
+    {
+      path: "/mistake-notebook",
+      component: () => import("../views/MistakeNotebookView.vue"),
+      meta: { public: true },
+    },
+    {
       path: "/practice",
       component: () => import("../views/PracticeView.vue"),
       meta: { requiresAuth: true, allowGuest: true },

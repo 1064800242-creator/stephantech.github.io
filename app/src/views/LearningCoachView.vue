@@ -5,7 +5,8 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const activeStage = ref(0);
 const cardSaved = ref(false);
-const draftText = ref(`From my perspective, it is extremely difficult for people working in a high-pressure full-time jobs to maintain a healthy social life. After a long day work, the only thing most people want to do is rest. Take myself as an example. I was used to consider myself a high-energy person. However, when I started my internship, all I want to do was staying at home alone.`);
+const defaultDraft = `From my perspective, it is impossible for a full-time job person maintaining a healthy social life. Imagine you are under high pressure in a big company, your peer are competitive with high professional ability and technical skills. After working, the only thing you need is to take a break and doing things without thinking. For example, I was used to believe I am a high-energy person. However, when I start an internship, I felt my full of energy were lost and just want to stay alone. They cannot balanced.`;
+const draftText = ref(sessionStorage.getItem("demoCurrentAnswer") || defaultDraft);
 const answers = ref([null, null, null]);
 const quizSubmitted = ref(false);
 const rewriteText = ref("");
@@ -88,8 +89,7 @@ const openCoachHome = () => {
 };
 
 const openMistakeMemory = () => {
-  activeStage.value = 4;
-  window.requestAnimationFrame(() => jumpToDemo());
+  router.push('/mistake-notebook');
 };
 </script>
 
@@ -98,9 +98,9 @@ const openMistakeMemory = () => {
     <aside class="product-sidebar">
       <button class="brand" @click="router.push('/')">TWI<span>beta</span></button>
       <nav class="side-nav">
-        <button class="side-link" @click="router.push('/practice')"><i>✎</i><span>写作练习</span></button>
+        <button class="side-link" @click="router.push('/demo-practice')"><i>✎</i><span>写作练习</span></button>
         <button class="side-link active" @click="openCoachHome"><i>◎</i><span>AI 学习教练</span></button>
-        <button class="side-link" @click="router.push('/records')"><i>▤</i><span>我的记录</span></button>
+        <button class="side-link" @click="router.push('/demo-records')"><i>▤</i><span>我的记录</span></button>
         <button class="side-link" @click="openMistakeMemory"><i>◇</i><span>智能错题本</span><b>3</b></button>
       </nav>
       <div class="student-profile">
@@ -116,6 +116,7 @@ const openMistakeMemory = () => {
           <h1>下午好，Alex</h1>
         </div>
         <div class="nav-actions">
+          <div class="case-switch"><button class="active">案例 A · 语言</button><button @click="router.push('/learning-coach/steec')">案例 B · STEEC</button></div>
           <span class="roadshow-badge"><i></i> 真实匿名案例</span>
           <button class="ghost-button" @click="router.push('/practice')">退出演示</button>
         </div>
@@ -328,6 +329,9 @@ button { font-family: inherit; }
 .product-main { min-width: 0; padding: 0 clamp(22px, 4vw, 60px) 70px; }
 .workspace-header { min-height: 94px; display: flex; align-items: center; justify-content: space-between; gap: 25px; border-bottom: 1px solid rgba(255,255,255,.08); }.workspace-header > div:first-child > span { color: #637a70; font-size: 10px; font-weight: 800; letter-spacing: .14em; }.workspace-header h1 { margin: 5px 0 0; font-size: 25px; letter-spacing: -.03em; }
 .nav-actions { display: flex; align-items: center; gap: 14px; }
+.case-switch { display: flex; padding: 3px; border: 1px solid #294138; border-radius: 9px; background: #091511; }
+.case-switch button { border: 0; border-radius: 6px; padding: 7px 10px; background: transparent; color: #657b72; font-size: 10px; font-weight: 800; cursor: pointer; }
+.case-switch button.active { background: #173229; color: #75e8b8; }
 .roadshow-badge { font-size: 11px; font-weight: 800; color: #9be7c8; letter-spacing: .12em; display: flex; align-items: center; gap: 7px; }
 .roadshow-badge i { width: 7px; height: 7px; border-radius: 50%; background: #48e6a4; box-shadow: 0 0 0 5px rgba(72,230,164,.12); }
 .ghost-button, .reset-button { color: #d6e7df; background: transparent; border: 1px solid rgba(218,255,238,.18); padding: 9px 14px; border-radius: 9px; cursor: pointer; }
