@@ -5,19 +5,71 @@ import { useRouter } from "vue-router";
 const router = useRouter();
 const activeStage = ref(0);
 const cardSaved = ref(false);
+const draftText = ref(`From my perspective, it is extremely difficult for people working in a high-pressure full-time jobs to maintain a healthy social life. After a long day work, the only thing most people want to do is rest. Take myself as an example. I was used to consider myself a high-energy person. However, when I started my internship, all I want to do was staying at home alone.`);
+const answers = ref([null, null, null]);
+const quizSubmitted = ref(false);
+const rewriteText = ref("");
+const rewriteChecked = ref(false);
 
 const stages = [
-  { label: "原始表现", hint: "12+ 个问题" },
+  { label: "提交作文", hint: "真实输入" },
   { label: "教学取舍", hint: "只抓 1 个" },
-  { label: "同题修复", hint: "3.0 → 4.5" },
-  { label: "错题记忆", hint: "沉淀方法" },
-  { label: "迁移验证", hint: "动态重规划" },
+  { label: "微型训练", hint: "现场作答" },
+  { label: "定向改写", hint: "自主修复" },
+  { label: "重新规划", hint: "结果分流" },
 ];
 
 const progress = computed(() => `${(activeStage.value / (stages.length - 1)) * 100}%`);
 
 const next = () => {
   if (activeStage.value < stages.length - 1) activeStage.value += 1;
+};
+
+const quizQuestions = [
+  {
+    stem: "I ___ consider myself a high-energy person.",
+    options: ["was used to", "used to", "am used to"],
+    correct: 1,
+    rule: "used to do 表示过去常常；be used to doing 表示习惯于。",
+  },
+  {
+    stem: "The only thing I wanted to do was ___ at home.",
+    options: ["staying", "stay", "to staying"],
+    correct: 1,
+    rule: "主语含 do 时，表语中的不定式通常省略 to：was stay。",
+  },
+  {
+    stem: "When I started the internship, I ___ completely drained.",
+    options: ["feel", "felt", "am feeling"],
+    correct: 1,
+    rule: "叙述同一段过去经历时，谓语时态需要保持一致。",
+  },
+];
+
+const quizComplete = computed(() => answers.value.every((answer) => answer !== null));
+const quizScore = computed(() => answers.value.reduce((score, answer, index) => score + (answer === quizQuestions[index].correct ? 1 : 0), 0));
+const rewritePassed = computed(() => {
+  const normalized = rewriteText.value.toLowerCase().replace(/\s+/g, " ");
+  return normalized.includes("used to consider") && normalized.includes("wanted to stay");
+});
+
+const submitQuiz = () => {
+  if (!quizComplete.value) return;
+  quizSubmitted.value = true;
+};
+
+const checkRewrite = () => {
+  rewriteChecked.value = true;
+  if (rewritePassed.value) cardSaved.value = true;
+};
+
+const resetDemo = () => {
+  activeStage.value = 0;
+  answers.value = [null, null, null];
+  quizSubmitted.value = false;
+  rewriteText.value = "";
+  rewriteChecked.value = false;
+  cardSaved.value = false;
 };
 
 const jumpToDemo = () => {
@@ -30,7 +82,7 @@ const openCoachHome = () => {
 };
 
 const openMistakeMemory = () => {
-  activeStage.value = 3;
+  activeStage.value = 4;
   window.requestAnimationFrame(() => jumpToDemo());
 };
 </script>
@@ -98,7 +150,7 @@ const openMistakeMemory = () => {
             <h2>今日训练路径</h2>
             <p>完成每一步后，AI 会读取新的表现并决定继续、毕业，还是返回微训练。</p>
           </div>
-          <button class="reset-button" @click="activeStage = 0; cardSaved = false">重新演示</button>
+          <button class="reset-button" @click="resetDemo">重置训练</button>
         </div>
 
         <div class="stage-track">
@@ -120,22 +172,18 @@ const openMistakeMemory = () => {
             <div :key="activeStage">
               <div v-if="activeStage === 0" class="two-column">
                 <article class="paper-card">
-                  <div class="card-label">首次限时作答 · 节选</div>
-                  <p>
-                    “From my perspective, it is impossible for a <mark>full-time job person maintaining</mark>
-                    a healthy social life… your <mark>peer are</mark> competitive… If a person
-                    <mark>start</mark> a social activity…”
-                  </p>
-                  <div class="paper-footer"><span>立场明确</span><span>逻辑完整</span><span>实例具体</span></div>
+                  <div class="card-label">你的 Academic Discussion 作答</div>
+                  <textarea v-model="draftText" class="draft-input" aria-label="学生作文"></textarea>
+                  <div class="input-meta"><span>{{ draftText.trim().split(/\s+/).filter(Boolean).length }} words</span><span>可直接编辑后再诊断</span></div>
                 </article>
                 <article class="diagnosis-card">
-                  <div class="card-label">AI 发现了什么</div>
-                  <div class="issue-count"><strong>12+</strong><span>处可见问题</span></div>
-                  <div class="issue-chips">
-                    <span>动词形式 × 5</span><span>主谓一致 × 3</span><span>搭配 × 3</span>
-                    <span>单复数</span><span>时态</span><span>表达自然度</span>
+                  <div class="card-label">诊断会结合什么</div>
+                  <div class="diagnosis-inputs">
+                    <p><b>本次表现</b><span>语言准确性、任务完成、内容展开</span></p>
+                    <p><b>历史记录</b><span>同类错误是否反复出现</span></p>
+                    <p><b>学习约束</b><span>距离考试 30 天，每次可练 10 分钟</span></p>
                   </div>
-                  <div class="warning-box">把这些一次性全交给学生，不叫个性化学习，只叫信息过载。</div>
+                  <div class="warning-box">点击后，系统不会把所有错误都丢给你，只生成当前最值得执行的一条训练路径。</div>
                 </article>
               </div>
 
@@ -164,62 +212,94 @@ const openMistakeMemory = () => {
               </div>
 
               <div v-else-if="activeStage === 2" class="repair-stage">
-                <div class="score-rise"><span>Agent 预估</span><strong>3.0</strong><i>→</i><strong>4.5</strong><b>同题计时二稿</b></div>
-                <div class="repair-list">
-                  <div><span>BEFORE</span><p>I <mark>was used to consider</mark> myself a high-energy person.</p></div>
-                  <div><span>AFTER</span><p>I <strong>used to consider</strong> myself a high-energy person.</p></div>
-                  <div><span>BEFORE</span><p>my full of energy <mark>were lost</mark></p></div>
-                  <div><span>AFTER</span><p>I found myself completely <strong>drained of energy</strong>.</p></div>
+                <div class="task-heading"><span class="section-kicker">MICRO PRACTICE</span><h3>先证明你理解了规则，再回到作文</h3><p>选择每个句子的正确动词结构。系统会根据正确率决定下一步。</p></div>
+                <div class="quiz-list">
+                  <article v-for="(question, questionIndex) in quizQuestions" :key="question.stem" class="quiz-card">
+                    <div class="quiz-number">0{{ questionIndex + 1 }}</div>
+                    <div class="quiz-content">
+                      <p>{{ question.stem }}</p>
+                      <div class="quiz-options">
+                        <button
+                          v-for="(option, optionIndex) in question.options"
+                          :key="option"
+                          :class="['quiz-option', {
+                            selected: answers[questionIndex] === optionIndex,
+                            correct: quizSubmitted && optionIndex === question.correct,
+                            wrong: quizSubmitted && answers[questionIndex] === optionIndex && optionIndex !== question.correct
+                          }]"
+                          :disabled="quizSubmitted"
+                          @click="answers[questionIndex] = optionIndex"
+                        >{{ option }}</button>
+                      </div>
+                      <p v-if="quizSubmitted" class="rule-feedback">{{ question.rule }}</p>
+                    </div>
+                  </article>
                 </div>
-                <div class="coach-observation">
-                  <b>教练判断</b>
-                  <p>同题修复显著，但二稿仍出现 “all I want to do was staying”。这不是“已掌握”，而是<strong>会模仿，尚待迁移</strong>。</p>
+                <div v-if="quizSubmitted" :class="['quiz-result', { passed: quizScore === 3 }]">
+                  <strong>{{ quizScore }}/3</strong>
+                  <p v-if="quizScore === 3"><b>规则识别通过。</b>下一步不是继续选择题，而是回到自己的表达中自主改写。</p>
+                  <p v-else><b>暂未通过。</b>系统将保留本知识点，并在改写后决定是否需要追加基础练习。</p>
                 </div>
               </div>
 
               <div v-else-if="activeStage === 3" class="memory-stage">
-                <div class="memory-intro">
-                  <span class="section-kicker">SMART MISTAKE MEMORY</span>
-                  <h3>错题本不收藏错误，它保存“下次怎么避免”</h3>
-                  <p>AI 生成候选卡，学生确认自己的错误原因与记忆点，系统再跟踪它是否在新作文里复发。</p>
+                <div class="task-heading">
+                  <span class="section-kicker">TARGETED REWRITE</span>
+                  <h3>现在，自己修复原作文里的两个目标句</h3>
+                  <p>必须保留原意，并正确使用 <b>used to do</b> 和 <b>wanted to stay</b>。这里不会提前给出完整答案。</p>
                 </div>
-                <button :class="['mistake-card', { saved: cardSaved }]" @click="cardSaved = !cardSaved">
-                  <div class="mistake-top"><span>核心错因 · 动词结构</span><b>{{ cardSaved ? '✓ 已存入学习记忆' : '+ 确认并存档' }}</b></div>
-                  <div class="mistake-example"><del>I was used to consider…</del><span>→</span><strong>I used to consider…</strong></div>
-                  <div class="memory-grid">
-                    <p><small>为什么错</small>混淆 used to do 与 be used to doing</p>
-                    <p><small>下次自检</small>看到 used to，先判断“过去常常”还是“习惯于”</p>
-                    <p><small>当前状态</small><em>同题已修复 · 新题待验证</em></p>
-                  </div>
-                </button>
+                <div class="rewrite-layout">
+                  <article class="source-sentences">
+                    <span>需要修复</span>
+                    <p>I was used to consider myself a high-energy person.</p>
+                    <p>All I want to do was staying at home alone.</p>
+                  </article>
+                  <article class="rewrite-box">
+                    <label for="rewrite-answer">你的改写</label>
+                    <textarea id="rewrite-answer" v-model="rewriteText" placeholder="请在这里写出两个完整句子……"></textarea>
+                    <div v-if="rewriteChecked" :class="['rewrite-feedback', { passed: rewritePassed }]">
+                      <template v-if="rewritePassed">✓ 两个目标结构均已检出。错题卡已进入“同题已修复”状态。</template>
+                      <template v-else>尚未同时检出 “used to consider” 和 “wanted to stay”，请继续修改。</template>
+                    </div>
+                  </article>
+                </div>
               </div>
 
               <div v-else class="replan-stage">
-                <div class="route-before">
-                  <span>原计划</span><b>再写一篇完整作文</b>
+                <div class="outcome-summary">
+                  <span class="section-kicker">LIVE DECISION RESULT</span>
+                  <h3>{{ quizScore === 3 && rewritePassed ? '本轮修复通过，进入新题迁移' : '本轮尚未稳定，返回针对训练' }}</h3>
+                  <p>这是根据你刚才的真实作答结果生成的路径，不是预先播放的固定结论。</p>
                 </div>
-                <div class="replan-pulse">AI 已重新规划</div>
                 <div class="route-after">
-                  <article><span>01 · 6 MIN</span><b>微型改错</b><p>识别 4 组动词结构中的错误</p></article>
+                  <article :class="{ 'route-active': !(quizScore === 3 && rewritePassed) }"><span>01 · REMEDIAL</span><b>动词结构微训练</b><p>{{ quizScore }}/3 道规则识别正确</p></article>
                   <i>→</i>
-                  <article><span>02 · 8 MIN</span><b>句子生成</b><p>用目标结构完成 4 个新句</p></article>
+                  <article><span>02 · REPAIR</span><b>同题自主修复</b><p>{{ rewritePassed ? '目标结构已检出' : '目标结构尚未全部检出' }}</p></article>
                   <i>→</i>
-                  <article class="route-active"><span>03 · 10 MIN</span><b>新题迁移</b><p>在陌生话题中自主使用并验证</p></article>
+                  <article :class="{ 'route-active': quizScore === 3 && rewritePassed }"><span>03 · TRANSFER</span><b>新题迁移验证</b><p>{{ quizScore === 3 && rewritePassed ? '已解锁陌生话题' : '完成前两步后解锁' }}</p></article>
                 </div>
-                <div class="route-result">
-                  <div><small>如果不再复发</small><strong>标记为「已掌握」</strong></div>
-                  <div><small>如果再次出现</small><strong>自动回到微训练</strong></div>
-                </div>
+
+                <button :class="['mistake-card', { saved: cardSaved }]" @click="cardSaved = !cardSaved">
+                  <div class="mistake-top"><span>智能错题卡 · 动词结构</span><b>{{ cardSaved ? '✓ 已存入学习记忆' : '+ 确认并存档' }}</b></div>
+                  <div class="memory-grid">
+                    <p><small>规则识别</small>{{ quizScore }}/3 正确</p>
+                    <p><small>自主改写</small>{{ rewritePassed ? '已通过' : '需继续' }}</p>
+                    <p><small>当前状态</small><em>{{ quizScore === 3 && rewritePassed ? '同题已修复 · 迁移待验证' : '训练中 · 尚未毕业' }}</em></p>
+                  </div>
+                </button>
               </div>
             </div>
           </transition>
 
           <div class="panel-footer">
             <span>Student A · Academic Discussion · 真实匿名记录</span>
-            <button v-if="activeStage < stages.length - 1" class="primary-button" @click="next">
-              {{ ['让 AI 做教学取舍', '查看同题修复', '生成智能错题卡', '开始迁移验证'][activeStage] }} <span>→</span>
-            </button>
-            <button v-else class="primary-button" @click="activeStage = 0; cardSaved = false">再看一遍 ↻</button>
+            <button v-if="activeStage === 0" class="primary-button" :disabled="draftText.trim().length < 80" @click="next">分析这篇作文 <span>→</span></button>
+            <button v-else-if="activeStage === 1" class="primary-button" @click="next">接受重点并开始训练 <span>→</span></button>
+            <button v-else-if="activeStage === 2 && !quizSubmitted" class="primary-button" :disabled="!quizComplete" @click="submitQuiz">提交答案</button>
+            <button v-else-if="activeStage === 2" class="primary-button" @click="next">进入自主改写 <span>→</span></button>
+            <button v-else-if="activeStage === 3 && !rewriteChecked" class="primary-button" :disabled="rewriteText.trim().length < 20" @click="checkRewrite">检查我的改写</button>
+            <button v-else-if="activeStage === 3" class="primary-button" :disabled="!rewritePassed" @click="next">根据结果重新规划 <span>→</span></button>
+            <button v-else class="primary-button" @click="resetDemo">重新训练 ↻</button>
           </div>
         </div>
       </section>
@@ -254,6 +334,7 @@ button { font-family: inherit; }
 .hero-copy > p { max-width: 690px; color: #acc2b9; font-size: 18px; line-height: 1.75; }
 .hero-actions { margin-top: 34px; display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
 .primary-button { border: 0; background: #69e9b2; color: #052117; border-radius: 10px; padding: 13px 18px; font-weight: 850; cursor: pointer; box-shadow: 0 10px 32px rgba(36,211,137,.15); }
+.primary-button:disabled { opacity: .38; cursor: not-allowed; box-shadow: none; }
 .primary-button span { padding-left: 18px; }
 .case-note { color: #728b81; font-size: 12px; }
 .decision-visual { border: 1px solid rgba(129,240,191,.2); border-radius: 28px; padding: 25px; background: radial-gradient(circle at 50% 80%, rgba(37,220,142,.16), transparent 42%), rgba(255,255,255,.025); min-height: 460px; display: flex; flex-direction: column; align-items: center; justify-content: center; box-shadow: inset 0 1px rgba(255,255,255,.07), 0 30px 90px rgba(0,0,0,.25); }
@@ -275,13 +356,16 @@ button { font-family: inherit; }
 .stage-button { position: relative; z-index: 1; background: transparent; border: 0; color: #647a71; display: flex; flex-direction: column; align-items: center; cursor: pointer; }.stage-button > span { width: 40px; height: 40px; display: grid; place-items: center; border-radius: 50%; background: #0d1c18; border: 1px solid #21372f; font-weight: 800; transition: .25s; }.stage-button b { margin-top: 10px; color: #7c9188; font-size: 13px; }.stage-button small { margin-top: 4px; }.stage-button.active > span, .stage-button.done > span { background: #57e0a5; color: #062117; border-color: #57e0a5; box-shadow: 0 0 25px rgba(68,221,157,.2); }.stage-button.active b { color: #effbf6; }
 .stage-panel { min-height: 530px; border: 1px solid rgba(198,255,229,.13); background: #0c1815; border-radius: 24px; padding: clamp(24px, 4vw, 48px); box-shadow: 0 30px 100px rgba(0,0,0,.25); display: flex; flex-direction: column; justify-content: space-between; }
 .two-column, .priority-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }.paper-card, .diagnosis-card, .priority-main, .deferred-card, .mistake-card { border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.025); border-radius: 18px; padding: 28px; }.paper-card p { font-family: Georgia, serif; font-size: 19px; line-height: 1.8; color: #d7e3de; }.paper-card mark, .repair-list mark { background: rgba(255,105,105,.16); color: #ffaaa3; padding: 1px 3px; }.paper-footer { display: flex; gap: 8px; flex-wrap: wrap; }.paper-footer span { color: #73dcb0; background: rgba(65,213,151,.08); padding: 6px 10px; border-radius: 99px; font-size: 11px; }.issue-count { display: flex; align-items: baseline; gap: 10px; margin: 22px 0; }.issue-count strong { font-size: 64px; color: #ffad91; line-height: 1; }.issue-count span { color: #8da198; }.issue-chips { display: flex; flex-wrap: wrap; gap: 8px; }.issue-chips span { border: 1px solid #344840; padding: 7px 10px; border-radius: 7px; color: #a9bcb4; font-size: 12px; }.warning-box { margin-top: 28px; padding: 16px; border-left: 3px solid #ffb18f; background: rgba(255,148,109,.07); color: #e4b8a8; line-height: 1.6; font-size: 13px; }
+.draft-input { width: 100%; min-height: 275px; resize: vertical; margin-top: 18px; padding: 18px; border: 1px solid #294139; border-radius: 12px; outline: none; background: #08130f; color: #dceae4; font: 15px/1.7 Georgia, serif; }.draft-input:focus { border-color: #59dfa7; box-shadow: 0 0 0 3px rgba(74,222,158,.08); }.input-meta { display: flex; justify-content: space-between; gap: 15px; margin-top: 10px; color: #61776e; font-size: 10px; }.diagnosis-inputs { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }.diagnosis-inputs p { margin: 0; padding: 15px; border: 1px solid rgba(255,255,255,.07); border-radius: 10px; display: flex; flex-direction: column; gap: 5px; }.diagnosis-inputs b { color: #d8e9e1; }.diagnosis-inputs span { color: #71877e; font-size: 12px; }
 .compression-card { display: flex; justify-content: center; align-items: center; gap: 25px; margin: 4px auto 28px; flex-wrap: wrap; }.compression-card .muted-number { font-size: 66px; color: #51645d; font-weight: 850; }.compression-card .strong-number { font-size: 82px; color: #69e9b2; font-weight: 900; }.compress-symbol { font-size: 38px; color: #6e857b; }.compression-card p { flex-basis: 100%; text-align: center; color: #7d948a; margin: -12px 0 0; }.priority-main { border-color: rgba(78,225,162,.35); background: linear-gradient(135deg, rgba(59,218,151,.1), rgba(255,255,255,.02)); }.focus-title span { color: #62e3aa; font-size: 11px; letter-spacing: .12em; }.focus-title h3 { margin: 8px 0 14px; font-size: 30px; }.priority-main > p, .priority-main li { color: #a8bcb3; line-height: 1.65; }.priority-main ul { padding-left: 20px; }.priority-main li { margin: 8px 0; }.priority-main li b { color: #dff5eb; }.deferred-card > div:not(.card-label) { display: flex; gap: 16px; align-items: center; border-bottom: 1px solid rgba(255,255,255,.07); padding: 16px 0; }.deferred-card div > span { color: #4f665d; font-weight: 850; }.deferred-card p { margin: 0; display: flex; flex-direction: column; gap: 4px; }.deferred-card small { color: #60776e; }
 .score-rise { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 28px; }.score-rise span, .score-rise b { color: #789087; font-size: 12px; }.score-rise strong { font-size: 48px; }.score-rise i { color: #54e0a5; font-size: 30px; }.repair-list { display: grid; grid-template-columns: 100px 1fr; border: 1px solid rgba(255,255,255,.09); border-radius: 16px; overflow: hidden; }.repair-list > div { display: contents; }.repair-list span, .repair-list p { padding: 15px 18px; margin: 0; border-bottom: 1px solid rgba(255,255,255,.07); }.repair-list span { color: #657a72; font-size: 10px; letter-spacing: .1em; background: rgba(255,255,255,.02); }.repair-list p { color: #c7d5cf; }.repair-list strong { color: #6ee7b3; }.coach-observation { margin-top: 24px; padding: 17px 20px; background: rgba(255,194,105,.07); border: 1px solid rgba(255,194,105,.15); border-radius: 12px; display: flex; gap: 18px; }.coach-observation b { color: #ffc778; white-space: nowrap; }.coach-observation p { margin: 0; color: #b9c9c2; line-height: 1.6; }
+.task-heading { text-align: center; max-width: 720px; margin: 0 auto 26px; }.task-heading h3, .outcome-summary h3 { font-size: 28px; margin: 9px 0; }.task-heading p, .outcome-summary p { color: #758c82; line-height: 1.6; margin: 0; }.quiz-list { display: grid; gap: 12px; }.quiz-card { padding: 18px; border: 1px solid rgba(255,255,255,.09); border-radius: 13px; background: rgba(255,255,255,.018); display: grid; grid-template-columns: 42px 1fr; gap: 12px; }.quiz-number { color: #557068; font-size: 11px; font-weight: 850; padding-top: 3px; }.quiz-content > p:first-child { margin: 0 0 12px; color: #d8e6e0; font-family: Georgia, serif; font-size: 16px; }.quiz-options { display: flex; gap: 8px; flex-wrap: wrap; }.quiz-option { border: 1px solid #2a4138; background: #0a1612; color: #8fa59b; border-radius: 8px; padding: 8px 12px; cursor: pointer; }.quiz-option:hover:not(:disabled), .quiz-option.selected { border-color: #5bdca6; color: #ddf8eb; }.quiz-option.correct { border-color: #58dda5; background: rgba(67,220,154,.12); color: #76e9ba; }.quiz-option.wrong { border-color: #f18e83; background: rgba(241,105,93,.09); color: #ffaaa1; }.rule-feedback { color: #789087; font-size: 11px; margin: 10px 0 0; }.quiz-result { margin-top: 18px; border: 1px solid rgba(255,162,130,.25); background: rgba(255,139,100,.06); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 18px; }.quiz-result.passed { border-color: rgba(85,224,165,.3); background: rgba(69,220,155,.07); }.quiz-result strong { font-size: 28px; }.quiz-result p { margin: 0; color: #9db0a8; line-height: 1.55; }.quiz-result b { color: #e9f8f1; }
 .memory-intro { text-align: center; max-width: 690px; margin: 0 auto 28px; }.memory-intro h3 { font-size: 30px; margin: 10px 0; }.memory-intro p { color: #849b91; line-height: 1.65; }.mistake-card { width: 100%; color: inherit; text-align: left; cursor: pointer; transition: .25s; }.mistake-card:hover, .mistake-card.saved { border-color: #55dfa5; transform: translateY(-2px); }.mistake-top { display: flex; justify-content: space-between; gap: 20px; }.mistake-top > span { color: #7f948b; }.mistake-top b { color: #69e9b2; }.mistake-example { margin: 24px 0; display: flex; gap: 18px; align-items: center; justify-content: center; font-size: 17px; flex-wrap: wrap; }.mistake-example del { color: #df9189; }.mistake-example strong { color: #74e7b6; }.memory-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }.memory-grid p { background: #0a1512; padding: 14px; border-radius: 10px; margin: 0; color: #c0d0c9; line-height: 1.5; }.memory-grid small { display: block; color: #61766d; margin-bottom: 7px; }.memory-grid em { color: #ffc87d; font-style: normal; }
+.rewrite-layout { display: grid; grid-template-columns: .85fr 1.15fr; gap: 18px; }.source-sentences, .rewrite-box { border: 1px solid rgba(255,255,255,.09); border-radius: 14px; padding: 20px; background: rgba(255,255,255,.02); }.source-sentences > span, .rewrite-box label { color: #677e74; font-size: 10px; font-weight: 800; letter-spacing: .1em; }.source-sentences p { color: #e1aaa4; font-family: Georgia, serif; line-height: 1.6; }.rewrite-box { display: flex; flex-direction: column; }.rewrite-box textarea { flex: 1; min-height: 170px; resize: vertical; margin-top: 12px; padding: 15px; border: 1px solid #294139; border-radius: 10px; background: #08130f; color: #e4f0eb; outline: none; line-height: 1.6; }.rewrite-box textarea:focus { border-color: #5bdca6; }.rewrite-feedback { margin-top: 10px; color: #f0a59b; font-size: 12px; line-height: 1.5; }.rewrite-feedback.passed { color: #6ee7b3; }.outcome-summary { text-align: center; margin-bottom: 26px; }
 .route-before { display: flex; align-items: center; justify-content: center; gap: 14px; color: #637970; text-decoration: line-through; }.route-before span { font-size: 11px; letter-spacing: .12em; }.replan-pulse { width: max-content; margin: 25px auto; padding: 9px 15px; border: 1px solid rgba(84,224,165,.32); background: rgba(84,224,165,.08); color: #6fe9b6; border-radius: 99px; font-size: 12px; font-weight: 850; box-shadow: 0 0 35px rgba(56,222,151,.12); }.route-after { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; align-items: center; gap: 12px; }.route-after article { min-height: 145px; border: 1px solid rgba(255,255,255,.1); padding: 20px; border-radius: 15px; display: flex; flex-direction: column; }.route-after article > span { font-size: 10px; color: #637970; letter-spacing: .1em; }.route-after article b { font-size: 20px; margin: 15px 0 8px; }.route-after article p { color: #788f85; line-height: 1.5; margin: 0; }.route-after .route-active { border-color: #58dfaa; background: rgba(65,219,153,.08); }.route-after i { color: #50d89f; }.route-result { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 28px; }.route-result > div { padding: 15px; background: rgba(255,255,255,.025); border-radius: 10px; display: flex; justify-content: space-between; }.route-result small { color: #6e837a; }.route-result strong { color: #c9ddd4; }
 .panel-footer { margin-top: 36px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.08); display: flex; justify-content: space-between; align-items: center; gap: 20px; }.panel-footer > span { color: #61766e; font-size: 11px; }.teacher-proof { max-width: 1240px; margin: 0 auto; padding: 55px; border-radius: 24px; color: #07120e; background: #baf7dc; display: grid; grid-template-columns: 1.1fr .9fr; align-items: end; gap: 50px; }.teacher-proof span { color: #18734f; font-weight: 850; font-size: 11px; letter-spacing: .14em; }.teacher-proof h2 { font-size: 33px; line-height: 1.25; letter-spacing: -.035em; margin: 14px 0 0; }.teacher-proof p { color: #356550; line-height: 1.7; margin: 0; }.stage-fade-enter-active, .stage-fade-leave-active { transition: opacity .16s ease, transform .16s ease; }.stage-fade-enter-from { opacity: 0; transform: translateY(8px); }.stage-fade-leave-to { opacity: 0; transform: translateY(-5px); }
 @media (max-width: 850px) {
-  .coach-page { grid-template-columns: 76px minmax(0, 1fr); }.product-sidebar { padding: 22px 10px; }.brand { font-size: 18px; padding-left: 6px; }.brand span, .side-link span, .side-link b, .student-profile p { display: none; }.side-link { grid-template-columns: 1fr; text-align: center; }.student-profile { justify-content: center; }.today-grid { grid-template-columns: 1fr; }.today-focus { grid-template-columns: 1fr; }.focus-meter { display: none; }.quick-stats { grid-template-columns: 1fr; }.hero-section { grid-template-columns: 1fr; padding-top: 60px; }.decision-visual { min-height: 390px; }.two-column, .priority-layout, .teacher-proof { grid-template-columns: 1fr; }.memory-grid { grid-template-columns: 1fr; }.route-after { grid-template-columns: 1fr; }.route-after > i { transform: rotate(90deg); text-align: center; }.stage-track { overflow-x: auto; grid-template-columns: repeat(5, 110px); justify-content: start; }.track-line { display: none; }.teacher-proof { padding: 30px; }
+  .coach-page { grid-template-columns: 76px minmax(0, 1fr); }.product-sidebar { padding: 22px 10px; }.brand { font-size: 18px; padding-left: 6px; }.brand span, .side-link span, .side-link b, .student-profile p { display: none; }.side-link { grid-template-columns: 1fr; text-align: center; }.student-profile { justify-content: center; }.today-grid { grid-template-columns: 1fr; }.today-focus { grid-template-columns: 1fr; }.focus-meter { display: none; }.quick-stats { grid-template-columns: 1fr; }.hero-section { grid-template-columns: 1fr; padding-top: 60px; }.decision-visual { min-height: 390px; }.two-column, .priority-layout, .teacher-proof, .rewrite-layout { grid-template-columns: 1fr; }.memory-grid { grid-template-columns: 1fr; }.route-after { grid-template-columns: 1fr; }.route-after > i { transform: rotate(90deg); text-align: center; }.stage-track { overflow-x: auto; grid-template-columns: repeat(5, 110px); justify-content: start; }.track-line { display: none; }.teacher-proof { padding: 30px; }
 }
 @media (max-width: 560px) {
   .coach-page { display: block; }.product-sidebar { display: none; }.product-main { padding: 0 15px 45px; }.workspace-header { min-height: 80px; }.workspace-header h1 { font-size: 20px; }.roadshow-badge { display: none; }.today-focus { padding: 24px 20px; }.quick-stats { display: none; }.hero-section, .demo-section { padding-left: 0; padding-right: 0; }.hero-copy h1 { font-size: 39px; }.stage-panel { padding: 18px; }.repair-list { grid-template-columns: 70px 1fr; }.panel-footer { align-items: stretch; flex-direction: column; }.section-heading { align-items: start; flex-direction: column; }.proof-strip { justify-content: flex-start; }.strip-divider { display: none; }.coach-observation { flex-direction: column; gap: 7px; }
