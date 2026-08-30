@@ -22,6 +22,10 @@ const router = useRouter();
           <button class="btn-primary" @click="router.push('/learning-coach')">观看 3 分钟真实案例</button>
           <button class="btn-secondary" @click="router.push('/login')">进入练习平台</button>
         </div>
+        <div class="feedback-invite">
+          <span>这是内测版本，建议先完成体验，再告诉我哪一步最有价值。</span>
+          <button @click="router.push('/demo-practice')">体验 Demo · 提交反馈 →</button>
+        </div>
       </section>
 
       <section class="welcome-features">
@@ -148,6 +152,8 @@ const router = useRouter();
   font-weight: 600;
   cursor: pointer;
 }
+
+.feedback-invite{margin-top:18px;display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;color:#748078;font-size:12px}.feedback-invite button{border:0;background:transparent;color:#087c5b;font-weight:700;cursor:pointer;padding:3px}.feedback-invite button:hover{text-decoration:underline}
 
 @media (max-width: 620px) {
   .welcome-title { font-size: 30px; }
