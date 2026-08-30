@@ -12,6 +12,67 @@ const answers = ref([null, null, null]);
 const quizSubmitted = ref(false);
 const rewriteText = ref("");
 const rewriteChecked = ref(false);
+const activeDiagnosisId = ref("verb");
+
+const diagnosisCategories = [
+  {
+    id: "verb",
+    short: "句子骨架",
+    title: "动词与句子骨架",
+    level: "高频 · 高影响",
+    signal: 94,
+    summary: "多处错误会直接破坏完整句，是其他表达能力的前置基础。",
+    impact: "如果句子的核心谓语不稳定，即使观点和例子不错，也会持续影响语言准确性与可读性。",
+    evidence: [
+      { source: "for a full-time job person maintaining...", issue: "固定句型与非谓语结构错误" },
+      { source: "I was used to believe...", issue: "used to 与 be used to 混淆" },
+      { source: "They cannot balanced.", issue: "情态动词后的被动结构错误" },
+    ],
+  },
+  {
+    id: "tense",
+    short: "时态与一致",
+    title: "时态与主谓一致",
+    level: "多处 · 中高影响",
+    signal: 77,
+    summary: "过去经历与一般判断混写，且出现名词单复数和谓语不一致。",
+    impact: "这些错误需要修复，但可以在动词骨架稳定后合并进入下一轮训练。",
+    evidence: [
+      { source: "your peer are competitive", issue: "名词单复数与主谓一致" },
+      { source: "when I start ... I felt", issue: "同一过去经历中的时态不一致" },
+      { source: "I used to believe I am...", issue: "过去叙述中的时态衔接" },
+    ],
+  },
+  {
+    id: "vocab",
+    short: "词汇与搭配",
+    title: "词汇与固定搭配",
+    level: "多处 · 中影响",
+    signal: 59,
+    summary: "意思基本可理解，但部分中式搭配降低了表达的自然度。",
+    impact: "当前不是最阻碍理解的问题，先保证句子站得住，再提升自然度更高效。",
+    evidence: [
+      { source: "a full-time job person", issue: "名词搭配不自然" },
+      { source: "After working", issue: "语境中更自然的搭配是 after work" },
+      { source: "my full of energy were lost", issue: "表达方式与搭配不自然" },
+    ],
+  },
+  {
+    id: "task",
+    short: "任务与论证",
+    title: "任务回应与论证严谨性",
+    level: "2 项 · 中影响",
+    signal: 46,
+    summary: "观点与例子完整，但对已有讨论的承接不够显性，结尾略绝对。",
+    impact: "这不等于作文不合格；它是内容质量的优化项，暂不抢占基础语言训练。",
+    evidence: [
+      { source: "未明确承接 Andrew / Claire 的观点", issue: "对讨论的参与感可以更清楚" },
+      { source: "it is impossible / They cannot...", issue: "结论过于绝对，可增加条件限制" },
+    ],
+  },
+];
+
+const activeDiagnosis = computed(() => diagnosisCategories.find((item) => item.id === activeDiagnosisId.value) || diagnosisCategories[0]);
 
 const stages = [
   { label: "提交作文", hint: "真实输入" },
@@ -85,6 +146,7 @@ const resetDemo = () => {
   rewriteText.value = "";
   rewriteChecked.value = false;
   cardSaved.value = false;
+  activeDiagnosisId.value = "verb";
 };
 
 const jumpToDemo = () => {
@@ -135,20 +197,20 @@ const openMistakeMemory = () => {
           <div class="focus-copy">
             <span class="section-kicker">TODAY'S FOCUS · 10 MIN</span>
             <h2>今天只练一件事：<em>动词骨架稳定性</em></h2>
-            <p>你上次作文中出现了 12+ 处问题。AI 根据得分影响、出现频率和前置依赖，暂时放下其他问题，先帮你攻克这一项。</p>
+            <p>AI 在这篇初稿中识别出 4 类问题与多处证据。它先展示完整诊断，再根据得分影响、出现频率和前置依赖，只布置今天最值得练的一项。</p>
             <button class="primary-button" @click="jumpToDemo">开始今日训练 <span>→</span></button>
           </div>
           <div class="focus-meter">
-            <div class="meter-ring"><strong>1</strong><span>/ 12+</span></div>
+            <div class="meter-ring"><strong>1</strong><span>/ 4 类问题</span></div>
             <small>本轮训练重点</small>
           </div>
         </article>
 
         <article class="status-card">
           <div class="status-top"><span>本周状态</span><b>学习中</b></div>
-          <div class="score-row"><div><small>本次初稿 · Agent 预估</small><strong>3.0 / 5.0</strong></div><span>待训练</span></div>
+          <div class="score-row"><div><small>这篇初稿的 Agent 参考评分</small><strong>3.0 / 5.0</strong></div><span>非提分承诺</span></div>
           <div class="status-progress"><i></i></div>
-          <p>初稿诊断已经完成。完成本轮 10 分钟微训练和局部修复后，系统才决定继续练习还是进入迁移验证。</p>
+          <p>3.0 只描述当前这篇初稿。完成训练不代表自动达到 4.5；系统会根据新的真实作答重新评分并决定下一步。</p>
         </article>
       </section>
 
@@ -204,9 +266,41 @@ const openMistakeMemory = () => {
               </div>
 
               <div v-else-if="activeStage === 1" class="decision-stage">
+                <section class="diagnosis-map">
+                  <div class="diagnosis-map-heading">
+                    <div><span class="section-kicker">FULL DIAGNOSIS MAP</span><h3>先看全貌，再做教学取舍</h3></div>
+                    <p>完整问题不会消失；系统把长篇反馈压缩成可查看的诊断地图，学生一次只执行一个任务。</p>
+                  </div>
+                  <div class="diagnosis-tabs" role="tablist" aria-label="作文诊断类别">
+                    <button
+                      v-for="item in diagnosisCategories"
+                      :key="item.id"
+                      :class="{ active: activeDiagnosisId === item.id }"
+                      role="tab"
+                      :aria-selected="activeDiagnosisId === item.id"
+                      @click="activeDiagnosisId = item.id"
+                    >
+                      <span>{{ item.level }}</span><b>{{ item.short }}</b><small>{{ item.summary }}</small>
+                      <i><em :style="{ width: item.signal + '%' }"></em></i>
+                    </button>
+                  </div>
+                  <article class="diagnosis-detail">
+                    <div class="diagnosis-detail-title"><span>当前查看</span><h4>{{ activeDiagnosis.title }}</h4><b>{{ activeDiagnosis.level }}</b></div>
+                    <div class="evidence-list">
+                      <div v-for="evidence in activeDiagnosis.evidence" :key="evidence.source">
+                        <code>{{ evidence.source }}</code><p>{{ evidence.issue }}</p>
+                      </div>
+                    </div>
+                    <p class="impact-note"><b>对学习路径的影响：</b>{{ activeDiagnosis.impact }}</p>
+                  </article>
+                </section>
+
+                <div class="selection-formula">
+                  <span>取舍依据</span><b>得分影响</b><i>×</i><b>出现频率</b><i>×</i><b>前置依赖</b><i>×</i><b>10 分钟可改善性</b>
+                </div>
                 <div class="compression-card">
-                  <span class="muted-number">12+</span><span class="compress-symbol">→</span><span class="strong-number">1</span>
-                  <p>从“所有问题”压缩为“现在最值得解决的问题”</p>
+                  <span class="muted-number">4 类</span><span class="compress-symbol">→</span><span class="strong-number">1</span>
+                  <p>不是只发现一个问题，而是看完全部问题后，只布置一个当前任务</p>
                 </div>
                 <div class="priority-layout">
                   <article class="priority-main">
@@ -215,14 +309,14 @@ const openMistakeMemory = () => {
                     <ul>
                       <li><b>为什么现在练：</b>同一篇中反复出现，短期可通过针对练习降低频率</li>
                       <li><b>本轮成功标准：</b>4 个目标句中至少 3 个动词结构正确</li>
-                      <li><b>暂时不追求：</b>高级词汇与复杂句式，避免同时增加认知负担</li>
+                      <li><b>暂时不追求：</b>词汇自然度和内容优化，避免同时增加认知负担</li>
                     </ul>
                   </article>
                   <article class="deferred-card">
                     <div class="card-label">NOT NOW · 暂缓</div>
                     <div><span>02</span><p><b>词汇自然度</b><small>先保证句子站得住</small></p></div>
-                    <div><span>03</span><p><b>高级句式</b><small>不是当前得分瓶颈</small></p></div>
-                    <div><span>04</span><p><b>内容扩充</b><small>已有完整论证链</small></p></div>
+                    <div><span>03</span><p><b>时态与一致</b><small>纳入下一轮语言训练</small></p></div>
+                    <div><span>04</span><p><b>任务与论证</b><small>不是当前基础瓶颈</small></p></div>
                   </article>
                 </div>
               </div>
@@ -376,6 +470,7 @@ button { font-family: inherit; }
 .stage-panel { min-height: 530px; border: 1px solid rgba(198,255,229,.13); background: #0c1815; border-radius: 24px; padding: clamp(24px, 4vw, 48px); box-shadow: 0 30px 100px rgba(0,0,0,.25); display: flex; flex-direction: column; justify-content: space-between; }
 .two-column, .priority-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }.paper-card, .diagnosis-card, .priority-main, .deferred-card, .mistake-card { border: 1px solid rgba(255,255,255,.1); background: rgba(255,255,255,.025); border-radius: 18px; padding: 28px; }.paper-card p { font-family: Georgia, serif; font-size: 19px; line-height: 1.8; color: #d7e3de; }.paper-card mark, .repair-list mark { background: rgba(255,105,105,.16); color: #ffaaa3; padding: 1px 3px; }.paper-footer { display: flex; gap: 8px; flex-wrap: wrap; }.paper-footer span { color: #73dcb0; background: rgba(65,213,151,.08); padding: 6px 10px; border-radius: 99px; font-size: 11px; }.issue-count { display: flex; align-items: baseline; gap: 10px; margin: 22px 0; }.issue-count strong { font-size: 64px; color: #ffad91; line-height: 1; }.issue-count span { color: #8da198; }.issue-chips { display: flex; flex-wrap: wrap; gap: 8px; }.issue-chips span { border: 1px solid #344840; padding: 7px 10px; border-radius: 7px; color: #a9bcb4; font-size: 12px; }.warning-box { margin-top: 28px; padding: 16px; border-left: 3px solid #ffb18f; background: rgba(255,148,109,.07); color: #e4b8a8; line-height: 1.6; font-size: 13px; }
 .draft-input { width: 100%; min-height: 275px; resize: vertical; margin-top: 18px; padding: 18px; border: 1px solid #294139; border-radius: 12px; outline: none; background: #08130f; color: #dceae4; font: 15px/1.7 Georgia, serif; }.draft-input:focus { border-color: #59dfa7; box-shadow: 0 0 0 3px rgba(74,222,158,.08); }.input-meta { display: flex; justify-content: space-between; gap: 15px; margin-top: 10px; color: #61776e; font-size: 10px; }.diagnosis-inputs { margin-top: 18px; display: flex; flex-direction: column; gap: 12px; }.diagnosis-inputs p { margin: 0; padding: 15px; border: 1px solid rgba(255,255,255,.07); border-radius: 10px; display: flex; flex-direction: column; gap: 5px; }.diagnosis-inputs b { color: #d8e9e1; }.diagnosis-inputs span { color: #71877e; font-size: 12px; }
+.diagnosis-map { margin-bottom: 28px; padding: 24px; border: 1px solid rgba(255,255,255,.09); border-radius: 18px; background: rgba(255,255,255,.018); }.diagnosis-map-heading { display: flex; justify-content: space-between; gap: 30px; align-items: end; margin-bottom: 18px; }.diagnosis-map-heading h3 { margin: 7px 0 0; font-size: 25px; }.diagnosis-map-heading p { max-width: 510px; margin: 0; color: #71877e; font-size: 12px; line-height: 1.6; }.diagnosis-tabs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }.diagnosis-tabs button { min-width: 0; padding: 15px; text-align: left; color: inherit; border: 1px solid #21382f; border-radius: 12px; background: #091511; cursor: pointer; transition: .2s ease; }.diagnosis-tabs button:hover, .diagnosis-tabs button.active { transform: translateY(-2px); border-color: #56dfa6; background: rgba(69,220,155,.07); }.diagnosis-tabs span { color: #eeaa90; font-size: 9px; font-weight: 850; letter-spacing: .06em; }.diagnosis-tabs b { display: block; margin: 6px 0; color: #dceae4; font-size: 14px; }.diagnosis-tabs small { display: block; min-height: 48px; color: #687e75; line-height: 1.45; }.diagnosis-tabs i { display: block; height: 4px; margin-top: 12px; border-radius: 99px; overflow: hidden; background: #1a2c25; }.diagnosis-tabs em { display: block; height: 100%; background: linear-gradient(90deg, #55dfa5, #f2b17f); }.diagnosis-detail { margin-top: 12px; padding: 18px; border-radius: 13px; background: #07120f; }.diagnosis-detail-title { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }.diagnosis-detail-title span { color: #60776d; font-size: 9px; letter-spacing: .1em; }.diagnosis-detail-title h4 { margin: 0; color: #e4f2ec; font-size: 17px; }.diagnosis-detail-title b { margin-left: auto; padding: 5px 8px; color: #ffb49d; border-radius: 99px; background: rgba(255,137,113,.08); font-size: 10px; }.evidence-list { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 14px; }.evidence-list > div { min-width: 0; padding: 12px; border: 1px solid rgba(255,255,255,.07); border-radius: 9px; }.evidence-list code { display: block; overflow-wrap: anywhere; color: #f0b4aa; font: 12px/1.5 Georgia, serif; }.evidence-list p { margin: 7px 0 0; color: #71877e; font-size: 10px; line-height: 1.45; }.impact-note { margin: 13px 0 0; color: #82988f; font-size: 11px; line-height: 1.55; }.impact-note b { color: #cfe2d9; }.selection-formula { margin: 0 auto 18px; display: flex; align-items: center; justify-content: center; gap: 9px; flex-wrap: wrap; color: #60766d; font-size: 10px; }.selection-formula > span { padding: 6px 9px; border-radius: 99px; color: #6de5b3; background: rgba(82,222,161,.08); font-weight: 850; }.selection-formula b { color: #9cafA6; font-weight: 700; }.selection-formula i { color: #40564d; font-style: normal; }
 .compression-card { display: flex; justify-content: center; align-items: center; gap: 25px; margin: 4px auto 28px; flex-wrap: wrap; }.compression-card .muted-number { font-size: 66px; color: #51645d; font-weight: 850; }.compression-card .strong-number { font-size: 82px; color: #69e9b2; font-weight: 900; }.compress-symbol { font-size: 38px; color: #6e857b; }.compression-card p { flex-basis: 100%; text-align: center; color: #7d948a; margin: -12px 0 0; }.priority-main { border-color: rgba(78,225,162,.35); background: linear-gradient(135deg, rgba(59,218,151,.1), rgba(255,255,255,.02)); }.focus-title span { color: #62e3aa; font-size: 11px; letter-spacing: .12em; }.focus-title h3 { margin: 8px 0 14px; font-size: 30px; }.priority-main > p, .priority-main li { color: #a8bcb3; line-height: 1.65; }.priority-main ul { padding-left: 20px; }.priority-main li { margin: 8px 0; }.priority-main li b { color: #dff5eb; }.deferred-card > div:not(.card-label) { display: flex; gap: 16px; align-items: center; border-bottom: 1px solid rgba(255,255,255,.07); padding: 16px 0; }.deferred-card div > span { color: #4f665d; font-weight: 850; }.deferred-card p { margin: 0; display: flex; flex-direction: column; gap: 4px; }.deferred-card small { color: #60776e; }
 .score-rise { display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; margin-bottom: 28px; }.score-rise span, .score-rise b { color: #789087; font-size: 12px; }.score-rise strong { font-size: 48px; }.score-rise i { color: #54e0a5; font-size: 30px; }.repair-list { display: grid; grid-template-columns: 100px 1fr; border: 1px solid rgba(255,255,255,.09); border-radius: 16px; overflow: hidden; }.repair-list > div { display: contents; }.repair-list span, .repair-list p { padding: 15px 18px; margin: 0; border-bottom: 1px solid rgba(255,255,255,.07); }.repair-list span { color: #657a72; font-size: 10px; letter-spacing: .1em; background: rgba(255,255,255,.02); }.repair-list p { color: #c7d5cf; }.repair-list strong { color: #6ee7b3; }.coach-observation { margin-top: 24px; padding: 17px 20px; background: rgba(255,194,105,.07); border: 1px solid rgba(255,194,105,.15); border-radius: 12px; display: flex; gap: 18px; }.coach-observation b { color: #ffc778; white-space: nowrap; }.coach-observation p { margin: 0; color: #b9c9c2; line-height: 1.6; }
 .task-heading { text-align: center; max-width: 720px; margin: 0 auto 26px; }.task-heading h3, .outcome-summary h3 { font-size: 28px; margin: 9px 0; }.task-heading p, .outcome-summary p { color: #758c82; line-height: 1.6; margin: 0; }.quiz-list { display: grid; gap: 12px; }.quiz-card { padding: 18px; border: 1px solid rgba(255,255,255,.09); border-radius: 13px; background: rgba(255,255,255,.018); display: grid; grid-template-columns: 42px 1fr; gap: 12px; }.quiz-number { color: #557068; font-size: 11px; font-weight: 850; padding-top: 3px; }.quiz-content > p:first-child { margin: 0 0 12px; color: #d8e6e0; font-family: Georgia, serif; font-size: 16px; }.quiz-options { display: flex; gap: 8px; flex-wrap: wrap; }.quiz-option { border: 1px solid #2a4138; background: #0a1612; color: #8fa59b; border-radius: 8px; padding: 8px 12px; cursor: pointer; }.quiz-option:hover:not(:disabled), .quiz-option.selected { border-color: #5bdca6; color: #ddf8eb; }.quiz-option.correct { border-color: #58dda5; background: rgba(67,220,154,.12); color: #76e9ba; }.quiz-option.wrong { border-color: #f18e83; background: rgba(241,105,93,.09); color: #ffaaa1; }.rule-feedback { color: #789087; font-size: 11px; margin: 10px 0 0; }.quiz-result { margin-top: 18px; border: 1px solid rgba(255,162,130,.25); background: rgba(255,139,100,.06); border-radius: 12px; padding: 16px; display: flex; align-items: center; gap: 18px; }.quiz-result.passed { border-color: rgba(85,224,165,.3); background: rgba(69,220,155,.07); }.quiz-result strong { font-size: 28px; }.quiz-result p { margin: 0; color: #9db0a8; line-height: 1.55; }.quiz-result b { color: #e9f8f1; }
@@ -386,9 +481,9 @@ button { font-family: inherit; }
 .route-after .route-locked { opacity: .48; border-style: dashed; }
 .panel-footer { margin-top: 36px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.08); display: flex; justify-content: space-between; align-items: center; gap: 20px; }.panel-footer > span { color: #61766e; font-size: 11px; }.teacher-proof { max-width: 1240px; margin: 0 auto; padding: 55px; border-radius: 24px; color: #07120e; background: #baf7dc; display: grid; grid-template-columns: 1.1fr .9fr; align-items: end; gap: 50px; }.teacher-proof span { color: #18734f; font-weight: 850; font-size: 11px; letter-spacing: .14em; }.teacher-proof h2 { font-size: 33px; line-height: 1.25; letter-spacing: -.035em; margin: 14px 0 0; }.teacher-proof p { color: #356550; line-height: 1.7; margin: 0; }.stage-fade-enter-active, .stage-fade-leave-active { transition: opacity .16s ease, transform .16s ease; }.stage-fade-enter-from { opacity: 0; transform: translateY(8px); }.stage-fade-leave-to { opacity: 0; transform: translateY(-5px); }
 @media (max-width: 850px) {
-  .coach-page { grid-template-columns: 76px minmax(0, 1fr); }.product-sidebar { padding: 22px 10px; }.brand { font-size: 18px; padding-left: 6px; }.brand span, .side-link span, .side-link b, .student-profile p { display: none; }.side-link { grid-template-columns: 1fr; text-align: center; }.student-profile { justify-content: center; }.today-grid { grid-template-columns: 1fr; }.today-focus { grid-template-columns: 1fr; }.focus-meter { display: none; }.quick-stats { grid-template-columns: 1fr; }.hero-section { grid-template-columns: 1fr; padding-top: 60px; }.decision-visual { min-height: 390px; }.two-column, .priority-layout, .teacher-proof, .rewrite-layout { grid-template-columns: 1fr; }.memory-grid { grid-template-columns: 1fr; }.route-after { grid-template-columns: 1fr; }.route-after > i { transform: rotate(90deg); text-align: center; }.stage-track { overflow-x: auto; grid-template-columns: repeat(5, 110px); justify-content: start; }.track-line { display: none; }.teacher-proof { padding: 30px; }
+  .coach-page { grid-template-columns: 76px minmax(0, 1fr); }.product-sidebar { padding: 22px 10px; }.brand { font-size: 18px; padding-left: 6px; }.brand span, .side-link span, .side-link b, .student-profile p { display: none; }.side-link { grid-template-columns: 1fr; text-align: center; }.student-profile { justify-content: center; }.today-grid { grid-template-columns: 1fr; }.today-focus { grid-template-columns: 1fr; }.focus-meter { display: none; }.quick-stats { grid-template-columns: 1fr; }.hero-section { grid-template-columns: 1fr; padding-top: 60px; }.decision-visual { min-height: 390px; }.two-column, .priority-layout, .teacher-proof, .rewrite-layout { grid-template-columns: 1fr; }.diagnosis-map-heading { align-items: start; flex-direction: column; }.diagnosis-tabs { grid-template-columns: 1fr 1fr; }.evidence-list { grid-template-columns: 1fr; }.memory-grid { grid-template-columns: 1fr; }.route-after { grid-template-columns: 1fr; }.route-after > i { transform: rotate(90deg); text-align: center; }.stage-track { overflow-x: auto; grid-template-columns: repeat(5, 110px); justify-content: start; }.track-line { display: none; }.teacher-proof { padding: 30px; }
 }
 @media (max-width: 560px) {
-  .coach-page { display: block; }.product-sidebar { display: none; }.product-main { padding: 0 15px 45px; }.workspace-header { min-height: 80px; }.workspace-header h1 { font-size: 20px; }.roadshow-badge { display: none; }.today-focus { padding: 24px 20px; }.quick-stats { display: none; }.hero-section, .demo-section { padding-left: 0; padding-right: 0; }.hero-copy h1 { font-size: 39px; }.stage-panel { padding: 18px; }.repair-list { grid-template-columns: 70px 1fr; }.panel-footer { align-items: stretch; flex-direction: column; }.section-heading { align-items: start; flex-direction: column; }.proof-strip { justify-content: flex-start; }.strip-divider { display: none; }.coach-observation { flex-direction: column; gap: 7px; }
+  .coach-page { display: block; }.product-sidebar { display: none; }.product-main { padding: 0 15px 45px; }.workspace-header { min-height: 80px; }.workspace-header h1 { font-size: 20px; }.roadshow-badge { display: none; }.today-focus { padding: 24px 20px; }.quick-stats { display: none; }.hero-section, .demo-section { padding-left: 0; padding-right: 0; }.hero-copy h1 { font-size: 39px; }.stage-panel { padding: 18px; }.diagnosis-map { padding: 16px; }.diagnosis-tabs { grid-template-columns: 1fr; }.repair-list { grid-template-columns: 70px 1fr; }.panel-footer { align-items: stretch; flex-direction: column; }.section-heading { align-items: start; flex-direction: column; }.proof-strip { justify-content: flex-start; }.strip-divider { display: none; }.coach-observation { flex-direction: column; gap: 7px; }
 }
 </style>

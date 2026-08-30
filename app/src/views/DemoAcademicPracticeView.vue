@@ -20,7 +20,7 @@ const openCoach = () => {
     <DemoSidebar />
     <main class="practice-main">
       <header><div><span>ACADEMIC DISCUSSION · 10 MIN</span><h1>写作练习</h1></div><button @click="router.push('/demo-records')">查看同题记录（2次）</button></header>
-      <div class="attempt-tabs"><button v-for="(attempt,index) in discussionCase.attempts" :key="attempt.number" :class="{active:selectedAttempt===index}" @click="loadAttempt(index)">第{{attempt.number}}次作答 <b>{{attempt.score }}</b></button></div>
+      <div class="attempt-tabs"><button v-for="(attempt,index) in discussionCase.attempts" :key="attempt.number" :class="{active:selectedAttempt===index}" @click="loadAttempt(index)">第{{attempt.number}}次作答 <b>本稿 Agent参考 {{attempt.score}}</b></button></div>
       <section class="exam-grid">
         <article class="prompt-panel">
           <div class="professor"><b>{{ discussionCase.professor }}</b><p>{{ discussionCase.question }}</p></div>
