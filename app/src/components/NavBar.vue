@@ -2,6 +2,7 @@
 import { ref } from "vue";
 import { useRouter, RouterLink } from "vue-router";
 import { useAuth } from "../composables/useAuth";
+import wechatContact from "../assets/wechat-contact.jpg";
 
 const { userProfile, guestMode, logout, changePassword } = useAuth();
 const router = useRouter();
@@ -18,6 +19,7 @@ const confirmPw = ref("");
 const changePwError = ref("");
 const changePwMsg = ref("");
 const changePwLoading = ref(false);
+const showContact = ref(false);
 
 const openChangePw = () => {
   currentPw.value = "";
@@ -70,6 +72,7 @@ const handleChangePw = async () => {
     <div class="nav-right">
       <template v-if="guestMode">
         <span class="nav-user nav-guest-label">访客模式</span>
+        <button class="nav-contact-btn" @click="showContact = true">联系老师</button>
         <button class="nav-logout-btn" @click="handleLogout">登录 / 注册</button>
       </template>
       <template v-else>
@@ -80,9 +83,20 @@ const handleChangePw = async () => {
         <RouterLink v-if="userProfile?.role !== 'teacher'" to="/practice" class="nav-link">练习</RouterLink>
         <RouterLink v-if="userProfile?.role !== 'teacher'" to="/learning-coach" class="nav-link nav-coach-link">AI 学习教练 · Beta</RouterLink>
         <RouterLink v-if="userProfile?.role !== 'teacher'" to="/records" class="nav-link">我的记录</RouterLink>
+        <button class="nav-contact-btn" @click="showContact = true">开通正式版</button>
         <button class="nav-logout-btn" @click="openChangePw">修改密码</button>
         <button class="nav-logout-btn" @click="handleLogout">Logout</button>
       </template>
+
+      <div v-if="showContact" class="modal-overlay" @click.self="showContact = false">
+        <div class="modal-box contact-box">
+          <button class="contact-close" @click="showContact = false">×</button>
+          <h2 class="modal-title">联系老师，开通正式版</h2>
+          <p class="contact-copy">想让系统分析你的真实作文并生成个性化训练路径？添加微信，了解正式版开通方式。</p>
+          <img :src="wechatContact" alt="Stephanie 文超微信二维码" class="wechat-qr">
+          <p class="contact-tip">微信扫码添加好友</p>
+        </div>
+      </div>
 
       <!-- Change Password Modal -->
       <div v-if="showChangePw" class="modal-overlay" @click.self="showChangePw = false">
@@ -106,3 +120,8 @@ const handleChangePw = async () => {
     </div>
   </div>
 </template>
+
+<style scoped>
+.nav-contact-btn{border:1px solid #2a9d78;background:transparent;color:#55dca7;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px}
+.contact-box{position:relative;text-align:center;max-width:360px}.contact-close{position:absolute;right:14px;top:10px;border:0;background:transparent;font-size:24px;color:#9ab0a5;cursor:pointer}.contact-copy{color:#7f978c;line-height:1.6;font-size:13px}.wechat-qr{display:block;width:230px;height:230px;object-fit:cover;margin:14px auto 8px;border-radius:8px}.contact-tip{color:#54dda5;font-size:12px}
+</style>
