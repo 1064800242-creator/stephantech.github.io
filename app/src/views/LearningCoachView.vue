@@ -396,7 +396,7 @@ const openMistakeMemory = () => {
                 <div v-if="quizScore === 3 && rewritePassed" class="transfer-box">
                   <span class="section-kicker">TRANSFER CHECK · 新题实战</span>
                   <h4>把规则带到一道新题里</h4>
-                  <div class="transfer-prompt"><b>新题</b><p>Some people prefer working from home, while others prefer working in an office. Which do you prefer and why?</p></div>
+                  <div class="transfer-prompt"><b>新题</b><p>Describe a time when you had to adapt to a new working or learning environment. What did you learn from that experience?</p></div>
                   <p class="transfer-instruction">请用英文写 <b>2–3 句</b>回答，至少包含一个 <b>used to + 动词原形</b> 表达和一个完整的过去时句子。不要复制上面的原句。</p>
                   <textarea v-model="transferText" placeholder="写出你的新题回答……"></textarea>
                   <div class="transfer-meta"><span>检查：used to 结构 · 过去时一致 · be used to 混淆</span><button :disabled="transferText.trim().length < 40" @click="transferChecked = true">提交并检查迁移</button></div>
