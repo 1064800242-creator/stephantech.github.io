@@ -11,6 +11,9 @@ const draftText = ref(sessionStorage.getItem("demoCurrentAnswer") || defaultDraf
 const answers = ref([null, null, null]);
 const quizSubmitted = ref(false);
 const rewriteText = ref("");
+const transferText = ref("");
+const transferChecked = ref(false);
+const transferPassed = computed(() => /used to\s+\w+|was\s+\w+ed|started|felt/i.test(transferText.value) && !/was used to\s+\w+|\bwas\s+staying\b/i.test(transferText.value));
 const rewriteChecked = ref(false);
 const activeDiagnosisId = ref("verb");
 
@@ -145,6 +148,8 @@ const resetDemo = () => {
   quizSubmitted.value = false;
   rewriteText.value = "";
   rewriteChecked.value = false;
+  transferText.value = "";
+  transferChecked.value = false;
   cardSaved.value = false;
   activeDiagnosisId.value = "verb";
 };
@@ -208,9 +213,9 @@ const openMistakeMemory = () => {
 
         <article class="status-card">
           <div class="status-top"><span>本周状态</span><b>学习中</b></div>
-          <div class="score-row"><div><small>这篇初稿的 Agent 参考评分</small><strong>3.0 / 5.0</strong></div><span>非提分承诺</span></div>
+          <div class="score-row"><div><small>这篇初稿的 Agent 参考评分</small><strong>3.0 / 5.0</strong></div></div>
           <div class="status-progress"><i></i></div>
-          <p>3.0 只描述当前这篇初稿。完成训练不代表自动达到 4.5；系统会根据新的真实作答重新评分并决定下一步。</p>
+          <p>3.0 只描述当前这篇初稿。系统会根据新的真实作答重新评分并决定下一步。</p>
         </article>
       </section>
 
@@ -343,6 +348,7 @@ const openMistakeMemory = () => {
                         >{{ option }}</button>
                       </div>
                       <p v-if="quizSubmitted" class="rule-feedback">{{ question.rule }}</p>
+                      <p v-else class="rule-hint">规则提示：{{ question.rule }}</p>
                     </div>
                   </article>
                 </div>
@@ -386,6 +392,13 @@ const openMistakeMemory = () => {
                   <article :class="{ 'route-active': !(quizScore === 3 && rewritePassed) }"><span>结果 A · CONTINUE</span><b>继续微训练</b><p>{{ quizScore }}/3 道规则识别正确；未稳定时回到更小练习</p></article>
                   <article :class="{ 'route-active': quizScore === 3 && rewritePassed }"><span>结果 B · TRANSFER</span><b>陌生题迁移验证</b><p>{{ quizScore === 3 && rewritePassed ? '本次修复通过，已解锁' : '同题修复通过后解锁' }}</p></article>
                   <article class="route-locked"><span>结果 C · GRADUATE</span><b>本能力毕业</b><p>只有陌生题也稳定正确，才会标记为已掌握</p></article>
+                </div>
+                <div v-if="quizScore === 3 && rewritePassed" class="transfer-box">
+                  <h4>陌生题迁移验证</h4>
+                  <p>换一道题写 2 句，系统检查同类动词错误是否复发。</p>
+                  <textarea v-model="transferText" placeholder="写出包含过去习惯或过去经历表达的新句子……"></textarea>
+                  <button :disabled="transferText.trim().length < 20" @click="transferChecked = true">提交迁移答案</button>
+                  <p v-if="transferChecked">{{ transferPassed ? '迁移验证通过：未发现同类错误。' : '检测到同类问题复发：回到微训练。' }}</p>
                 </div>
 
                 <button :class="['mistake-card', { saved: cardSaved }]" @click="cardSaved = !cardSaved">

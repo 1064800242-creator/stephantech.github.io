@@ -16,10 +16,10 @@ const evidenceChoice=ref(null);
 const trainingChecked=ref(false);
 const labelItems=[
   {text:"Whether AI affects learning positively or negatively depends on students themselves.",correct:"T"},
-  {text:"Students may skip the process of thinking and organizing their own ideas.",correct:"E"},
+  {text:"Students may skip the process of thinking and organizing their own ideas.",correct:"Exp"},
   {text:"Therefore, responsible AI use depends on individuals' self-control.",correct:"C"},
 ];
-const labelOptions=["S","T","E","C"];
+const labelOptions=["S","T","Exp","Eg","C"];
 const recognitionScore=computed(()=>labels.value.reduce((n,x,i)=>n+(x===labelItems[i].correct?1:0),0));
 const allDone=computed(()=>labels.value.every(Boolean)&&thesisChoice.value!==null&&bridgeChoice.value!==null);
 const functionalScore=computed(()=>(thesisChoice.value===1?1:0)+(bridgeChoice.value===1?1:0));
@@ -45,7 +45,7 @@ const reset=()=>{step.value=0;maxStep.value=0;labels.value=[null,null,null];thes
   <section class="work-panel">
     <div v-if="step===0" class="source-grid"><article><span>题目</span><p>{{steecCase.question}}</p><div v-for="s in steecCase.students" :key="s.name"><b>{{s.name}}</b>{{s.text}}</div></article><article><span>学生作答</span><p>{{steecCase.answer}}</p></article></div>
     <div v-else-if="step===1">
-      <div class="task-head"><span>PREREQUISITE CHECK</span><h2>你能识别每句话正在承担什么功能吗？</h2><p>先不评价语言，只检查 STEEC 标签与功能理解。</p></div>
+      <div class="task-head"><span>PREREQUISITE CHECK</span><h2>你能识别每句话正在承担什么功能吗？</h2><p>先不评价语言，只检查结构功能。S = Standpoint 立场 · T = Thesis 核心论点 · Exp = Explanation 解释 · Eg = Example 例子 · C = Conclusion 总结。</p></div>
       <div class="label-list"><article v-for="(item,i) in labelItems" :key="item.text"><p>{{item.text}}</p><div><button v-for="option in labelOptions" :key="option" :class="{selected:labels[i]===option}" @click="labels[i]=option">{{option}}</button></div></article></div>
       <div class="function-tests"><article><b>哪一个更适合作为核心论点 T？</b><button :class="{selected:thesisChoice===0}" @click="thesisChoice=0">A. Whether AI is beneficial depends on individuals.</button><button :class="{selected:thesisChoice===1}" @click="thesisChoice=1">B. Overreliance on AI may weaken students' independent-thinking ability.</button></article><article><b>论点和例子之间最需要哪条解释桥梁？</b><button :class="{selected:bridgeChoice===0}" @click="bridgeChoice=0">A. AI is a technology people need to go through.</button><button :class="{selected:bridgeChoice===1}" @click="bridgeChoice=1">B. Students skip organizing and evaluating ideas, gradually depending on generated answers.</button></article></div>
     </div>
