@@ -6,6 +6,10 @@
       "title": "Heating system repair request",
       "category": "校园生活",
       "subcategory": "宿舍公寓报修",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
       "context": "You have recently moved into a new apartment and are experiencing issues with the heating system. You need to contact the property manager, Ms. Green, to report the problem and request a repair.",
       "instruction": "Write and email to Ms. Green. In your email, do the following:",
       "bullets": [
@@ -23,6 +27,10 @@
       "title": "Concern about park maintenance",
       "category": "校园生活",
       "subcategory": "宿舍公寓报修",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "You are a member of the neighborhood association, and you have noticed that the local park needs some maintenance. You decide to contact the association president, Mr. Williams, to discuss the issues and offer a suggestion.",
       "instruction": "Write an email to Mr. Williams. In your email, do the following:",
       "bullets": [
@@ -40,6 +48,10 @@
       "title": "issues with hotel room",
       "category": "校园生活",
       "subcategory": "宿舍公寓报修",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
       "context": "You recently stayed at a hotel called ‘Coastal Retreat\" during your vacation. While you were generally satisfied with the service, there were several problems with the room's features and overall condition. You want to inform the hotel manager, Mr. Rodriguez, about these issues.",
       "instruction": "Write an email to Mr. Rodriguez. In your email, do the following:",
       "bullets": [
@@ -57,6 +69,10 @@
       "title": "issues with the apartment",
       "category": "校园生活",
       "subcategory": "宿舍公寓报修",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
       "context": "You are a university student who has recently moved into a new apartment. You have noticed some issues with the apartment. You want to inform your landlord, Mr. Thompson, about these problems.",
       "instruction": "Write an email to Mr. Thompson. In your email, do the following:",
       "bullets": [
@@ -74,6 +90,10 @@
       "title": "internet connection issue in the dorm",
       "category": "校园生活",
       "subcategory": "宿舍公寓报修",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
       "context": "You are a university student living in a dormitory. Recently, you have noticed that the internet connection in your dormitory is very slow and often disconnects. This issue is making it difficult for you to complete your assignments and attend online classes. You want to report this problem to the dormitory manager, Mr. Evans, and request a solution.",
       "instruction": "Write an email to Mr. Evans. In your email, do the following:",
       "bullets": [
@@ -91,6 +111,10 @@
       "title": "Printer Malfunction Issues",
       "category": "校园生活",
       "subcategory": "办公室报修",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "You are a student who works in the Office of Admissions and have noticed that the office printer frequently malfunctions. You want to report this problem to the university's IT department and suggest a solution.",
       "instruction": "Write an email to the IT manager, Mr. Evans. In your email, do the following:",
       "bullets": [
@@ -108,6 +132,10 @@
       "title": "Suggestion for updating gym equipment",
       "category": "校园生活",
       "subcategory": "健身房报修",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "You are a member of a local gym called Fitness Zone. Recently, you have noticed that some of the exercise equipment is problematic. You want to suggest this to the gym manager, Ms. Taylor.",
       "instruction": "Write an email to Ms. Taylor. In your email, do the following:",
       "bullets": [
@@ -125,6 +153,9 @@
       "title": "damage to a library book",
       "category": "校园生活",
       "subcategory": "图书馆",
+      "functions": [
+        "咨询/询问"
+      ],
       "context": "You are a student who recently borrowed a book from the university library. Unfortunately, you accidentally damaged the book. You want to inform the librarian, Mr. Anderson, about the incident and inquire about the steps you need to take to resolve the situation.",
       "instruction": "Write an email to Mr. Anderson. In your email, do the following:",
       "bullets": [
@@ -142,6 +173,11 @@
       "title": "lost jacket inquiry",
       "category": "校园生活",
       "subcategory": "失物招领",
+      "functions": [
+        "请求/求助",
+        "咨询/询问",
+        "建议/提案"
+      ],
       "context": "You recently attended your university’s choir concert and had a great experience. However, you left your favorite jacket behind. You need to contact the university’s lost and found department.",
       "instruction": "Write an email to the lost and found manager, Ms. Davis. In your email, do the following:",
       "bullets": [
@@ -155,10 +191,35 @@
     },
     {
       "id": "email-10",
+      "code": "新增-1 issues during a campus-visit hotel stay",
+      "title": "新增-1 issues during a campus-visit hotel stay",
+      "category": "校园生活",
+      "subcategory": "失物招领",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently stayed at a hotel during a campus visit. While you generally liked the room, there were some issues with the room during your stay. You need to provide feedback to the hotel manager, Ms. Thompson, and suggest improvements.",
+      "instruction": "Write an email to Ms. Thompson. In your email, do the following:",
+      "bullets": [
+        "Describe what you enjoyed about your stay.",
+        "Explain the issues you had with the room and stay.",
+        "Suggest ways that the hotel could make a guest's stay more peaceful."
+      ],
+      "to": "Ms",
+      "subject": "新增-1 issues during a campus-visit hotel stay",
+      "minutes": 7
+    },
+    {
+      "id": "email-11",
       "code": "TPO4 request for extension",
       "title": "request for extension",
       "category": "校园学习",
       "subcategory": "作业延期",
+      "functions": [
+        "请求/求助",
+        "建议/提案"
+      ],
       "context": "You are a student who has been working on a research project and need to request an extension on the deadline from your professor, Dr. Jones. You have encountered some unexpected challenges that have delayed your progress.",
       "instruction": "Write and email to Dr. Jones. In your email, do the following:",
       "bullets": [
@@ -171,11 +232,15 @@
       "minutes": 7
     },
     {
-      "id": "email-11",
+      "id": "email-12",
       "code": "TPO6 Request for additional course information",
       "title": "Request for additional course information",
       "category": "校园学习",
       "subcategory": "课程咨询",
+      "functions": [
+        "咨询/询问",
+        "致谢/关怀/交流"
+      ],
       "context": "You are a student starting a new semester, and you would like some additional information about a course you are interested in that is taught by Dr. Adams. You want to ensure that the course is suitable for you.",
       "instruction": "Write and email to Adams. In your email, do the following:",
       "bullets": [
@@ -188,11 +253,14 @@
       "minutes": 7
     },
     {
-      "id": "email-12",
+      "id": "email-13",
       "code": "2-1 back pain in yoga classes",
       "title": "back pain in yoga classes",
       "category": "校园学习",
       "subcategory": "课程咨询",
+      "functions": [
+        "请求/求助"
+      ],
       "context": "You recently started going to yoga classes at your university gym. You have been enjoying the sessions overall, but you have experienced some back pain and would like advice from the instructor, Ms. Martinez, on how to modify your practice to avoid further discomfort.",
       "instruction": "Write an email to Ms. Martinez. In your email, do the following:",
       "bullets": [
@@ -205,11 +273,16 @@
       "minutes": 7
     },
     {
-      "id": "email-13",
+      "id": "email-14",
       "code": "2-3 reschedule a yoga class",
       "title": "reschedule a yoga class",
       "category": "校园学习",
       "subcategory": "课程咨询",
+      "functions": [
+        "请求/求助",
+        "建议/提案",
+        "致谢/关怀/交流"
+      ],
       "context": "You recently joined a new yoga class at your local community center. The instructor, Mr. Davis, has been very welcoming and helpful. However, you find the class schedule inconvenient and would prefer if the classes were held at a different time that fits better with your daily routine.",
       "instruction": "Write an email to Mr. Davis. In your email, do the following:",
       "bullets": [
@@ -222,11 +295,14 @@
       "minutes": 7
     },
     {
-      "id": "email-14",
+      "id": "email-15",
       "code": "2-5 struggle with some recent assignments",
       "title": "struggle with some recent assignments",
       "category": "校园学习",
       "subcategory": "课程咨询",
+      "functions": [
+        "请求/求助"
+      ],
       "context": "You have been struggling with some recent assignments and have decided to seek help from your professor, Dr. Smith. You want to understand the topics better and improve your grades.",
       "instruction": "Write an email to Dr. Smith. In your email, do the following:",
       "bullets": [
@@ -239,11 +315,15 @@
       "minutes": 7
     },
     {
-      "id": "email-15",
+      "id": "email-16",
       "code": "2-8 miss a biology lecture",
       "title": "miss a biology lecture",
       "category": "校园学习",
       "subcategory": "课程咨询",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
       "context": "You are a student who missed an important lecture in your biology class. You need to catch up on the material and want to ask a classmate, Maria, for her notes and any key information you missed. You also want to thank her in advance for her help.",
       "instruction": "Write an email to Maria, in your email, do the following:",
       "bullets": [
@@ -256,11 +336,15 @@
       "minutes": 7
     },
     {
-      "id": "email-16",
+      "id": "email-17",
       "code": "922-3 workshop on digital marketing",
       "title": "workshop on digital marketing",
       "category": "校园学习",
       "subcategory": "课程咨询",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
       "context": "You recently attended a workshop on digital marketing and found it to be very informative. You want to thank the presenter, Ms. Clark, and ask for additional resources to further your understanding of the topic.",
       "instruction": "Write an email to Ms. Clark. In your email, do the following:",
       "bullets": [
@@ -273,11 +357,15 @@
       "minutes": 7
     },
     {
-      "id": "email-17",
+      "id": "email-18",
       "code": "01-4 Group Project Participation",
       "title": "Group Project Participation",
       "category": "校园学习",
       "subcategory": "小组学习",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "You have been working on a group project with several classmates for a course. One of your group members, Alex, has not been participating actively and has missed several assignments. You want to address this issue and find a solution.",
       "instruction": "Write an email to Alex. In your email, do the following:",
       "bullets": [
@@ -290,11 +378,35 @@
       "minutes": 7
     },
     {
-      "id": "email-18",
+      "id": "email-19",
+      "code": "TPO1 Group Project Participation",
+      "title": "Group Project Participation",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You are a university student working on a group project for one of your classes. One of your group members, Jake, has not been contributing to the project and has missed several meetings. This is affecting the progress of the project, and you need to address the issue with him.",
+      "instruction": "Write an email to Jake. In your email, do the following:",
+      "bullets": [
+        "Describe the importance of the project.",
+        "Explain how his absence has affected the group's progress.",
+        "Suggest ways he can help the group."
+      ],
+      "to": "Jake",
+      "subject": "Need your contribution to the group project",
+      "minutes": 7
+    },
+    {
+      "id": "email-20",
       "code": "1-3 lssues with group project",
       "title": "lssues with group project",
       "category": "校园学习",
       "subcategory": "小组学习",
+      "functions": [
+        "投诉/反馈"
+      ],
       "context": "Your professor, Dr. Smith, recently assigned a group project due in two weeks. You are frustrated because not all of your group members are contributing equally to the project.",
       "instruction": "Write an email to Dr. Smith. in your email, do the following:",
       "bullets": [
@@ -307,11 +419,15 @@
       "minutes": 7
     },
     {
-      "id": "email-19",
+      "id": "email-21",
       "code": "2-7 excellent contribution of Lisa",
       "title": "excellent contribution of Lisa",
       "category": "校园学习",
       "subcategory": "小组学习",
+      "functions": [
+        "建议/提案",
+        "致谢/关怀/交流"
+      ],
       "context": "You are a student who recently participated in a group project for your marketing class. One of your group members, Lisa, did an excellent job on part of the project.",
       "instruction": "Write an email to Lisa. In your email, do the following:",
       "bullets": [
@@ -324,11 +440,14 @@
       "minutes": 7
     },
     {
-      "id": "email-20",
+      "id": "email-22",
       "code": "922-2 invitation",
       "title": "invitation",
       "category": "校园学习",
       "subcategory": "小组学习",
+      "functions": [
+        "邀请/组织"
+      ],
       "context": "You are a student organizing a study group for an upcoming exam. You want to invite your classmates to join the group and explain to them your ideas about how the group should proceed.",
       "instruction": "Write an email to your classmates. In your email, do the following:",
       "bullets": [
@@ -341,28 +460,332 @@
       "minutes": 7
     },
     {
-      "id": "email-21",
-      "code": "3-1 resort inquiry",
-      "title": "resort inquiry",
-      "category": "社团活动",
-      "subcategory": "综合",
-      "context": "You are organizing a team-building retreat for the whole class. You have found a suitable resort for the event and need to contact the resort manager, Ms. Taylor, to discuss the reservation details.",
-      "instruction": "Write an email to Ms. Taylor. In your email, do the following:",
-      "bullets": [
-        "Explain the purpose of the retreat and why you chose this particular resort.",
-        "Ask about the special dietary options offered.",
-        "Inquire about the recreational activities offered at the resort."
+      "id": "email-23",
+      "code": "新增-2 photography workshop follow-up",
+      "title": "新增-2 photography workshop follow-up",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
       ],
-      "to": "Ms. Taylor",
-      "subject": "Resort inquiry",
+      "context": "You have recently attended a photography workshop and found it informative and rewarding. Write an email to tutor Mr. C to thank him and ask for extra practical skills concerning portrait photography. Express appreciation for the workshop. Specify valuable takeaways from the course. Enquire about supplementary tips on portrait shooting. Your Response: To: Subject:",
+      "instruction": "Write an email. In your email, do the following:",
+      "bullets": [
+        "Express appreciation for the workshop.",
+        "Specify valuable takeaways from the course.",
+        "Enquire about supplementary tips on portrait shooting."
+      ],
+      "to": "to tutor Mr",
+      "subject": "新增-2 photography workshop follow-up",
       "minutes": 7
     },
     {
-      "id": "email-22",
+      "id": "email-24",
+      "code": "新增-3 world history course feedback",
+      "title": "新增-3 world history course feedback",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently completed a course on world history and found it very interesting, though you do have some criticisms. The teacher, Professor Brown, has asked for feedback from students to help improve the course. You want to offer some suggestions.",
+      "instruction": "Write an email to Professor Brown. In your email, do the following:",
+      "bullets": [
+        "Express your appreciation for Professor Brown's teaching.",
+        "Mention what you found most helpful about the course.",
+        "Suggest what aspect of the course could be improved and how."
+      ],
+      "to": "Professor Brown",
+      "subject": "新增-3 world history course feedback",
+      "minutes": 7
+    },
+    {
+      "id": "email-25",
+      "code": "新增-4 online language course platform problem",
+      "title": "新增-4 online language course platform problem",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently enrolled in an online language course and have enjoyed it. However, you are having some trouble with the online class platform. You need to contact the course instructor, Mrs. White, to resolve this issue.",
+      "instruction": "Write an email to Mrs. White. In your email, do the following:",
+      "bullets": [
+        "Mention what you enjoyed most about the course.",
+        "Describe the issue you are having with the online platform.",
+        "Propose a solution to resolve this problem."
+      ],
+      "to": "Mrs",
+      "subject": "新增-4 online language course platform problem",
+      "minutes": 7
+    },
+    {
+      "id": "email-26",
+      "code": "GTRT 08 Request to discuss academic and work balance",
+      "title": "GTRT 08 Request to discuss academic and work balance",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently started a job on campus. Your academic advisor, Professor Patel, has been helpful in guiding you through your studies. However, you are finding it difficult to balance your work schedule with your academic commitments.",
+      "instruction": "Write an email to Professor Patel. In your email, do the following:",
+      "bullets": [
+        "Thank her for the support and guidance she has provided.",
+        "Discuss why you are having difficulty completing your academic commitments.",
+        "Explain how you plan to balance your academic commitments and work plans."
+      ],
+      "to": "Professor Patel",
+      "subject": "GTRT 08 Request to discuss academic and work balance",
+      "minutes": 7
+    },
+    {
+      "id": "email-27",
+      "code": "GTRT 25 Technology Conference Inquiry",
+      "title": "GTRT 25 Technology Conference Inquiry",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "咨询/询问"
+      ],
+      "context": "You need to attend a technology conference. Write an email to the organizer. In this email, do the following:",
+      "instruction": "Write an email. In your email, do the following:",
+      "bullets": [
+        "Explain that you want to attend the conference.",
+        "Explain the things you wish to learn during the conference.",
+        "Ask the organizer to give you itinerary information and recommendations."
+      ],
+      "to": "教师/学校工作人员",
+      "subject": "GTRT 25 Technology Conference Inquiry",
+      "minutes": 7
+    },
+    {
+      "id": "email-28",
+      "code": "GTRT 27 Communication Skills Seminar Inquiry",
+      "title": "GTRT 27 Communication Skills Seminar Inquiry",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "咨询/询问"
+      ],
+      "context": "You are interested in attending a seminar on communication skills. Write an email to the organizing institution or company to inquire about the seminar. In your email, do the following: Explain why you are writing (to inquire about a communication skills seminar). Ask for details about the seminar, such as the schedule, content, and registration process. Ask if there are any specific requirements or materials needed to attend the seminar. 【原版已收集到，补充在下方】 You recently attended a professional development seminar on communication skills. You found the seminar very valuable and want to follow up with the presenter, Ms. Johnson, to ask for additional resources and express your appreciation for the seminar.",
+      "instruction": "Write an email to Ms. Johnson. In your email, do the following:",
+      "bullets": [
+        "Mention what you found valuable about the seminar.",
+        "Ask for additional resources on communication skills.",
+        "Express your appreciation for her insights."
+      ],
+      "to": "Ms",
+      "subject": "GTRT 27 Communication Skills Seminar Inquiry",
+      "minutes": 7
+    },
+    {
+      "id": "email-29",
+      "code": "GTRT 30 Career Workshop",
+      "title": "GTRT 30 Career Workshop",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently attended a university-sponsored career workshop and found the information on job hunting very helpful. However, there were some issues with the workshop organization. You want to follow up with the organizer, Ms. Williams, to express your appreciation for the event and provide feedback on the workshop organization.",
+      "instruction": "Write an email to Ms. Williams. In your email do the following:",
+      "bullets": [
+        "Explain what you found especially helpful about workshop.",
+        "Describe the problems you found with the workshop organization.",
+        "Suggest ways to avoid these issues in future events."
+      ],
+      "to": "Ms",
+      "subject": "GTRT 30 Career Workshop",
+      "minutes": 7
+    },
+    {
+      "id": "email-30",
+      "code": "GTRT 44 Attending International Conference",
+      "title": "GTRT 44 Attending International Conference",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "咨询/询问",
+        "建议/提案"
+      ],
+      "context": "You have been selected to represent your university at an international conference. You need to inform your professor, Dr. Lee, about this opportunity and request permission to miss class during the conference.",
+      "instruction": "Write an email to Dr. Lee. In your email, do the following:",
+      "bullets": [
+        "Inform Dr. Lee about the opportunity, including conference topic and location.",
+        "Request permission to miss class and suggest ways to make up for missed classes.",
+        "Ask for suggestions on how to prepare for the conference."
+      ],
+      "to": "Dr",
+      "subject": "GTRT 44 Attending International Conference",
+      "minutes": 7
+    },
+    {
+      "id": "email-31",
+      "code": "GTRT 51 Lecture Materials Request",
+      "title": "GTRT 51 Lecture Materials Request",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "【已补充原题】 Lecture Materials Request You are a student who recently attended a guest lecture by Professor Johnson on environmental sustainability. You found the lecture very insightful and would like to learn more about the topic. You want to request additional reading materials and resources from Professor Johnson to deepen your understanding.",
+      "instruction": "Write an email to Professor Johnson. In your email, do the following:",
+      "bullets": [
+        "Express your appreciation for the lecture and highlight what you found most interesting.",
+        "Explain why you are interested in learning more about environmental sustainability.",
+        "Request additional reading materials and resources related to the topic."
+      ],
+      "to": "Professor Johnson",
+      "subject": "GTRT 51 Lecture Materials Request",
+      "minutes": 7
+    },
+    {
+      "id": "email-32",
+      "code": "GTRT 62 兼职和学业冲突",
+      "title": "GTRT 62 兼职和学业冲突",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "建议/提案",
+        "致谢/关怀/交流"
+      ],
+      "context": "You work part-time at the school library and you are grateful for your teacher’s support for this job. Nevertheless, your working hours clash with your study schedule recently. You decide to write an email to your teacher to express your thanks and request a change to your working timetable.",
+      "instruction": "Write an email to your teacher. In your email, include the following details:",
+      "bullets": [
+        "Mention why you are thankful for the teacher’s help regarding your library part-time job.",
+        "Explain the conflicts between your library shifts and your study time.",
+        "Ask the teacher if it is possible to adjust your working hours and state your suitable time options."
+      ],
+      "to": "your teacher",
+      "subject": "GTRT 62 兼职和学业冲突",
+      "minutes": 7
+    },
+    {
+      "id": "email-33",
+      "code": "GTRT 69 论文成绩申诉",
+      "title": "GTRT 69 论文成绩申诉",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "给教授写邮件申诉term paper的成绩：",
+      "instruction": "Write an email. In your email, do the following:",
+      "bullets": [
+        "解释为什么你对论文成绩有疑虑",
+        "表达你对这个成绩产生的影响的担忧",
+        "请教如何在以后的作业中改进，并提出弥补低分的办法"
+      ],
+      "to": "教师/学校工作人员",
+      "subject": "GTRT 69 论文成绩申诉",
+      "minutes": 7
+    },
+    {
+      "id": "email-34",
+      "code": "GTRT 70 感谢科技大会演讲者",
+      "title": "GTRT 70 感谢科技大会演讲者",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently attended a technology conference where you met Mr. Smith, a prominent industry expert. You found his presentation helpful and informative. You want to thank Mr. Smith for his presentation and request additional information on a topic he discussed.",
+      "instruction": "Write an email to Mr. Smith. In your email, do the following:",
+      "bullets": [
+        "Mention what you found useful about his presentation.",
+        "Request additional information about one of the topics he discussed.",
+        "Express your appreciation for his time and insight."
+      ],
+      "to": "Mr",
+      "subject": "GTRT 70 感谢科技大会演讲者",
+      "minutes": 7
+    },
+    {
+      "id": "email-35",
+      "code": "GTRT 79 Request for chemistry lab schedule change",
+      "title": "GTRT 79 Request for chemistry lab schedule change",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "建议/提案"
+      ],
+      "context": "You are having a scheduling conflict with your chemistry laboratory. There are many laboratory sessions, but the one your are assigned to meets on Wednesday afternoons. Unfortunately, your favorite student club’s weekly meeting is also on Wednesdays. You need to ask your chemistry professor, Dr. Nguyen, for a schedule change.",
+      "instruction": "Write an email to Dr. Nguyen. In your email, do the following:",
+      "bullets": [
+        "Explain the scheduling conflict you are having.",
+        "Explain why your student club meetings are so important to you.",
+        "Request a schedule change for your chemistry laboratory."
+      ],
+      "to": "Dr",
+      "subject": "GTRT 79 Request for chemistry lab schedule change",
+      "minutes": 7
+    },
+    {
+      "id": "email-36",
+      "code": "GTRT 80 Your recent lecture on environmental sustainability",
+      "title": "GTRT 80 Your recent lecture on environmental sustainability",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "咨询/询问",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently attended a guest lecture at your university on environmental sustainability. You found the lecture highly informative and would like to ask the speaker, Dr. Roberts, for recommendations on further reading materials and resources. You also want to know if she offers lectures on other topics that interest you.",
+      "instruction": "Write an email to Dr. Roberts. In your email, do the following:",
+      "bullets": [
+        "Mention what you found informative about her lecture.",
+        "Request recommendations for further reading materials and resources on environmental sustainability.",
+        "Ask her if she gives lectures on other topics that interest you."
+      ],
+      "to": "Dr",
+      "subject": "GTRT 80 Your recent lecture on environmental sustainability",
+      "minutes": 7
+    },
+    {
+      "id": "email-37",
+      "code": "GTRT 81 Feedback on your seminar and a request",
+      "title": "GTRT 81 Feedback on your seminar and a request",
+      "category": "校园学习",
+      "subcategory": "小组学习",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently attended a seminar on finding a job after graduation. You thought the seminar was very valuable and want to follow up with the presenter, Ms. Johnson, to give some feedback and ask for additional resources.",
+      "instruction": "Write an email to Ms. Johnson. In your email, do the following:",
+      "bullets": [
+        "Express your gratitude for Ms. Johnson giving the seminar.",
+        "Mention which topics you found most interesting.",
+        "Ask about additional resources to help you find a job after graduation."
+      ],
+      "to": "Ms",
+      "subject": "GTRT 81 Feedback on your seminar and a request",
+      "minutes": 7
+    },
+    {
+      "id": "email-38",
       "code": "1-0 environmental awareness",
       "title": "environmental awareness",
       "category": "社团活动",
       "subcategory": "综合",
+      "functions": [
+        "建议/提案",
+        "邀请/组织"
+      ],
       "context": "You recently joined a student organization at your university that focuses on environmental conservation. The group is planning an upcoming event to raise awareness about recycling and reducing waste. You have some ideas for activities and would like to share them with the group leader, Julia.",
       "instruction": "Write an email to Julia. In your email, do the following:",
       "bullets": [
@@ -375,11 +798,15 @@
       "minutes": 7
     },
     {
-      "id": "email-23",
+      "id": "email-39",
       "code": "1-1 raise fund for a children’s hospital",
       "title": "raise fund for a children’s hospital",
       "category": "社团活动",
       "subcategory": "综合",
+      "functions": [
+        "建议/提案",
+        "邀请/组织"
+      ],
       "context": "You and your friend, Jasmine, are planning to host a fundraising event for a local children's hospital. You have some ideas for activities and entertainment to include in the event, but you need Jasmine's input to finalize the plans. You also want to discuss the best time to meet and organize the details.",
       "instruction": "Write an email to Jasmine. In your email, do the following:",
       "bullets": [
@@ -392,11 +819,14 @@
       "minutes": 7
     },
     {
-      "id": "email-24",
+      "id": "email-40",
       "code": "3-3 printing services for upcoming play",
       "title": "printing services for upcoming play",
       "category": "社团活动",
       "subcategory": "综合",
+      "functions": [
+        "咨询/询问"
+      ],
       "context": "You are part of your school's drama club and have been assigned the role of event coordinator for an upcoming play. You need to arrange for promotional materials, such as posters and flyers, to be printed and distributed. You want to contact a local print shop to discuss this.",
       "instruction": "Write an email to the print shop manager, Ms.Clark. In your email, do the following:",
       "bullets": [
@@ -409,45 +839,205 @@
       "minutes": 7
     },
     {
-      "id": "email-25",
-      "code": "3-13 Trip Accommodation Inquiry",
-      "title": "Trip Accommodation Inquiry",
+      "id": "email-41",
+      "code": "新增-5 charity event catering issues",
+      "title": "新增-5 charity event catering issues",
       "category": "社团活动",
       "subcategory": "综合",
-      "context": "You are planning a trip with your classmates to a popular tourist destination during your semester break. You need to book accommodations and ensure the hotel can meet your group's needs. You want to contact the hotel to confirm these details.",
-      "instruction": "Write an email to the hotel manager, Mr. Carter. In your email, do the following:",
-      "bullets": [
-        "Explain the purpose of your trip and the number of people in your group.",
-        "Explain your group's specific requirements.",
-        "Request the hotel send any additional information needed."
+      "functions": [
+        "投诉/反馈",
+        "建议/提案",
+        "致谢/关怀/交流"
       ],
-      "to": "Mr. Carter",
-      "subject": "Trip Accommodation Inquiry",
+      "context": "Your classmate Emma recently hosted a charity event on campus to raise funds for a local animal shelter. The event was successful overall, but there were some issues with the catering service, including delayed food delivery and incorrect orders. You need to address these concerns to the catering manager, Ms. Johnson.",
+      "instruction": "Write an email to Ms. Johnson. In your email, do the following:",
+      "bullets": [
+        "Thank her for the service provided.",
+        "Describe the issues that occurred during the event.",
+        "Suggest how these issues could be resolved in future events."
+      ],
+      "to": "Ms",
+      "subject": "新增-5 charity event catering issues",
       "minutes": 7
     },
     {
-      "id": "email-26",
-      "code": "4-2 Inquiry About Class Field Trip Travel Packages",
-      "title": "Inquiry About Class Field Trip Travel Packages",
+      "id": "email-42",
+      "code": "新增-6 tennis club fundraising event",
+      "title": "新增-6 tennis club fundraising event",
       "category": "社团活动",
       "subcategory": "综合",
-      "context": "You are a student leader at your school and have been assigned to help plan your class field trip. You have found a travel agency that offers comprehensive travel packages and want to contact the travel agent, Mr. Brown, to inquire about their services.",
-      "instruction": "Write an email to the travel agent, Mr. Brown. In your email, do the following:",
-      "bullets": [
-        "Explain the purpose and dates of the class field trip.",
-        "Ask about the available offers for large groups.",
-        "Request details on how they can accommodate specific travel needs and additional services offered."
+      "functions": [
+        "建议/提案",
+        "邀请/组织"
       ],
-      "to": "Mr. Brown",
-      "subject": "Inquiry About Class Field Trip Travel Packages",
+      "context": "You are a member of the school tennis club. You plan to organize a fundraising event for the club.",
+      "instruction": "Write an email to your club leader / to Coach Johnson. In your email, you should:",
+      "bullets": [
+        "Describe your specific ideas about this fundraising activity.",
+        "Explain the reasons why these plans are likely to achieve great success.",
+        "Propose a suitable time to have an in-person meeting to further talk over detailed plans."
+      ],
+      "to": "your club leader / to Coach Johnson",
+      "subject": "新增-6 tennis club fundraising event",
       "minutes": 7
     },
     {
-      "id": "email-27",
+      "id": "email-43",
+      "code": "新增-7 community event workshop sharing",
+      "title": "新增-7 community event workshop sharing",
+      "category": "社团活动",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You are a member of a local community club that organizes monthly events, such as neighborhood clean-up days and guest-speaker nights. You attended the local university's workshop on planning large community events and wanted to share what you learned with your local community club president, Ms. Jackson.",
+      "instruction": "Write an email to Ms. Jackson. In your email, do the following:",
+      "bullets": [
+        "Mention what you enjoyed about the online workshop you attended.",
+        "Explain how what you learned in the workshop can be applied to future events in your local club.",
+        "Request a meeting to discuss further."
+      ],
+      "to": "Ms",
+      "subject": "新增-7 community event workshop sharing",
+      "minutes": 7
+    },
+    {
+      "id": "email-44",
+      "code": "GTRT 18 Feedback on art gallery visit",
+      "title": "GTRT 18 Feedback on art gallery visit",
+      "category": "社团活动",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently visited a new art gallery in your city called Art Haven. You want to share some feedback with the gallery curator, Ms. Blake.",
+      "instruction": "Write an email to Ms. Blake. In your email, do the following:",
+      "bullets": [
+        "Describe what you enjoyed about your visit to the gallery.",
+        "Explain why you think providing more information about the artists and their work is important.",
+        "Suggest ways that visitors could connect with and learn more about the gallery’s artists."
+      ],
+      "to": "Ms",
+      "subject": "GTRT 18 Feedback on art gallery visit",
+      "minutes": 7
+    },
+    {
+      "id": "email-45",
+      "code": "GTRT 35 节日聚会场所咨询",
+      "title": "GTRT 35 节日聚会场所咨询",
+      "category": "社团活动",
+      "subcategory": "综合",
+      "functions": [
+        "咨询/询问",
+        "邀请/组织"
+      ],
+      "context": "You are a member of a school club, and your club is planning to hold a holiday party. You have learned that the local community center, managed by Mr. Khan, might be a suitable venue for this event.",
+      "instruction": "Write an email to Mr. Khan. In your email, you should:",
+      "bullets": [
+        "Explain the purpose of the holiday party and mention the expected number of participants.",
+        "Ask about the total price for renting the venue.",
+        "Inquire whether the venue can provide the facilities you need."
+      ],
+      "to": "Mr",
+      "subject": "GTRT 35 节日聚会场所咨询",
+      "minutes": 7
+    },
+    {
+      "id": "email-46",
+      "code": "GTRT 66 Suggestion for a community center",
+      "title": "GTRT 66 Suggestion for a community center",
+      "category": "社团活动",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently visited a community center that offers various recreational activities. You want to provide feedback on the community center to its manager, Mr. Larson.",
+      "instruction": "Write an email to Mr. Larson. In your email, do the following:",
+      "bullets": [
+        "Describe what you enjoyed about the community center.",
+        "Identify a recreational activity that the community should add to its current offerings.",
+        "Explain why adding this activity would benefit community members."
+      ],
+      "to": "Mr",
+      "subject": "GTRT 66 Suggestion for a community center",
+      "minutes": 7
+    },
+    {
+      "id": "email-47",
+      "code": "GTRT 68 Volunteer help for charity event",
+      "title": "GTRT 68 Volunteer help for charity event",
+      "category": "社团活动",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "邀请/组织"
+      ],
+      "context": "You are organizing a charity event at your university to raise funds for a local animal shelter. You need volunteers to help with various tasks. You know that your friend, Emma, has experience in organizing events and would be a great help.",
+      "instruction": "Write an email to Emma. In your email, do the following:",
+      "bullets": [
+        "Describe the charity event and explain the type of support you need.",
+        "Ask her if she would be willing to volunteer and specify the tasks she could assist with.",
+        "Explain how her help would benefit human members of the community as well as animals."
+      ],
+      "to": "Emma",
+      "subject": "GTRT 68 Volunteer help for charity event",
+      "minutes": 7
+    },
+    {
+      "id": "email-48",
+      "code": "GTRT 72 Inquiry About Costume Rentals",
+      "title": "GTRT 72 Inquiry About Costume Rentals",
+      "category": "社团活动",
+      "subcategory": "综合",
+      "functions": [
+        "咨询/询问",
+        "邀请/组织"
+      ],
+      "context": "Inquiry About Costume Rentals for Community Theater Production You are organizing a university theater production and need to rent costumes for the cast. You want to contact a local costume shop to inquire about their rental options, prices, and availability. You also need to know if they offer fitting services for the actors.",
+      "instruction": "Write an email to the costume shop manager, Ms. Parker. In your email, do the following:",
+      "bullets": [
+        "Explain the purpose of the university theater production.",
+        "Ask about rental options, prices, and availability for costumes.",
+        "Invite them to the production."
+      ],
+      "to": "the costume shop manager",
+      "subject": "GTRT 72 Inquiry About Costume Rentals",
+      "minutes": 7
+    },
+    {
+      "id": "email-49",
+      "code": "GTRT 75 Request for a meeting schedule change",
+      "title": "GTRT 75 Request for a meeting schedule change",
+      "category": "社团活动",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You are a member of a student cooking club. You are enjoying the club’s various activities, but the weekly meeting is currently on Wednesday nights, which is a problem for you. You need to contact the club president, Lily, and explain the situation. You want to request a change to the meeting schedule.",
+      "instruction": "Write an email to Lily. In your email, do the following:",
+      "bullets": [
+        "Compliment Lily on the job she is doing as club president.",
+        "Explain why the current weekly club meeting schedule is a problem for you.",
+        "Request a change to the meeting schedule going forward."
+      ],
+      "to": "Lily",
+      "subject": "GTRT 75 Request for a meeting schedule change",
+      "minutes": 7
+    },
+    {
+      "id": "email-50",
       "code": "1-4 a university orchestra concert",
       "title": "a university orchestra concert",
       "category": "娱乐活动",
       "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "You recently attended a university orchestra concert. While you enjoyed the performance greatly, the sound quality at the venue was poor, making it difficult to fully appreciate the music. You would like to provide feedback to the sound engineer, Mr. Bridges, in hopes of improving future events.",
       "instruction": "Write an email to Mr. Bridges. In your email, do the following:",
       "bullets": [
@@ -460,11 +1050,15 @@
       "minutes": 7
     },
     {
-      "id": "email-28",
+      "id": "email-51",
       "code": "01-1 Problem using submission form",
       "title": "Problem using submission form",
       "category": "娱乐活动",
       "subcategory": "综合",
+      "functions": [
+        "咨询/询问",
+        "投诉/反馈"
+      ],
       "context": "A new poetry magazine has asked its reader for submissions, and you decided to submit two of your poems. However, you had a problem using the online submission form, and you are not certain that your submissions were received.",
       "instruction": "Write an email to the editor of the magazine. In your email, do the following:",
       "bullets": [
@@ -477,11 +1071,16 @@
       "minutes": 7
     },
     {
-      "id": "email-29",
+      "id": "email-52",
       "code": "TPO3 Feedback on recent concert",
       "title": "Feedback on recent concert",
       "category": "娱乐活动",
       "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案",
+        "致谢/关怀/交流"
+      ],
       "context": "You recently attended a concert by your favorite band at a local venue. You want to thank the event organizer, Mr. Harris, for arranging the event and provide feedback on what you enjoyed most.",
       "instruction": "Write and email to Mr. Harris. In your email, do the following:",
       "bullets": [
@@ -494,45 +1093,15 @@
       "minutes": 7
     },
     {
-      "id": "email-30",
-      "code": "1-5 a trip to Europe",
-      "title": "a trip to Europe",
-      "category": "娱乐活动",
-      "subcategory": "综合",
-      "context": "You and your friend, John, are planning a trip to Europe this summer. You have done some research and found some interesting destinations and activities that you would like to include in your itinerary. You want to share your ideas with John and get his opinion.",
-      "instruction": "Write an email to John. In your email, do the following:",
-      "bullets": [
-        "Describe the destinations you have researched.",
-        "Explain why you think these destinations would be enjoyable.",
-        "Ask for his opinion on the suggested itinerary and any additional ideas he might have."
-      ],
-      "to": "John",
-      "subject": "Summer trip itinerary ideas",
-      "minutes": 7
-    },
-    {
-      "id": "email-31",
-      "code": "3-12 Feedback on Car Rental Experience",
-      "title": "Feedback on Car Rental Experience",
-      "category": "娱乐活动",
-      "subcategory": "综合",
-      "context": "You recently rented a car for a weekend trip with your dorm mate and were satisfied with the vehicle's performance. However, you had a bad experience with the customer service at the rental office. You want to provide feedback to the rental company manager, Ms. Turner.",
-      "instruction": "Write an email to Ms. Turner. In your email, do the following:",
-      "bullets": [
-        "Explain what features of the car you liked most.",
-        "Describe the issues that occurred during your customer service experience.",
-        "Suggest ways to improve the pick-up and drop-off process."
-      ],
-      "to": "Ms. Turner",
-      "subject": "Feedback on Car Rental Experience",
-      "minutes": 7
-    },
-    {
-      "id": "email-32",
+      "id": "email-53",
       "code": "3-15 Arrangements for Surprise Birthday Party",
       "title": "Arrangements for Surprise Birthday Party",
       "category": "娱乐活动",
       "subcategory": "综合",
+      "functions": [
+        "咨询/询问",
+        "邀请/组织"
+      ],
       "context": "You are planning a surprise birthday party for your classmate, Sarah. You want to hold the party for the whole class at Sarah's favorite restaurant. You need to contact the restaurant manager, Mr. Lee, to make the arrangements.",
       "instruction": "Write an email to Mr. Lee. in your email, do the following:",
       "bullets": [
@@ -545,11 +1114,283 @@
       "minutes": 7
     },
     {
-      "id": "email-33",
+      "id": "email-54",
+      "code": "新增-8 invite a friend to a campus park",
+      "title": "新增-8 invite a friend to a campus park",
+      "category": "娱乐活动",
+      "subcategory": "综合",
+      "functions": [
+        "邀请/组织"
+      ],
+      "context": "You have recently discovered a beautiful park for long walks near your university campus. You think your friend Alex would enjoy the experience and you want to invite them to join you on an upcoming weekend.",
+      "instruction": "Write an email to Alex. In your email, do the following:",
+      "bullets": [
+        "Describe the park and what makes it special.",
+        "Invite Alex to join you for a walk in the park during an upcoming weekend.",
+        "Suggest to Alex what they should prepare for the trip."
+      ],
+      "to": "Alex",
+      "subject": "新增-8 invite a friend to a campus park",
+      "minutes": 7
+    },
+    {
+      "id": "email-55",
+      "code": "新增-9 farewell party arrangement",
+      "title": "新增-9 farewell party arrangement",
+      "category": "娱乐活动",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "邀请/组织"
+      ],
+      "context": "You are organizing a farewell party for a colleague who is leaving the company. Write an email to Mr. Teller, the coordinator in charge of company events, to discuss the arrangements.",
+      "instruction": "Write an email. In your email, do the following:",
+      "bullets": [
+        "Explain the purpose of organizing the party and what you hope to achieve.",
+        "Describe the type of venue you prefer and the decoration style you have in mind.",
+        "Request a brief meeting with the coordinator to finalize the specific details of the event."
+      ],
+      "to": "to Mr",
+      "subject": "新增-9 farewell party arrangement",
+      "minutes": 7
+    },
+    {
+      "id": "email-56",
+      "code": "GTRT 33 Feedback on Cooking Class",
+      "title": "GTRT 33 Feedback on Cooking Class",
+      "category": "娱乐活动",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently completed a cooking class taught by Ms. Baker. You were very satisfied with the experience and would like to thank her. You are also eager to keep improving your cooking skills and would like her guidance.",
+      "instruction": "Write an email to Ms. Baker. In your email, you should:",
+      "bullets": [
+        "Explain why you enjoyed the class and why you are writing to thank her.",
+        "Ask for her advice on how to further improve your cooking skills and request recommendations for learning resources.",
+        "Express your gratitude to her."
+      ],
+      "to": "Ms",
+      "subject": "GTRT 33 Feedback on Cooking Class",
+      "minutes": 7
+    },
+    {
+      "id": "email-57",
+      "code": "GTRT 50 邀请专家参加采访",
+      "title": "GTRT 50 邀请专家参加采访",
+      "category": "娱乐活动",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently attended a conference at the university where you met Ms. Johnson, who is an expert in your field. You were impressed by her keynote speech and would like to follow up to ask if she would be available for a short interview for an article you are writing for class. You also want to express your admiration for her work.",
+      "instruction": "Write an email to Ms. Johnson. In your email, do the following:",
+      "bullets": [
+        "Mention what you found impressive about her keynote speech.",
+        "Request an interview at her earliest convenience.",
+        "Explain the purpose of the interview and how it will be used."
+      ],
+      "to": "Ms",
+      "subject": "GTRT 50 邀请专家参加采访",
+      "minutes": 7
+    },
+    {
+      "id": "email-58",
+      "code": "GTRT 58 Request for Advice in Fitness Class",
+      "title": "GTRT 58 Request for Advice in Fitness Class",
+      "category": "娱乐活动",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently joined a new fitness class at the campus gym and have been enjoying the workouts. However, you are experiencing some difficulty with certain exercises. You would like to ask the instructor, Ms. Miller, for her advice and express your appreciation for her guidance so far.",
+      "instruction": "Write an email to Ms. Miller. In your email, do the following:",
+      "bullets": [
+        "Mention what you enjoy about the fitness class.",
+        "Describe the difficulty you are having with certain exercises.",
+        "Ask for advice to address the difficulty you are having."
+      ],
+      "to": "Ms",
+      "subject": "GTRT 58 Request for Advice in Fitness Class",
+      "minutes": 7
+    },
+    {
+      "id": "email-59",
+      "code": "GTRT 63 训练遇到问题寻求建议",
+      "title": "GTRT 63 训练遇到问题寻求建议",
+      "category": "娱乐活动",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You have attended training sessions at a local sports club for several months and you appreciate the guidance given by your sports coach. However, you have faced a few difficulties while taking part in the club’s training. You decide to write an email to your coach to express your gratitude and ask for his advice.",
+      "instruction": "Write an email to your coach. In your email, include the following details:",
+      "bullets": [
+        "State what you appreciate about the coach’s teaching and the club’s training.",
+        "Describe the difficulties you have met during training.",
+        "Ask the coach for relevant practical suggestions to solve these problems."
+      ],
+      "to": "your coach",
+      "subject": "GTRT 63 训练遇到问题寻求建议",
+      "minutes": 7
+    },
+    {
+      "id": "email-60",
+      "code": "3-1 resort inquiry",
+      "title": "resort inquiry",
+      "category": "娱乐活动",
+      "subcategory": "出行住宿",
+      "functions": [
+        "咨询/询问"
+      ],
+      "context": "You are organizing a team-building retreat for the whole class. You have found a suitable resort for the event and need to contact the resort manager, Ms. Taylor, to discuss the reservation details.",
+      "instruction": "Write an email to Ms. Taylor. In your email, do the following:",
+      "bullets": [
+        "Explain the purpose of the retreat and why you chose this particular resort.",
+        "Ask about the special dietary options offered.",
+        "Inquire about the recreational activities offered at the resort."
+      ],
+      "to": "Ms. Taylor",
+      "subject": "Resort inquiry",
+      "minutes": 7
+    },
+    {
+      "id": "email-61",
+      "code": "3-13 Trip Accommodation Inquiry",
+      "title": "Trip Accommodation Inquiry",
+      "category": "娱乐活动",
+      "subcategory": "出行住宿",
+      "functions": [
+        "咨询/询问"
+      ],
+      "context": "You are planning a trip with your classmates to a popular tourist destination during your semester break. You need to book accommodations and ensure the hotel can meet your group’s needs. You want to contact the hotel to confirm these details.",
+      "instruction": "Write an email to the hotel manager, Mr. Carter. In your email, do the following:",
+      "bullets": [
+        "Explain the purpose of your trip and the number of people in your group.",
+        "Explain your group’s specific requirements.",
+        "Request the hotel send any additional information needed."
+      ],
+      "to": "Mr. Carter",
+      "subject": "Trip Accommodation Inquiry",
+      "minutes": 7
+    },
+    {
+      "id": "email-62",
+      "code": "4-2 Inquiry About Class Field Trip Travel Packages",
+      "title": "Inquiry About Class Field Trip Travel Packages",
+      "category": "娱乐活动",
+      "subcategory": "出行住宿",
+      "functions": [
+        "咨询/询问"
+      ],
+      "context": "You are a student leader at your school and have been assigned to help plan your class field trip. You have found a travel agency that offers comprehensive travel packages and want to contact the travel agent, Mr. Brown, to inquire about their services.",
+      "instruction": "Write an email to the travel agent, Mr. Brown. In your email, do the following:",
+      "bullets": [
+        "Explain the purpose and dates of the class field trip.",
+        "Ask about the available offers for large groups.",
+        "Request details on how they can accommodate specific travel needs and additional services offered."
+      ],
+      "to": "Mr. Brown",
+      "subject": "Inquiry About Class Field Trip Travel Packages",
+      "minutes": 7
+    },
+    {
+      "id": "email-63",
+      "code": "1-5 a trip to Europe",
+      "title": "a trip to Europe",
+      "category": "娱乐活动",
+      "subcategory": "出行住宿",
+      "functions": [
+        "致谢/关怀/交流"
+      ],
+      "context": "You and your friend, John, are planning a trip to Europe this summer. You have done some research and found some interesting destinations and activities that you would like to include in your itinerary. You want to share your ideas with John and get his opinion.",
+      "instruction": "Write an email to John. In your email, do the following:",
+      "bullets": [
+        "Describe the destinations you have researched.",
+        "Explain why you think these destinations would be enjoyable.",
+        "Ask for his opinion on the suggested itinerary and any additional ideas he might have."
+      ],
+      "to": "John",
+      "subject": "Summer trip itinerary ideas",
+      "minutes": 7
+    },
+    {
+      "id": "email-64",
+      "code": "GTRT 32 邀请同学一起定旅行套餐",
+      "title": "GTRT 32 邀请同学一起定旅行套餐",
+      "category": "娱乐活动",
+      "subcategory": "出行住宿",
+      "functions": [
+        "邀请/组织",
+        "致谢/关怀/交流"
+      ],
+      "context": "You and your friend Alex have been talking about taking a trip during spring break. You recently found a travel package to a nearby city and think it would be perfect for both of you.",
+      "instruction": "Write an email to Alex. In your email, you should:",
+      "bullets": [
+        "·Explain why you think this travel package is a good choice for your trip.",
+        "·Describe what the travel package includes.",
+        "·Invite Alex to join you on the trip."
+      ],
+      "to": "Alex",
+      "subject": "GTRT 32 邀请同学一起定旅行套餐",
+      "minutes": 7
+    },
+    {
+      "id": "email-65",
+      "code": "GTRT 73 Inquiry Regarding Canceled Flight and Alternative Arrangements",
+      "title": "GTRT 73 Inquiry Regarding Canceled Flight and Alternative Arrangements",
+      "category": "娱乐活动",
+      "subcategory": "出行住宿",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You have booked a flight with ‘Skyline Airlines’ for your upcoming study abroad trip. Unfortunately, you have received an email notifying you that your flight has been canceled due to unforeseen circumstances. You need to make alternative travel arrangements as soon as possible.",
+      "instruction": "Write an email to Ms. Turner. In your email, do the following:",
+      "bullets": [
+        "Explain the issue with your canceled flight.",
+        "Describe how this cancellation affects your travel plans.",
+        "Ask for assistance in booking another flight or provide alternative solutions."
+      ],
+      "to": "Ms",
+      "subject": "GTRT 73 Inquiry Regarding Canceled Flight and Alternative Arrangements",
+      "minutes": 7
+    },
+    {
+      "id": "email-66",
+      "code": "GTRT 82 Inquiry about vacation rental for weekend getaway",
+      "title": "GTRT 82 Inquiry about vacation rental for weekend getaway",
+      "category": "娱乐活动",
+      "subcategory": "出行住宿",
+      "functions": [
+        "咨询/询问"
+      ],
+      "context": "You are planning a weekend getaway with your friends from the university and need to find suitable accommodation. You have found a vacation rental that looks perfect, but you want to confirm some details before booking. You need to contact the property owner, Mr. Johnson, for more information.",
+      "instruction": "Write an email to Mr. Johnson. In your email, do the following:",
+      "bullets": [
+        "Explain why you are interested in the property.",
+        "Ask about the availability of the property for your preferred dates.",
+        "Request details about nearby attractions."
+      ],
+      "to": "Mr",
+      "subject": "GTRT 82 Inquiry about vacation rental for weekend getaway",
+      "minutes": 7
+    },
+    {
+      "id": "email-67",
       "code": "2-6 kitchen appliance problems",
       "title": "kitchen appliance problems",
       "category": "消费投诉",
       "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
       "context": "You recently purchased a new kitchen appliance from a store called \"Home Essentials.\" After using it for a few days, you noticed some problems with it. You want to inform the customer service representative, Ms. Parker, about the issue.",
       "instruction": "Write an email to Ms. Parker. In your email, do the following:",
       "bullets": [
@@ -562,11 +1403,15 @@
       "minutes": 7
     },
     {
-      "id": "email-34",
+      "id": "email-68",
       "code": "3-7 Feedback on Recent Cake Purchase",
       "title": "Feedback on Recent Cake Purchase",
       "category": "消费投诉",
       "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "You are a regular customer at a local bakery and have always enjoyed their products. Recently, you bought a cake for your favorite professor, but it did not meet your expectations. You want to provide feedback to the bakery owner, Ms. Lopez, and suggest improvements.",
       "instruction": "Write an email to Ms. Lopez. In your email, do the following:",
       "bullets": [
@@ -579,11 +1424,15 @@
       "minutes": 7
     },
     {
-      "id": "email-35",
+      "id": "email-69",
       "code": "3-10 Damaged furniture item",
       "title": "Damaged furniture item",
       "category": "消费投诉",
       "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
       "context": "You recently purchased a piece of furniture for your dorm room from an online store called ‘Home Comforts.' When the item arrived, you discovered that it was damaged during shipping. You are disappointed because you were looking forward to using the new furniture. You need to contact customer service to resolve the issue.",
       "instruction": "Write an email to the customer service representative, Ms. Brown. In your email, do the following:",
       "bullets": [
@@ -596,11 +1445,15 @@
       "minutes": 7
     },
     {
-      "id": "email-36",
+      "id": "email-70",
       "code": "4-4 Feedback on dining experience",
       "title": "Feedback on dining experience",
       "category": "消费投诉",
       "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "You recently had dinner at a restaurant called ‘Cozy Corner.’ While part of the experience was enjoyable, the service was poor. You want to provide feedback to the restaurant owner, Ms. Lee.",
       "instruction": "Write an email to Ms. Lee. In your email, do the following:",
       "bullets": [
@@ -613,11 +1466,15 @@
       "minutes": 7
     },
     {
-      "id": "email-37",
+      "id": "email-71",
       "code": "4-8 Recent Laptop Purchase",
       "title": "Recent Laptop Purchase",
       "category": "消费投诉",
       "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "You recently purchased a new laptop for school, and you are satisfied with the purchase. However, you noticed some issues with its performance. You need to contact customer service to resolve this issue.",
       "instruction": "Write an email to customer service. In your email, do the following:",
       "bullets": [
@@ -630,11 +1487,268 @@
       "minutes": 7
     },
     {
-      "id": "email-38",
+      "id": "email-72",
+      "code": "新增-10 university online store item quality",
+      "title": "新增-10 university online store item quality",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You have received an item you ordered from your university's online store, but you are not satisfied with its quality. Write an email to the customer service department.",
+      "instruction": "Write an email. In your email, do the following:",
+      "bullets": [
+        "Describe the specific problem with the item you received.",
+        "Propose a solution that would satisfy you.",
+        "Provide feedback on your overall online shopping experience."
+      ],
+      "to": "to the customer service department",
+      "subject": "新增-10 university online store item quality",
+      "minutes": 7
+    },
+    {
+      "id": "email-73",
+      "code": "新增-11 restaurant meal feedback",
+      "title": "新增-11 restaurant meal feedback",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You had a meal at a restaurant and you were not very satisfied. You contact the manager of the restaurant.",
+      "instruction": "Write an email. In your email, do the following:",
+      "bullets": [
+        "Explain what you enjoyed about the meal.",
+        "Explain what problem you met.",
+        "Give suggestions for improvement."
+      ],
+      "to": "the manager of the restaurant",
+      "subject": "新增-11 restaurant meal feedback",
+      "minutes": 7
+    },
+    {
+      "id": "email-74",
+      "code": "新增-12 resort stay feedback",
+      "title": "新增-12 resort stay feedback",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently stayed at a resort during your semester break and enjoyed the overall experience. However, you encountered some issues with your stay. You want to provide feedback to the resort manager, Ms. Garcia, to address these concerns.",
+      "instruction": "Write an email to Ms. Garcia. In your email, do the following:",
+      "bullets": [
+        "Mention what you enjoyed about your stay at the resort.",
+        "Describe the issues you had with your stay.",
+        "Suggest ways to improve the service."
+      ],
+      "to": "Ms",
+      "subject": "新增-12 resort stay feedback",
+      "minutes": 7
+    },
+    {
+      "id": "email-75",
+      "code": "新增-13 restaurant menu improvement",
+      "title": "新增-13 restaurant menu improvement",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently dined at a restaurant near your campus called The Garden Bistro and had an excellent experience. However, you noticed that the menu could be improved.",
+      "instruction": "Write an email to Ms. Johnson. In your email, do the following:",
+      "bullets": [
+        "Express gratitude for the dining experience you had and explain what you liked about it.",
+        "Explain your concerns about the menu.",
+        "Suggest ways to improve the menu and the restaurant."
+      ],
+      "to": "Ms",
+      "subject": "新增-13 restaurant menu improvement",
+      "minutes": 7
+    },
+    {
+      "id": "email-76",
+      "code": "GTRT 54 Online Shopping Complaint",
+      "title": "GTRT 54 Online Shopping Complaint",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
+      "context": "You recently purchased a dress/skirt from an online store for a school event. Unfortunately, the item arrived with noticeable quality issues (e.g., wrong size, fabric defect, or damage).",
+      "instruction": "Write an email to the store’s customer service. In your email, do the following:",
+      "bullets": [
+        "Express your initial satisfaction with their service.",
+        "Describe the specific problem with the product.",
+        "Propose a solution or request improvements."
+      ],
+      "to": "the store’s customer service",
+      "subject": "GTRT 54 Online Shopping Complaint",
+      "minutes": 7
+    },
+    {
+      "id": "email-77",
+      "code": "GTRT 56 Shoes Purchase Complaint",
+      "title": "GTRT 56 Shoes Purchase Complaint",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
+      "context": "You recently bought a pair of shoes from an online store for a special occasion. However, after receiving the shoes, you found that there were some problems with them (e.g., incorrect size, defects, or poor quality).",
+      "instruction": "Write an email to the store’s customer service. In your email, do the following:",
+      "bullets": [
+        "Describe the problem with the shoes.",
+        "Explain why the issue is important to you.",
+        "Request a replacement or another solution."
+      ],
+      "to": "the store’s customer service",
+      "subject": "GTRT 56 Shoes Purchase Complaint",
+      "minutes": 7
+    },
+    {
+      "id": "email-78",
+      "code": "GTRT 64 度假村环保问题",
+      "title": "GTRT 64 度假村环保问题",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently visited a popular tourist destination called “Sunny Beach Resort.” While the experience was partially enjoyable, you noticed that some aspects of the resort are environmentally harmful. You want to suggest some improvements to the resort manager, Mr. Collins.",
+      "instruction": "Write an email to Mr. Collins. In your email, do the following:",
+      "bullets": [
+        "Describe what you enjoyed about your stay at the resort.",
+        "Explain your concerns about the resort’s environmental impact.",
+        "Suggest some measures that could be implemented to make the resort more environmentally friendly."
+      ],
+      "to": "Mr",
+      "subject": "GTRT 64 度假村环保问题",
+      "minutes": 7
+    },
+    {
+      "id": "email-79",
+      "code": "GTRT 65 Recent order",
+      "title": "GTRT 65 Recent order",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently purchased a shirt online for the upcoming university gala. When the shirt arrived, you noticed some issues. You need to contact the online store’s customer service to report the issue and request a solution.",
+      "instruction": "Write an email to customer service. In your email, do the following:",
+      "bullets": [
+        "Explain what you liked about your online shopping experience.",
+        "Describe the issue with the shirt you received.",
+        "Suggest a resolution for the issue."
+      ],
+      "to": "customer service",
+      "subject": "GTRT 65 Recent order",
+      "minutes": 7
+    },
+    {
+      "id": "email-80",
+      "code": "GTRT 71 Issues with Coffeemaker",
+      "title": "GTRT 71 Issues with Coffeemaker",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
+      "context": "You recently purchased a new coffeemaker for your dorm room from an online store, and you are satisfied with its performance in general.However, you are having one issue with the product that is a problem for you. You need to contact customer service to report the issue and request a resolution.",
+      "instruction": "Write an email to customer service. In your email, do the following:",
+      "bullets": [
+        "Mention your satisfaction with the appliance’s performance in general.",
+        "Describe the issue you are having with the product.",
+        "Request a resolution."
+      ],
+      "to": "customer service",
+      "subject": "GTRT 71 Issues with Coffeemaker",
+      "minutes": 7
+    },
+    {
+      "id": "email-81",
+      "code": "GTRT 74 Battery life issue with recent smartphone purchase",
+      "title": "GTRT 74 Battery life issue with recent smartphone purchase",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "投诉/反馈"
+      ],
+      "context": "You recently purchased a new smartphone from a store near your university campus, and you are happy with its features and performance. However, you noticed some issues with the phone.You need to contact the customer service department to address this issue.",
+      "instruction": "Write an email to customer service. In your email, do the following:",
+      "bullets": [
+        "Explain your satisfaction with some of the smartphone’s specific attributes.",
+        "Describe the issues you found with your phone.",
+        "Request a solution to the problem."
+      ],
+      "to": "customer service",
+      "subject": "GTRT 74 Battery life issue with recent smartphone purchase",
+      "minutes": 7
+    },
+    {
+      "id": "email-82",
+      "code": "GTRT 78 Recent Furniture Purchase",
+      "title": "GTRT 78 Recent Furniture Purchase",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently purchased new furniture for your dorm room from an online store, and you are satisfied with it in general. However, you noticed some issues with the furniture. You need to contact customer service about the issue.",
+      "instruction": "Write an email to customer service. In your email, do the following:",
+      "bullets": [
+        "Mention what you particularly liked about the furniture.",
+        "Describe the issue you noticed with the furniture.",
+        "Suggest a resolution for the problem."
+      ],
+      "to": "customer service",
+      "subject": "GTRT 78 Recent Furniture Purchase",
+      "minutes": 7
+    },
+    {
+      "id": "email-83",
+      "code": "3-12 Feedback on Car Rental Experience",
+      "title": "Feedback on Car Rental Experience",
+      "category": "消费投诉",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You recently rented a car for a weekend trip with your dorm mate and were satisfied with the vehicle’s performance. However, you had a bad experience with the customer service at the rental office. You want to provide feedback to the rental company manager, Ms. Turner.",
+      "instruction": "Write an email to Ms. Turner. In your email, do the following:",
+      "bullets": [
+        "Explain what features of the car you liked most.",
+        "Describe the issues that occurred during your customer service experience.",
+        "Suggest ways to improve the pick-up and drop-off process."
+      ],
+      "to": "Ms. Turner",
+      "subject": "Feedback on Car Rental Experience",
+      "minutes": 7
+    },
+    {
+      "id": "email-84",
       "code": "01-3 Recommendations for Upcoming Business Trip",
       "title": "Recommendations for Upcoming Business Trip",
       "category": "职场实习",
       "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "咨询/询问"
+      ],
       "context": "You are planning a business trip to another city. Your colleague, Maria, recently traveled to the same city for work. You want to ask her recommendations for places to eat and things to do during your free time.",
       "instruction": "Write an email to Maria. In your email, do the following:",
       "bullets": [
@@ -647,11 +1761,15 @@
       "minutes": 7
     },
     {
-      "id": "email-39",
+      "id": "email-85",
       "code": "01-2 Team Lunch Experience",
       "title": "Team Lunch Experience",
       "category": "职场实习",
       "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
       "context": "Your coworker, Kevin, recently recommended a new restaurant for your team to visit. You took the team there, but everyone was disappointed. The food was not as good as expected, and the service was slow. You need to inform Kevin about the situation and discuss future lunch options.",
       "instruction": "Write an email to Kevin. In your email, do the following:",
       "bullets": [
@@ -664,11 +1782,14 @@
       "minutes": 7
     },
     {
-      "id": "email-40",
+      "id": "email-86",
       "code": "3-21 Inquiry About Internship Program",
       "title": "Inquiry About Internship Program",
       "category": "职场实习",
       "subcategory": "综合",
+      "functions": [
+        "咨询/询问"
+      ],
       "context": "You are a university student who recently attended a career fair on campus. You met Ms. Anderson from a company where you are very interested in applying for an internship. You want to follow up with her about the internship program.",
       "instruction": "Write an email to Ms. Anderson. In your email, do the following:",
       "bullets": [
@@ -681,11 +1802,140 @@
       "minutes": 7
     },
     {
-      "id": "email-41",
+      "id": "email-87",
+      "code": "新增-14 internship thank-you and recommendation request",
+      "title": "新增-14 internship thank-you and recommendation request",
+      "category": "职场实习",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You are a student who recently completed an internship at a local company. You want to send an email to your supervisor, Mr. Clark, to thank him for the opportunity and to ask for a letter of recommendation for your future job applications.",
+      "instruction": "Write an email to Mr. Clark. In your email, do the following:",
+      "bullets": [
+        "Express your appreciation for the internship opportunity and describe what you learned under his mentorship.",
+        "Explain how the experience will benefit your future career.",
+        "Request a letter of recommendation."
+      ],
+      "to": "Mr",
+      "subject": "新增-14 internship thank-you and recommendation request",
+      "minutes": 7
+    },
+    {
+      "id": "email-88",
+      "code": "GTRT 40 面试跟进",
+      "title": "GTRT 40 面试跟进",
+      "category": "职场实习",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You recently had a job interview with a company. Write an email to the hiring manager, Mr. Davis, to follow up. In your email, you should:",
+      "instruction": "Write an email. In your email, do the following:",
+      "bullets": [
+        "Express your gratitude to Mr. Davis for taking the time to interview you.",
+        "Express your strong interest in the position and the company.",
+        "Explain that you would like to submit some additional application materials."
+      ],
+      "to": "招聘方/主管/同事",
+      "subject": "GTRT 40 面试跟进",
+      "minutes": 7
+    },
+    {
+      "id": "email-89",
+      "code": "GTRT 57 Feedback on Recent Presentation",
+      "title": "GTRT 57 Feedback on Recent Presentation",
+      "category": "职场实习",
+      "subcategory": "综合",
+      "functions": [
+        "投诉/反馈",
+        "建议/提案"
+      ],
+      "context": "You are a student intern at a marketing firm, and you need to provide feedback to your fellow intern, Alex, on a market research presentation he gave recently. While the presentation was generally good, there are a few areas that could be improved.",
+      "instruction": "Write an email to Alex. In your email, do the following:",
+      "bullets": [
+        "Commend him by mentioning specific aspects of the presentation that were effective.",
+        "Describe the areas that were not as successful.",
+        "Suggest ways to enhance future presentations."
+      ],
+      "to": "Alex",
+      "subject": "GTRT 57 Feedback on Recent Presentation",
+      "minutes": 7
+    },
+    {
+      "id": "email-90",
+      "code": "GTRT 61 Direct Deposit Information",
+      "title": "GTRT 61 Direct Deposit Information",
+      "category": "职场实习",
+      "subcategory": "综合",
+      "functions": [
+        "咨询/询问",
+        "投诉/反馈"
+      ],
+      "context": "You recently started a new job on campus and need to complete several onboarding tasks including setting direct deposit for your monthly paychecks. You need to contact the HR department to report issues with this task. You also want to express your excitement about joining the team.",
+      "instruction": "Write an email to the HR manager, Ms. Davis. In your email, do the following:",
+      "bullets": [
+        "Express your excitement for joining the team.",
+        "Explain the problem you are having with setting the direct deposit.",
+        "Inquire about the timing of your first paycheck."
+      ],
+      "to": "the HR manager",
+      "subject": "GTRT 61 Direct Deposit Information",
+      "minutes": 7
+    },
+    {
+      "id": "email-91",
+      "code": "GTRT 76 Summer internship application - additional documents",
+      "title": "GTRT 76 Summer internship application - additional documents",
+      "category": "职场实习",
+      "subcategory": "综合",
+      "functions": [
+        "致谢/关怀/交流"
+      ],
+      "context": "You are a student who recently applied for a summer internship at a company. You have received an email from the personnel manager, Mr. Davis, asking you to provide additional documents and information to complete your application.",
+      "instruction": "Write an email to Mr. Davis. In your email, do the following:",
+      "bullets": [
+        "Thank him for considering your application.",
+        "Explain what interests you most about the job for which you are applying.",
+        "List the additional documents and information you are sending."
+      ],
+      "to": "Mr",
+      "subject": "GTRT 76 Summer internship application - additional documents",
+      "minutes": 7
+    },
+    {
+      "id": "email-92",
+      "code": "GTRT 77 Recognition and request for presentation",
+      "title": "GTRT 77 Recognition and request for presentation",
+      "category": "职场实习",
+      "subcategory": "综合",
+      "functions": [
+        "请求/求助",
+        "致谢/关怀/交流"
+      ],
+      "context": "You are the leader of a research team at your university. Your team has been working on an important project, and one of your team members, John, has consistently provided high‑quality work and met all deadlines. You want to acknowledge his efforts and suggest that he share his successful strategies with the rest of the team.",
+      "instruction": "Write an email to John. In your email, do the following:",
+      "bullets": [
+        "Commend him for his excellent work on the project.",
+        "Explain how his strategies could benefit the team.",
+        "Request that he prepare a brief presentation to share his approaches with everyone."
+      ],
+      "to": "John",
+      "subject": "GTRT 77 Recognition and request for presentation",
+      "minutes": 7
+    },
+    {
+      "id": "email-93",
       "code": "TPO2 Tips for settling into a new city",
       "title": "Tips for settling into a new city",
       "category": "帮助朋友",
       "subcategory": "综合",
+      "functions": [
+        "建议/提案",
+        "致谢/关怀/交流"
+      ],
       "context": "Your friend Emma has recently moved to a new city and is feeling a bit overwhelmed. She has reached out to you for advice on how to adjust to her new environment and make new friends. You have lived in several cities before, and you have experience with finding ways to settle into new places.",
       "instruction": "Write and email to Emma. In your email, do the following:",
       "bullets": [
@@ -696,6 +1946,27 @@
       "to": "Emma",
       "subject": "Tips for settling into a new city",
       "minutes": 7
+    },
+    {
+      "id": "email-94",
+      "code": "3-8 Managing stress and workload",
+      "title": "Managing stress and workload",
+      "category": "帮助朋友",
+      "subcategory": "综合",
+      "functions": [
+        "建议/提案",
+        "致谢/关怀/交流"
+      ],
+      "context": "Your friend, Alex, has been feeling overwhelmed with university assignments. You have noticed that he is struggling to keep up with his workload and is not taking proper care of his health. You want to offer some helpful advice.",
+      "instruction": "Write an email. In your email, do the following:",
+      "bullets": [
+        "-Describe to Alex what you have recently noticed about him.",
+        "-Explain why it is important to maintain good health.",
+        "-Suggest some specific strategies Alex can use to manage his stress and workload."
+      ],
+      "to": "Alex",
+      "subject": "Managing stress and workload",
+      "minutes": 7
     }
   ],
   "academic": [
@@ -704,6 +1975,9 @@
       "code": "4-4 character development",
       "title": "character development",
       "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -726,6 +2000,9 @@
       "code": "2-7 learning assessment",
       "title": "learning assessment",
       "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
       "discussionType": "开放式",
       "professor": {
         "name": "Dr. Achebe",
@@ -748,6 +2025,9 @@
       "code": "1-5 technology in education",
       "title": "technology in education",
       "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -767,9 +2047,37 @@
     },
     {
       "id": "academic-04",
+      "code": "ZPO3 volunteer work",
+      "title": "volunteer work",
+      "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "Your professor is teaching a class on social studies. Write a post responding to the professor's question. Volunteerism refers to the act of offering your time and service without financial compensation to benefit a community, organization, or cause. While many people volunteer mainly to help others, some institutions have mandatory volunteer programs. High schools are one example, where students may be required to complete a certain number of volunteer hours to graduate. What do you think? Should high school students be required to do volunteer work? Why or why not? In your response, you should do the following. ● Express and support your opinion. ● Make a contribution to the discussion in your own words. An effective response will contain at least 100 words."
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "Yes, I think high schools should require volunteer hours because it helps students build a sense of civic responsibility. Many teenagers don't naturally think about helping others, and this requirement can introduce them to the idea that their time and effort can make a real difference in the lives of others."
+        },
+        {
+          "name": "Lena",
+          "text": "I don't think volunteer hours should be required because many students already have limited free time. Some have part-time jobs or take care of younger siblings after school. Adding a mandatory volunteer requirement could create extra stress and make it harder for those students to balance their existing responsibilities."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-05",
       "code": "3-22 online learning",
       "title": "online learning",
       "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -788,10 +2096,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-05",
+      "id": "academic-06",
       "code": "2-8 teaching preference：lectures VS participation",
       "title": "teaching preference：lectures VS participation",
       "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -810,10 +2121,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-06",
+      "id": "academic-07",
       "code": "3-12 parental involvement",
       "title": "parental involvement",
       "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
@@ -832,32 +2146,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-07",
-      "code": "3-19 the main purpose of literature",
-      "title": "the main purpose of literature",
-      "category": "学习和教育",
-      "discussionType": "封闭式",
-      "professor": {
-        "name": "Dr. Gupta",
-        "text": "Literature includes novels, poems, plays, and stories that express ideas and emotions. Some writers aim to inspire change by showing problems like inequality or injustice. Others focus on entertaining readers through exciting plots or imaginative worlds. Both types of literature influence readers in different ways. Think about how stories can shape how people think or feel. Which do you believe is the main purpose of literature: to inspire change or to entertain? Give reasons to support your view."
-      },
-      "students": [
-        {
-          "name": "Kelly",
-          "text": "The main purpose of literature is to inspire social change. Many stories explore serious topics like historical conflicts, unfair treatment, or climate problems. When people read about these issues, they develop an understanding of other people’s viewpoints and want to make improvements. Literature can open minds and help readers care about what others think and experience."
-        },
-        {
-          "name": "Andrew",
-          "text": "Literature’s primary goal is to entertain. It allows readers to enter new worlds, meet fictional characters, and enjoy surprising events. Even stories with serious themes often include exciting moments. Entertainment helps readers relax, imagine new possibilities, and appreciate creativity, which are also important benefits for individuals and society."
-        }
-      ],
-      "minutes": 10
-    },
-    {
       "id": "academic-08",
       "code": "4-1 education: traditional or nontraditional career paths",
       "title": "education: traditional or nontraditional career paths",
       "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
@@ -877,31 +2172,137 @@
     },
     {
       "id": "academic-09",
-      "code": "1-0 nature or nurture",
-      "title": "nature or nurture",
+      "code": "GTRT 05 Project-based learning",
+      "title": "GTRT 05 Project-based learning",
       "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
       "discussionType": "封闭式",
       "professor": {
-        "name": "Dr. Achebe",
-        "text": "We’ve been discussing the role of nature versus nurture in human development. Some experts believe that genetics play the most significant role in shaping who we are, while others argue that our environment and experiences are more important. Which do you think has a greater impact on human development: nature or nurture? Why?"
+        "name": "Dr. Gupta",
+        "text": "We’ve been discussing the impact of different teaching methods on student learning. Some educational experts believe that project-based learning, which involves students working on projects over an extended period, is the most effective way to learn. Do you think project-based learning is beneficial for students? Why or why not?"
       },
       "students": [
         {
-          "name": "Claire",
-          "text": "I think nurture has a greater impact on human development. Our environment and experiences shape our beliefs, behaviors, and personalities. While genetics provide a foundation, it is our interactions and experiences that truly define who we become."
+          "name": "Paul",
+          "text": "I believe project-based learning is highly beneficial for students. It encourages critical thinking, collaboration, and problem-solving skills. Students can apply what they learn in real-world scenarios, which helps them retain information better."
         },
         {
-          "name": "Paul",
-          "text": "In my opinion, nature has a more significant role. Genetics determine many aspects of our personality, intelligence, and physical abilities. While the environment can influence these traits, our genetic makeup is the primary factor in shaping who we are."
+          "name": "Claire",
+          "text": "In my opinion, project-based learning might not work for every student. Some students may find it challenging to manage long-term projects and prefer traditional teaching methods like lectures and exams. It’s important to have a balance of different teaching approaches."
         }
       ],
       "minutes": 10
     },
     {
       "id": "academic-10",
+      "code": "GTRT 40 如何提高财商",
+      "title": "GTRT 40 如何提高财商",
+      "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Today, I’d like to discuss how young people develop financial literacy. On one hand, structured courses can provide a solid foundation in financial concepts and help individuals make more informed money-related decisions. On the other hand, some argue that true financial literacy is better acquired through real-world experience and personal practice. In your opinion, which approach plays a more important role in developing financial literacy: formal classroom instruction or hands-on experience? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I believe structured courses are more important because they teach fundamental concepts—such as budgeting, investing, and risk management—in a systematic way. Without this foundational knowledge, people might make costly mistakes in real life."
+        },
+        {
+          "name": "Andrew",
+          "text": "While courses are useful, I think hands-on experience matters more. Managing your own income, paying bills, and learning from actual financial setbacks teach lessons that textbooks simply cannot replicate."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-11",
+      "code": "GTRT 42 VR在教育中的使用",
+      "title": "GTRT 42 VR在教育中的使用",
+      "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "In many education courses, we often discuss how technology can change the learning experience. Recently, some educators have argued that virtual reality devices may offer important benefits in schools. VR can place students inside realistic environments, such as historical sites, science labs, or engineering simulations. However, others worry about cost and fairness. Do you believe VR devices are helpful for education? Why or why not?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe VR devices can be very helpful in education. They give students the chance to use modern tools and explore new ideas in an active way. Instead of only reading about a topic, students can experience it directly. This strong sense of immersion may increase motivation and participation."
+        },
+        {
+          "name": "Paul",
+          "text": "I do not think VR should be widely used in schools yet. The technology is still very expensive, and many schools cannot afford the equipment or maintenance. This could make educational inequality worse. Traditional teaching methods are much cheaper, and they can still be very effective when teachers use them well."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-12",
+      "code": "GTRT 44 父母参与对教育的影响",
+      "title": "GTRT 44 父母参与对教育的影响",
+      "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We’ve been talking about parental involvement in children’s growth and upbringing. Many parents tend to offer plenty of assistance to their kids in daily routines as well as academic studies. Some people hold the view that this kind of support brings plenty of benefits to children, whereas others claim that excessive parental help will give rise to negative influences. Do you think excessive help from parents brings more advantages or more disadvantages to children? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I believe abundant help from parents is beneficial to children’s growth. Proper guidance and practical assistance can help kids avoid unnecessary mistakes and solve various difficulties efficiently. It also lets children feel warm family care and grow up in a safe and comforting living environment."
+        },
+        {
+          "name": "Andrew",
+          "text": "In my opinion, parents offering too much help will produce more bad effects on children. If parents arrange everything for their kids, children will lack chances to exercise their independent abilities. They may become overly reliant on others and fail to develop the sense of responsibility needed for future life."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-13",
+      "code": "5-9 climate change education",
+      "title": "climate change education",
+      "category": "学习和教育",
+      "categories": [
+        "学习和教育"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Achebe",
+        "text": "Today's educational institutions need to prepare students for a world impacted by climate change and other environmental problems. Education that focuses on science and technology can help students develop innovative solutions to environmental problems. On the other hand, education that emphasizes social sciences and ethics can foster students' deeper understanding of environmental problems and their effects. In your view, which of these two approaches best prepares students to face climate change and other environmental issues?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "Focusing on social sciences like history and human geography helps us to see how our actions affect global communities. By learning about different cultures and the environment, we understand the need for collective action. This knowledge encourages us to work together to improve the environment on a global scale."
+        },
+        {
+          "name": "Andrew",
+          "text": "Technical skills are essential in combating climate change. They provide tangible solutions to environmental issues. Education should prioritize teaching these skills, as they directly address and solve problems like renewable energy development and waste reduction. A practical approach like this can ensure a better future for all."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-14",
       "code": "2-2 multitasking in the workplace",
       "title": "multitasking in the workplace",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
@@ -920,10 +2321,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-11",
+      "id": "academic-15",
       "code": "1-1 personalization",
       "title": "personalization",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -942,10 +2346,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-12",
+      "id": "academic-16",
       "code": "1-2 corporate transparency",
       "title": "corporate transparency",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Achebe",
@@ -964,10 +2371,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-13",
+      "id": "academic-17",
       "code": "2-4 emotional intelligence VS technical skills",
       "title": "emotional intelligence VS technical skills",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -986,11 +2396,14 @@
       "minutes": 10
     },
     {
-      "id": "academic-14",
+      "id": "academic-18",
       "code": "2-6 advertisement influences behavior",
       "title": "advertisement influences behavior",
       "category": "商业和工作",
-      "discussionType": "封闭式",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "限定式",
       "professor": {
         "name": "Dr. Diaz",
         "text": "We’ve been discussing the influence of advertising on consumer behavior. Advertisements can inform consumers about new products and services, such as the latest tech products or new local businesses, potentially boosting sales and driving economic growth. However, some experts argue that advertisements can be deceptive, create unrealistic expectations about products, and promote materialistic values. Reflect on a specific advertisement that influenced your behavior. Do you think its impact was positive or negative? why?"
@@ -1008,10 +2421,38 @@
       "minutes": 10
     },
     {
-      "id": "academic-15",
+      "id": "academic-19",
+      "code": "ZPO2 advertising",
+      "title": "advertising",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "We are all exposed to a lot of advertising, especially on the internet. And of course businesses spend a lot of money to create and distribute advertising. Before next class, I would like for you to discuss this question: Is advertising just a way of manipulating people to buy things they do not need, or is it an important source of information that helps people make informed consumer decisions?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "I don’t think most people consider ads to be valuable. I read that in just one one year, from 2018 to 2019, the number of computers, tablets and and mobile phones using ad blockers increased from 142 million to 615 million."
+        },
+        {
+          "name": "Lena",
+          "text": "People can find out a lot about products from advertising. There’s plenty of evidence that people usually begin the process of making a big purchase by looking at ads and reviews. I have to go to another class right now, but I’m going to post later about an advertisement that gave me a lot of useful information."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-20",
       "code": "3-2 important factor in choosing a career",
       "title": "important factor in choosing a career",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
@@ -1030,10 +2471,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-16",
+      "id": "academic-21",
       "code": "3-10 Emotional intelligence",
       "title": "Emotional intelligence",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -1052,10 +2496,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-17",
+      "id": "academic-22",
       "code": "3-16 customer feedback",
       "title": "customer feedback",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -1074,10 +2521,38 @@
       "minutes": 10
     },
     {
-      "id": "academic-18",
+      "id": "academic-23",
+      "code": "ZPO5 digital nomadism",
+      "title": "digital nomadism",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "More and more people can work remotely on portable electronic devices rather than in a dedicated office. These workers often have more flexibility regarding when and where they work, allowing them to become what are known as“digital nomads”-that is, workers who travel regularly and work from different locations, both inside and outside their own countries. Do you think digital nomadism is likely to continue increasing? Why or why not?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "While digital nomadism does offer unparalleled freedom, it's important to note that it heavily relies on strong Internet connectivity. This requirement can significantly limit the destinations one can choose to work from, so digital nomadism probably won't increase globally as much as some people think."
+        },
+        {
+          "name": "Lena",
+          "text": "While Claire makes a good point, Internet technologies and speed are always improving, so I think digital nomadism will continue to grow. Why work in a stuffy city office building just so you can afford to travel to someplace beautiful once or twice a year when you could work from such places all year round?"
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-24",
       "code": "3-21 globalization’s impact on local economies",
       "title": "globalization’s impact on local economies",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -1096,10 +2571,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-19",
+      "id": "academic-25",
       "code": "4-2 long-term business success",
       "title": "long-term business success",
       "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
@@ -1118,10 +2596,263 @@
       "minutes": 10
     },
     {
-      "id": "academic-20",
+      "id": "academic-26",
+      "code": "GTRT 55 品牌忠诚度",
+      "title": "GTRT 55 品牌忠诚度",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Companies often face an important choice between building loyalty among current customers and attracting new ones. Loyal customers can provide steady revenue, recommend the brand to others, and help create a strong reputation over time. However, gaining new customers can expand market share and support faster growth, especially in competitive industries. In your opinion, which is more important for a company: building brand loyalty or attracting new customers? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I think building brand loyalty is more important because loyal customers provide stable income over time. For example, people who trust a brand often buy from it repeatedly and recommend it to friends. This positive word of mouth can also help the company attract new customers naturally."
+        },
+        {
+          "name": "Paul",
+          "text": "I believe attracting new customers is more important, especially for companies that want to grow. A loyal customer base is helpful, but it may not be enough in a changing market. By reaching new groups of buyers, a company can increase sales and reduce dependence on one audience."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-27",
+      "code": "5-10 personalized experiences",
+      "title": "personalized experiences",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "This week, we've been discussing the topic of personalized experiences. Many companies today use customer data to offer personalized product recommendations, or services. Supporters believe personalization improves customer satisfaction and makes services more efficient. Critics, however, argue that personalization is unnecessary and may even raise privacy concerns. In your opinion, is providing personalized experiences to customers necessary?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I think personalization is necessary because it saves time and improves relevance. When a music app recommends songs based on my listening history, I discover new artists I actually like, instead of scrolling through endless random tracks. It makes the service feel helpful, not just automated."
+        },
+        {
+          "name": "Paul",
+          "text": "I disagree. For me, personalization isn't essential, and it can feel invasive. Last month, an online store showed me ads for a gift I'd already bought, based on my search history. It felt like being watched. Many people would prefer generic options if it means their data private."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-28",
+      "code": "5-11 efficiency vs fairness",
+      "title": "efficiency vs fairness",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "In the workplace, there is often a trade-off between efficiency and fairness. Some people believe that achieving tasks quickly and effectively is the most important, while others think ensuring fairness and equal treatment for all employees should come first. Which do you think is more important in a business context, and why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I believe fairness is more important because it ensures everyone is treated equally, which builds trust and long-term commitment among employees. Without fairness, even high efficiency cannot sustain good performance."
+        },
+        {
+          "name": "Paul",
+          "text": "I think efficiency should take priority, especially in competitive environments. Achieving results quickly and effectively allows the organization to succeed and benefits employees and stakeholders in the long run."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-29",
+      "code": "5-12 leadership styles",
+      "title": "leadership styles",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We've been discussing various leadership styles in business management. Some leaders are known for their authoritative approach, making decisions independently and expecting compliance from their team. Others prefer a collaborative approach, involving team members in decision-making and encouraging feedback. Which leadership style do you think is more effective in a business setting? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I believe a collaborative leadership style is more effective in a business setting. Involving team members in decision-making can foster a sense of team cohesion. This feeling tends to produce better result, in terms of both quantity and quality."
+        },
+        {
+          "name": "Paul",
+          "text": "I think an authoritative leadership style is typically more effective. It ensures clear guidance from one person, which can be helpful to all others in high-pressure situations when interactions may require a more nuanced approach."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-30",
+      "code": "5-13 remote work",
+      "title": "remote work",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We've been discussing the impact of remote work on productivity and employee well-being. Remote work can have many significant advantages, but it may also lead to some unintended problems. Do you think remote work has a positive or negative impact?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "Remote work can have a positive impact on both productivity and employee well-being. The flexibility helps employees manage their work-life balance better, and the reduction in commuting time can lead to increased productivity and less stress."
+        },
+        {
+          "name": "Claire",
+          "text": "While remote work offers flexibility, it can negatively impact employees. Isolation and lack of face-to-face interaction can hinder teamwork and lead to feelings of loneliness, affecting overall job performance."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-31",
+      "code": "5-14 ethical behavior in business",
+      "title": "ethical behavior in business",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We've been discussing the importance of ethical behavior in business. Ethical practices, like fair wages or sustainable production policies, can enhance a company's reputation and build trust with customers. Some argue that companies should prioritize ethical practices even if it affects profitability, while others believe that profit should always come first. What is your opinion on this issue?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "Ethical practices should be prioritized in business. Building trust with customers and maintaining a positive reputation can lead to long-term success. Even if it affects short-term profitability, ethical behavior ensures long-term, sustainable growth."
+        },
+        {
+          "name": "Claire",
+          "text": "Profit should come first in business decisions, especially in cases when the business is new and needs to grow. Companies need to be financially healthy to continue operating and providing jobs. Ethical practices are important, but they should not compromise a company's ability to be profitable."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-32",
+      "code": "5-15 global expansion vs local focus",
+      "title": "global expansion vs local focus",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We've been discussing strategic growth in corporations. Businesses may often choose to expand globally or prefer instead to deepen local roots. Global growth offers access to new markets and new resources, but can dilute brand identity and strain resources. A local focus, on the other hand, builds community trust, adapts to regional needs, and strengthens customer loyalty. Do you think corporations should concentrate more on expansion or local business? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I think global expansion is vital for businesses. It unlocks opportunities, like broader talent pools and increased innovation. Most companies that I know seek to stay competitive in a connected world. While local focus has its strengths, going global builds resilience and relevance across cultures and economies. Why limit potential to one region when the world is within reach?"
+        },
+        {
+          "name": "Paul",
+          "text": "Focusing on local business practices supports regional economies and allows companies to tailor offerings to local needs. It builds trust, loyalty, and authenticity--qualities that global strategies can struggle to replicate. My favorite businesses are the family-owned ones downtown. Sometimes, deep roots in one place can create more lasting impact than a broad reach across many."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-33",
+      "code": "5-16 long-term brand identity",
+      "title": "long-term brand identity",
+      "category": "商业和工作",
+      "categories": [
+        "商业和工作"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We are studying how companies maintain long-term brand through logos, colors, slogans, and advertising styles. Some companies have maintained the same visual design and core advertising messages for decades to build strong customer recognition and trust. Other regularly update their appearance and marketing approaches to adapt to current trends and changing customer preferences. Which strategy do you think is more suitable for maintaining long-term brand? Why?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe companies should keep their brand identity consistent for a long time. When customers repeatedly see the same logo, colors, and slogans, they can easily recognize the brand."
+        },
+        {
+          "name": "Andrew",
+          "text": "In my opinion, companies should regularly update their brand image. Consumer tastes and market trends change quickly, especially with younger generations. If companies keep the same design for too long, their brand may appear outdated."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-34",
+      "code": "ZPO12 social media influencers marketing",
+      "title": "social media influencers marketing",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "Next week we'll be discussing the role of social media influencers in marketing campaigns. Some marketers believe that influencers are essential for marketing products. Others argue that traditional advertising methods are more effective than social media influencers. What are your thoughts on this issue?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe that social media influencers are essential for reaching target audiences. Influencers have a loyal following and their recommendations can be very persuasive. This personal connection makes influencer marketing a powerful tool for promoting products and increasing brand awareness."
+        },
+        {
+          "name": "Paul",
+          "text": "I think traditional advertising methods are still more reliable. While influencers can be effective, there is a risk of their followers being skeptical of sponsored content. Traditional advertising methods, such as TV and print ads, have proven track records and can reach a broader audience."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-35",
+      "code": "ZPO1  scientific discovery",
+      "title": "scientific discovery",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
+      "discussionType": "开放式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "When people are asked about the most important discoveries or inventions made in the last two hundred years, they usually mention something very obvious, like the computer or the cell phone. But there are thousands of other discoveries or inventions that have had a huge impact on how we live today. What scientific discovery or technological invention from the last 200 years-other than computers and cell phones-would you choose as being important? Why?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "I mean, we're so used to science and technology that we are not even aware of all the things we use in our daily lives. I would probably choose space satellites. This technology happened in the last hundred years, and it has become important for so many things. Just think about navigation, or telecommunications, or even the military."
+        },
+        {
+          "name": "Lena",
+          "text": "I am thinking about medical progress. Like, for example, when scientists discovered things about healthy nutrition. I am thinking of identifying all the vitamins we need to stay healthy. I am not sure exactly when the vitamin discoveries happened, but I know they are very important. Our health is much better than it was 200 years ago."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-36",
       "code": "3-9 Social media impact society",
       "title": "Social media impact society",
       "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
@@ -1140,11 +2871,39 @@
       "minutes": 10
     },
     {
-      "id": "academic-21",
+      "id": "academic-37",
+      "code": "ZPO14 digital media impact communication",
+      "title": "digital media impact communication",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "Next week we'll be discussing the impact of digital media on traditional forms of communication. Some argue that digital media has had a beneficial effect overall, as it has greatly improved global communication and connectivity. Others believe it has had a largely negative effect, leading to the decline of face-to-face interactions and reduced quality of relationships. What is your opinion on this?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I believe digital media has primarily had a positive effect. It allows people to stay in touch over long distances with friends and family with whom they may not have had much contact otherwise. The convenience and speed of digital media allow people to communicate with ease."
+        },
+        {
+          "name": "Andrew",
+          "text": "Although it seems like a good thing on the surface, I think digital media has led to some serious problems. People often spend more time online than engaging in real-life conversations, which can erode social bonds and reduce the quality of communication with others. We need to find a balance between digital and traditional communication."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-38",
       "code": "2-5 how digital communication influences relationship",
       "title": "how digital communication influences relationship",
       "category": "科技和媒体",
-      "discussionType": "封闭式",
+      "categories": [
+        "科技和媒体"
+      ],
+      "discussionType": "限定式",
       "professor": {
         "name": "Dr. Gupta",
         "text": "Digital communication includes texting, video chats, and social media. Some people say these tools help relationships by allowing instant messages, sharing photos, and staying in touch over long distances. Others believe they cause problems-like misunderstandings and less eye contact-because people rely less on talking in person. Think about how you communicate with family, friends, or classmates. Do you believe digital communication makes your relationships stronger or weaker? Share specific examples and explain your opinion clearly."
@@ -1162,10 +2921,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-22",
+      "id": "academic-39",
       "code": "3-3 social media platforms influence",
       "title": "social media platforms influence",
       "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -1184,10 +2946,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-23",
+      "id": "academic-40",
       "code": "3-7 using social media personalities for marketing",
       "title": "using social media personalities for marketing",
       "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
@@ -1206,10 +2971,13 @@
       "minutes": 10
     },
     {
-      "id": "academic-24",
+      "id": "academic-41",
       "code": "3-13 technology in surveillance",
       "title": "technology in surveillance",
       "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
@@ -1228,10 +2996,39 @@
       "minutes": 10
     },
     {
-      "id": "academic-25",
+      "id": "academic-42",
+      "code": "ZPO6 art and media increase environmental awareness",
+      "title": "art and media increase environmental awareness",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体",
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "Art and media have the power to influence public opinion and behavior on environmental issues. For example, movies and social media can bring attention to climate change and inspire action with powerful words, images, and stories. However, some worry that art and media may oversimplify complex environmental issues or focus too much on negative aspects for dramatic effect. Do you think art and media are an appropriate way to increase public awareness of complex environmental issues? Why or why not?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "It's evident that commercial interests in media can slant the representation of issues like climate change, pushing certain agendas.This bias can mislead the public, overshadowing impartial scientific evidence."
+        },
+        {
+          "name": "Lena",
+          "text": "I believe innovative media campaigns and interactive artworks have a unique ability to connect with people on a personal level, driving home the urgency of environmental issues more than dry facts ever could. Such creative Your professor is teaching a class on environmental science. expressions can motivate individuals to take immediate action, showcasing Write a post responding to the professor's question. practical ways to contribute to environmental sustainability."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-43",
       "code": "2-1 AI",
       "title": "AI",
       "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
       "discussionType": "开放式",
       "professor": {
         "name": "Dr. Diaz",
@@ -1250,10 +3047,389 @@
       "minutes": 10
     },
     {
-      "id": "academic-26",
+      "id": "academic-44",
+      "code": "ZPO11 smart cities",
+      "title": "smart cities",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体",
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "We've recently been discussing the concept of smart cities, which use technology to improve urban living. Some believe that investing in smart city technology, such as smart traffic lights and energy-efficient buildings, is essential for the future. Others think that these investments should be directed to immediate social issues. What is your opinion on this?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "I believe that investing in smart city technology is essential for the future. Smart technologies can improve the efficiency of city services, reduce energy consumption, and enhance the quality of life for residents. This long-term investment will ultimately benefit the city."
+        },
+        {
+          "name": "Lena",
+          "text": "I think funds should be directed to immediate social issues including housing and education. While smart city technology might have its benefits in the long run, addressing urgent social needs will have a more immediate and significant impact on improving people's lives. We should prioritize solving these pressing issues first."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-45",
+      "code": "GTRT 32 网络新闻影响",
+      "title": "GTRT 32 网络新闻影响",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We’ve been discussing how people get news in the digital age. In the past, many people relied on a small number of newspapers or television channels for information. Today, however, online news sources allow people to access different viewpoints almost instantly. Some people believe this helps the public become better informed. Others worry that online news can spread false information and make people more divided. Overall, do you think the increase in online news sources has had a mostly positive or negative effect on society? Why?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "I believe the growing number of online news sources is generally good for society. It gives people more choices, so they do not have to depend on just one source of information. For example, if people are unsure about a report, they can compare it with other sources. This can help them understand an issue more thoroughly and make better judgments."
+        },
+        {
+          "name": "Kelly",
+          "text": "I am more worried about the problems caused by online news. False information can spread very quickly, and many people may believe it before checking whether it is true. Also, people often follow news sources that already agree with their views. This can make it harder for different groups to understand each other."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-46",
+      "code": "GTRT 49 社交媒体有助于学习",
+      "title": "GTRT 49 社交媒体有助于学习",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "Many believe that social media platforms, where users exchange information and ideas in virtual communities, have potential for use in education. They can foster collaboration and engagement among students and offer real-time interaction and access to a wide array of resources. However, concerns about misinformation and privacy issues raise questions about their appropriateness in educational settings. What do you think? Can social media be used effectively as a tool for educational purposes? Why or why not?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I don’t think we should be relying on social media for learning. It can alienate students who lack access to these platforms. Many students simply do not have the luxury of constant Internet or social media access, and that could lead to unequal learning opportunities and widen the gap in educational equity."
+        },
+        {
+          "name": "Paul",
+          "text": "Using social media for educational purposes offers the advantage of real-time feedback and communication. It allows students to interact with their instructors outside of regular class times. The learning process could therefore be enhanced through immediate clarification and discussion, making education more dynamic and accessible."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-47",
+      "code": "GTRT 58 社媒算法推送的负面影响",
+      "title": "GTRT 58 社媒算法推送的负面影响",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Achebe",
+        "text": "Social media platforms often use algorithms, which are sets of rules computers follow to make decisions, to show users content they might like or find interesting. This customization means everyone’s experience is unique, but it also raises concerns. Some argue it helps users find what they enjoy faster, while others worry it might limit exposure to diverse perspectives and create echo chambers. What do you think? Does the customization of social media through algorithms have negative effects?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe overreliance on algorithms can negatively affect our online experiences. It limits the joy of stumbling upon new content randomly. This organic discovery often leads to learning about diverse topics and viewpoints, which algorithms might filter out, creating a narrow view of the world."
+        },
+        {
+          "name": "Andrew",
+          "text": "Personalization algorithms on social media are beneficial, especially for small creators. They help these groups gain visibility among users who have shown interest in similar content. This customization enables users to discover new content they’re likely to enjoy, supporting smaller creators who might otherwise be overlooked."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-48",
+      "code": "5-17 automation",
+      "title": "automation",
+      "category": "科技和媒体",
+      "categories": [
+        "科技和媒体"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Automation is a much-discussed topic in economics, one that continues to grow in importance with today's advances in robotics and artificial intelligence, or AI. Robots and AI provide powerful ways to replace human labor by doing work better and faster than people can. Automation can have very positive effects on businesses and the broader economy, but there are disadvantages as well. What do you think? Is the use of automation a positive development overall? Why or why not?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I think the use of automation is a positive development. If AI and robots are used instead of human workers, companies will be able to produce many more products than they do now. They can also lower costs, making those products cheaper for people to buy. As a result, everyone will have access to more affordable products."
+        },
+        {
+          "name": "Andrew",
+          "text": "I worry about the psychological effects on people as AI and robots take over work. I doubt humans will really be happy with ever-greater amounts of leisure time. Many of us derive satisfaction from working and doing our jobs well."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-49",
+      "code": "3-1 whether art drives social change",
+      "title": "whether art drives social change",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We've been discussing how different art forms affect people and communities. Consider these specific examples: protest songs that motivate people to join movements, murals that bring communities together, or movies that change how people think about important issues. Some people argue that art creates change by making people aware of problems and motivating them to act. Others believe art simply shows what already exists in society without actually changing anything. Which view do you agree with, and why?"
+      },
+      "students": [
+        {
+          "name": "Andrew",
+          "text": "I believe art has the power to drive social change. At many times in history, protest songs helped unite people to support important causes, while political cartoons exposed corruption and motivated voters to demand better leadership. Art doesn’t just show problems, it gives people emotional reasons to care and practical ways to take action for justice."
+        },
+        {
+          "name": "Claire",
+          "text": "I think art mainly reflects society by showing us what people experience and observe in their daily lives. Artists create paintings, songs, and stories based on their personal experiences and cultural backgrounds. While art can sometimes inspire people to think differently, its primary role is to document and preserve the current state of society for future generations."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-50",
+      "code": "GTRT 38 艺术对社会的影响",
+      "title": "GTRT 38 艺术对社会的影响",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Today we’ll discuss the dynamic role of art in society. Clearly, art can be a powerful form of expression and communication that can challenge societal norms and help society progress. On the other hand, some people believe that art primarily serves as a way to preserve both the history and heritage of a people, a country, or even a civilization. Which do you believe plays a larger role for art?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I think that art can challenge societal norms by presenting alternative perspectives to conventional thinking. For instance, abstract art often provokes critical thinking about established norms and deeply held beliefs. In doing so, it encourages audiences to open their minds to new possibilities and to effect change."
+        },
+        {
+          "name": "Paul",
+          "text": "I believe that art’s role in preserving heritage is its most important role. As the world becomes more globalized, different cultures are losing their identities because they have been forced to adapt to the modern world. The arts have the power to prevent languages from being lost, can preserve important cultural traditions, and remind us of what makes us unique."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-51",
+      "code": "GTRT 53 Public art 的作用",
+      "title": "GTRT 53 Public art 的作用",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Next week, we will discuss the influence of public art on community identity. Public art, such as murals and sculptures, can enrich a community’s cultural landscape and contribute to a sense of shared identity. Do you think public art plays a significant role in shaping community identity? Why or why not?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "Public art plays a significant role in shaping community identity. It reflects the values and culture of the community, promotes local artists, and provides a sense of pride and unity among residents."
+        },
+        {
+          "name": "Paul",
+          "text": "While public art can enhance a community’s aesthetic appeal, its role in shaping community identity may be limited. Other factors, such as social programs and community events, have a more substantial impact on fostering a shared identity."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-52",
+      "code": "GTRT 65 Cultural diversity",
+      "title": "GTRT 65 Cultural diversity",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We’re studying how communities benefit when people from different cultural backgrounds live and work together. Some researchers believe that cultural diversity helps communities by bringing new foods, languages, art forms, and business ideas that create economic opportunities and enrich daily. Other believe that having shared cultural traditions and common languages makes it easier for people to communicate and cooperate effectively. Which factor do you think contributes more to building strong, successful communities?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe cultural diversity helps build stronger communities by bringing valuable new resources and opportunities. When people from different backgrounds share their traditional foods, music, and art forms, they create vibrant festivals and businesses that attract visitors and generate income. Additionally, multilingual residents help local businesses expand internationally and serve diverse customer groups more effectively."
+        },
+        {
+          "name": "Andrew",
+          "text": "I think having shared cultural traditions and common languages makes communities more successful and cohesive. When residents speak the same language and celebrate similar holidays, they can communicate easily, organize community events more efficiently, and work together on local projects. Shared cultural practices help neighbors understand each other’s expectations and build trust quickly."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-53",
+      "code": "3-14 cultural globalization",
+      "title": "cultural globalization",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We’ve been discussing the impact of cultural globalization on local traditions. Some anthropologists argue that cultural globalization leads to the loss of unique and diverse cultural identities, while others believe it promotes cultural exchange and understanding. What is your perspective on the impact of cultural globalization on local traditions?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe cultural globalization can lead to the loss of unique cultural identities. As global culture becomes more dominant, traditional practices and languages can be forgotten or replaced. It’s important to preserve and celebrate local cultures to maintain diversity."
+        },
+        {
+          "name": "Andrew",
+          "text": "In my opinion, cultural globalization promotes cultural exchange and understanding. It allows people to learn about and appreciate different cultures. This exchange can enrich local traditions and create a more interconnected and tolerant world."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-54",
+      "code": "3-19 the main purpose of literature",
+      "title": "the main purpose of literature",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Literature includes novels, poems, plays, and stories that express ideas and emotions. Some writers aim to inspire change by showing problems like inequality or injustice. Others focus on entertaining readers through exciting plots or imaginative worlds. Both types of literature influence readers in different ways. Think about how stories can shape how people think or feel. Which do you believe is the main purpose of literature: to inspire change or to entertain? Give reasons to support your view."
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "The main purpose of literature is to inspire social change. Many stories explore serious topics like historical conflicts, unfair treatment, or climate problems. When people read about these issues, they develop an understanding of other people’s viewpoints and want to make improvements. Literature can open minds and help readers care about what others think and experience."
+        },
+        {
+          "name": "Andrew",
+          "text": "Literature’s primary goal is to entertain. It allows readers to enter new worlds, meet fictional characters, and enjoy surprising events. Even stories with serious themes often include exciting moments. Entertainment helps readers relax, imagine new possibilities, and appreciate creativity, which are also important benefits for individuals and society."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-55",
+      "code": "5-18 arts in society",
+      "title": "arts in society",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "The arts include a variety of fields: literature, painting, and dance, just to name a few. Some people believe the arts play a vital role in human communication and growth, reflecting cultural values and commenting on societal issues. On the other hand, some people believe that the arts are mainly valuable as a source of entertainment and personal enjoyment, with little or no wider significance. Which view on the arts' role in society do you hold? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I think the role that the arts play in society is highly significant. Art can convey powerful messages and provoke thought and discussion about important social and cultural issues. It can also preserve history and traditions, allowing future generations to understand and appreciate their heritage."
+        },
+        {
+          "name": "Paul",
+          "text": "I think people like Claire overestimate the impact that the arts have on society. Obviously, the arts can provide a sense of joy and relaxation, offering an escape from the stresses of everyday life. But there are many disciplines and fields that play a much more vital role in promoting communication and growth, such as journalism and psychology."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-56",
+      "code": "5-19 indigenous cultures",
+      "title": "indigenous cultures",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Next week, we will be discussing the importance of preserving indigenous cultures that were present a long time ago and survive today. Indigenous cultures face numerous challenges, including globalization and environmental changes. Some experts argue that preserving these cultures is vital. Others believe that adapting to modern society is equally important for the survival and prosperity of indigenous peoples. What are your thoughts on this issue?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "Preserving indigenous cultures is essential for maintaining cultural diversity and historical knowledge. These cultures offer unique perspectives and wisdom that contribute to the richness of human heritage. Efforts should be made to protect their traditions and languages because the history of civilizations are often preserved by cultures with a long, storied past."
+        },
+        {
+          "name": "Paul",
+          "text": "While preserving cultural heritage is important, adapting to modern society is also crucial for the survival and prosperity of indigenous peoples. Integration into modern systems can provide additional resources for education, healthcare, and economic development. Indigenous peoples can be part of a modern society without sacrificing their history and culture."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-57",
+      "code": "5-20 public art vs temporary events",
+      "title": "public art vs temporary events",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We've been discussing the role of public art like painted murals on building walls, statues in parks, and sculptures in city squares. Some people believe that these permanent artistic installations enhance neighborhoods and provide spaces for local artists to showcase their talents. Others argue that communities benefit more from funding temporary art events like outdoor concerts, theater performances, and art festivals that gather people together. What is your view? Should communities prioritize permanent public art or temporary cultural events?"
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "Permanent public art installations are more valuable for creating lasting community identity and pride. Colorful murals and interesting sculptures transform boring public spaces into inspiring environments where people enjoy spending time daily, which supports local businesses. Unlike temporary events, permanent art provides year-round cultural enrichment and gives residents constant opportunities to feel connected to their neighborhood's artistic character and history."
+        },
+        {
+          "name": "Claire",
+          "text": "I think communities benefit more from funding temporary cultural events like outdoor concerts, theater performances, and art festivals. These events bring people together for shared experiences, support local artists through paid performances, and attract visitors who spend money at nearby businesses. Temporary events also allow communities to experience diverse art forms and adapt their cultural programming based on changing interests."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-58",
+      "code": "5-26 storytelling vs factual communication",
+      "title": "storytelling vs factual communication",
+      "category": "人文与艺术",
+      "categories": [
+        "人文与艺术"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We’ve been discussing the role of storytelling in effective communication. Storytelling can be a powerful tool to convey messages and connect with audiences emotionally. Some experts argue that storytelling is essential for engaging presentations, while others believe that factual, straightforward communication is more effective. What is your opinion on the use of storytelling in communication?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "Storytelling is essential for successful communication during, for instance, presentations. It helps to connect with the audience on an emotional level, making the message more memorable and impactful. Stories can illustrate points more vividly than plain facts and keep the audience engaged from start to finish."
+        },
+        {
+          "name": "Paul",
+          "text": "Factual, straightforward communication is more effective. Clear and concise information ensures that the audience understands the message without any ambiguity. While stories can be engaging, they may sometimes distract from the main points. Successful communication is determined more by its ability to convey a message than it is to entertain an audience."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-59",
       "code": "3-6 social norms and their influence",
       "title": "social norms and their influence",
-      "category": "社会和历史",
+      "category": "社会与制度",
+      "categories": [
+        "社会与制度"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -1272,58 +3448,17 @@
       "minutes": 10
     },
     {
-      "id": "academic-27",
-      "code": "2-3 shaping history",
-      "title": "shaping history",
-      "category": "社会和历史",
-      "discussionType": "封闭式",
-      "professor": {
-        "name": "Dr. Diaz",
-        "text": "We've been discussing the impact of major historical figures on their respective societies. Some historians argue that individuals like political leaders or influential thinkers shape the course of history more than broader social and economical forces. Others believe social and economical events are the primary drivers of historical change. What do you think has a greater impact on shaping history: individual actions or broader social and economic forces? Why?"
-      },
-      "students": [
-        {
-          "name": "Andrew",
-          "text": "I believe individuals and their actions have a greater impact on shaping history. Leaders and influential thinkers can inspire movements, create significant changes, and leave a lasting legacy. Their decisions and actions often alter the course of events in profound ways."
-        },
-        {
-          "name": "Kelly",
-          "text": "In my opinion, broader social and economic events are more significant in shaping history. While individuals can influence events, it is the underlying conditions and trends that drive major changes. These forces affect large groups of people and create the context in which individuals operate."
-        }
-      ],
-      "minutes": 10
-    },
-    {
-      "id": "academic-28",
-      "code": "3-8 individual actions or broader social and economic forces",
-      "title": "individual actions or broader social and economic forces",
-      "category": "社会和历史",
-      "discussionType": "封闭式",
-      "professor": {
-        "name": "Dr. Diaz",
-        "text": "We've been discussing the impact of major historical figures on their respective societies Some historians argue that individuals like leaders or influential thinkers shape the course history more than broader social and economical forces. Others believe social and economical events are the primary drivers of historical change. What do you think has a greater impact on shaping history: individual actions or broader social and economic forces? Why?"
-      },
-      "students": [
-        {
-          "name": "Andrew",
-          "text": "I believe individuals and their actions have a greater impact on shaping history. Leaders and influential thinkers can inspire movements, create significant changes, and leave a lasting legacy. Their decisions and actions often alter the course of events in profound ways."
-        },
-        {
-          "name": "Kelly",
-          "text": "In my opinion, broader social and economic events are more significant in shaping history. While individuals can influence events, it is the underlying conditions and trends that drive major changes. These forces affect large groups of people and create the context in which individuals operate."
-        }
-      ],
-      "minutes": 10
-    },
-    {
-      "id": "academic-29",
+      "id": "academic-60",
       "code": "3-11 Conformity",
       "title": "Conformity",
-      "category": "社会和历史",
+      "category": "社会与制度",
+      "categories": [
+        "社会与制度"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Diaz",
-        "text": "Conformity means behaving in ways that match what others in a group expect. It can influence how people dress, speak, or make choices. Some researchers believe conformity keeps society peaceful and organized. Others argue that it limits personal expression and original thinking. Think about your own experiences, what you've seen in school, media, or daily life. Do you believe conformity is mostly helpful or mostly harmful to individuals and society? Explain your opinion clearly."
+        "text": "Conformity means behaving in ways that match what others in a group expect. It can influence how people dress, speak, or make choices. Some researchers believe conformity keeps society peaceful and organized. Others argue that it limits personal expression and original thinking. Think about your own experiences, what you’ve seen in school, media, or daily life. Do you believe conformity is mostly helpful or mostly harmful to individuals and society? Explain your opinion clearly."
       },
       "students": [
         {
@@ -1338,10 +3473,138 @@
       "minutes": 10
     },
     {
-      "id": "academic-30",
+      "id": "academic-61",
+      "code": "GTRT 48 Peer pressure",
+      "title": "GTRT 48 Peer pressure",
+      "category": "社会与制度",
+      "categories": [
+        "社会与制度"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Today we’ll discuss the influence of peer pressure on teen behavior. Clearly, peer pressure can lead teens to make choices they might not otherwise make. On the other hand, some people believe that individual personality and family influence play a larger role in shaping teen behavior. Which do you believe has a greater impact on teen behavior? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I think peer pressure has a significant impact on teen behavior. Teens often want to fit in with their peers and might make decisions based on what their friends are doing, even if it goes against their better judgment or how they were raised at home."
+        },
+        {
+          "name": "Paul",
+          "text": "I believe that individual personality and family influence are more important. A strong sense of self and a supportive family environment can help teens resist negative peer pressure and make better choices."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-62",
+      "code": "ZPO7 social mobility",
+      "title": "social mobility",
+      "category": "社会与制度",
+      "categories": [
+        "社会与制度"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Achebe",
+        "text": "This semester, we are exploring the concept of social mobility. Social mobility refers to the ability of individuals or families to move up or down the social ladder over time, especially by growing wealthier. Some sociologists argue that education is the key to improving social mobility, while others believe that economic policies and government intervention play a larger role. What do you think is the most effective way to enhance social mobility? Why?"
+      },
+      "students": [
+        {
+          "name": "Andrew",
+          "text": "I think education is the most effective way to enhance social mobility. Access to quality education provides individuals with the knowledge and skills needed to pursue better job opportunities and improve their socioeconomic status. Without education, people are unlikely to become wealthier."
+        },
+        {
+          "name": "Claire",
+          "text": "I believe economic policies and government intervention are more effective at helping people to improve their economic and social status. Policies that address income inequality, provide financial support, and create job opportunities can significantly impact social mobility and help individuals rise out of poverty."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-63",
+      "code": "ZPO8 UBI",
+      "title": "UBI",
+      "category": "社会与制度",
+      "categories": [
+        "社会与制度"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We’ve been discussing the concept of a universal basic income (UBI) in our class as a solution to economic inequality. Some argue that UBI with everyone getting a similar income can provide financial security and reduce poverty, while others believe it can discourage people from working and can negatively impact the economy. Do you think implementing UBI is a good idea? Why or why not?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I think UBI is a good idea because it can provide a safety net for people who are struggling financially. It would help reduce poverty and give everyone a basic level of security, allowing them to focus on improving their lives without the constant fear of financial instability."
+        },
+        {
+          "name": "Andrew",
+          "text": "I don’t think UBI is a good idea because it might discourage people from working. If people receive money without having to work for it, they might lose motivation to find jobs, which could lead to lower productivity and negatively impact the economy as a whole. I also believe that UBI is a good idea to improve social well‑being. Claire makes a good point by mentioning the importance of helping people avoid financial instability. Without a basic sense of security, both adults and children are going to have mental health issues because of too much pressure. Some people suffer from poverty not because they are unable to work, but because they are unwilling to fit in due to the anxiety they have. As for Andrew’s opinion that UBI will discourage people from working, I would argue that, as long as this UBI isn’t absurdly high, then most people will still prefer to earn higher incomes by having a job. So the question is not whether UBI should be implemented, but rather what kind of UBI is appropriate. Governments need to conduct thorough analysis before making a standard for the UBI they provide. (145 words, by Zirui Wang)"
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-64",
+      "code": "5-24 minimum wage laws",
+      "title": "minimum wage laws",
+      "category": "社会与制度",
+      "categories": [
+        "社会与制度"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Next week, we will be discussing the impact of minimum wage laws on the economy. Minimum wage laws are designed to ensure that workers receive fair compensation for their labor. Some argue that raising the minimum wage helps reduce poverty and improve living standards, while others believe it can lead to job losses and increased costs for businesses. What are your thoughts on this issue? Are minimum wage laws good or bad for the economy overall?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "Minimum wage laws provide a lot of benefits if they are handled properly. If there is no minimum wage, or if it is too low, many people will not be able to afford food, housing, and medicine even if they work hard. Raising the minimum wage reduces poverty and improves living standards. It ensures that workers can afford basic necessities and contribute to the economy."
+        },
+        {
+          "name": "Andrew",
+          "text": "Increasing the minimum wage can lead to job losses and higher costs for businesses. Employers may cut jobs or reduce hours to offset the increased wages, which can negatively impact workers and the economy. The economy works best when prices and wages are determined by supply and demand, not by laws. So on the whole, minimum wage laws do more harm than good."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-65",
+      "code": "ZPO13 urbanization",
+      "title": "urbanization",
+      "category": "社会与制度",
+      "categories": [
+        "社会与制度"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "Next week we’ll be discussing the impact of urbanization on community life. Urbanization has led to the development of large cities with diverse populations. Some people believe that urbanization fosters a sense of community and cultural exchange, while others think it leads to social isolation and the breakdown of close-knit communities usually found in small towns and villages. What are your thoughts on this and why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I believe urbanization fosters a sense of community and cultural exchange. Large cities bring together people from different backgrounds, creating opportunities for cultural interaction and mutual understanding. Urban areas often have vibrant social scenes that encourage community building."
+        },
+        {
+          "name": "Andrew",
+          "text": "In my opinion, urbanization leads to social isolation and the breakdown of close-knit communities. The fast-paced city life can make it difficult for people to form meaningful connections. Traditional community An effective response will contain at least 100 words. bonds, often found in smaller towns, tend to weaken in urban settings."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-66",
       "code": "3-20 government intervention in the economy",
       "title": "government intervention in the economy",
       "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
       "discussionType": "开放式",
       "professor": {
         "name": "Dr. Gupta",
@@ -1360,10 +3623,320 @@
       "minutes": 10
     },
     {
-      "id": "academic-31",
+      "id": "academic-67",
+      "code": "3-18 purchasing decisions affect environmental outcomes",
+      "title": "purchasing decisions affect environmental outcomes",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We've been discussing how consumer purchasing decisions affect environmental outcomes. Some economists believe that people should prioritize buying products that last longer and can be repaired, even if they cost more initially, because this reduces manufacturing waste and resource consumption. Others argue that people should prioritize buying newer products with advanced energy-efficient technologies, even if they replace items more frequently, because modern innovations significantly reduce daily environmental impact. Which purchasing strategy do you think produces better environmental outcomes?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe prioritizing durable, repairable products produces better environmental outcomes even when they cost more initially. When people buy high-quality goods like long-lasting electronics and well- made clothing, they reduce the demand for frequent manufacturing and prevent tons of waste. This purchasing strategy also supports companies that design products responsibly rather than those focused only on planned obsolescence and profit maximization."
+        },
+        {
+          "name": "Andrew",
+          "text": "I think buying newer products with advanced, energy-efficient technologies produces better environmental outcomes despite more frequent replacement. Modern appliances, vehicles, and electronics use significantly less energy than older models, reducing daily carbon emissions and resource consumption. The environmental savings from using highly efficient technology for several years often outweigh the manufacturing costs of producing newer, cleaner products more frequently."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-68",
+      "code": "ZPO15 the most effective way to address environmental issues",
+      "title": "the most effective way to address environmental issues",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "Human activities like pollution and deforestation harm the environment. Some argue we must reduce or eliminate these actions to mitigate their impact. Others support technologies and initiatives that lessen the damage without stopping the activities-such as pollution cleanup or forest restoration.This alternative approach focuses on managing consequences rather than prevention. What do you think is the most effective way to address environmental issues-eliminating harmful activities or minimizing their impact? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "The best way to protect the environment is to stop harmful activities like pollution and deforestation. If we don't end them, the damage will continue and get worse. Prevention is more effective than trying to fix problems after they happen. Reducing future damage only delays the inevitable destruction these activities cause."
+        },
+        {
+          "name": "Andrew",
+          "text": "Human development has increased to the extent that stopping all harmful activities in time for it to make a difference would be nearly impossible. Instead, we should focus on smarter solutions that reduce harm. Innovations like carbon capture to reduce climate change help limit damage while allowing progress. This approach supports environmental protection without demanding drastic lifestyle changes."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-69",
+      "code": "GTRT 21 保护野生动物和自然环境",
+      "title": "GTRT 21 保护野生动物和自然环境",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We’re studying the benefits of different approaches to protecting wildlife and natural environments. Some experts argue that creating parks and wildlife reserves where no human development is allowed is the most effective way to protect animals and ecosystems. Others believe that teaching farmers to reduce pesticide use and preserve soil quality is more important because agriculture affects much larger land areas where both wildlife and food production must coexist. Which approach do you think produces better environmental protection effects? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "Parks and wildlife preserves offer better environmental protection results because endangered species can reproduce there without human interference. When large areas of forests, wetlands, and grasslands remain completely undeveloped, they maintain natural water cycles, prevent soil erosion, and preserve complex food webs that support hundreds of different plant and animal species that cannot survive in agricultural or urban environments."
+        },
+        {
+          "name": "Paul",
+          "text": "Ecologically-friendly agriculture is better for the environment because farmland covers much larger areas than parks and wildlife preserves. When farmers reduce harmful pesticides and plant trees along field borders, they create wildlife habitats and cleaner water systems. These farming practices also allow continued food production while protecting the environment, which is more realistic than converting all land to wilderness areas."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-70",
+      "code": "GTRT 50 应对气候变化靠个人还是政府政策",
+      "title": "GTRT 50 应对气候变化靠个人还是政府政策",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We’ve been exploring strategies to address climate change, especially the effects of carbon-based energy sources, which are causing global warming. Some experts emphasize the importance of individual actions, like reducing energy use and minimizing waste. Others argue that systemic change through government policy and corporate accountability is more impactful. Which approach do you believe is most effective in combating climate change, and why? Support your view with reasoning."
+      },
+      "students": [
+        {
+          "name": "Paul",
+          "text": "Individual actions are essential because they foster environmental awareness and personal responsibility. When people adopt sustainable habits like conserving energy, reducing plastic use, and supporting green initiatives, they influence cultural norms and consumer demand. These shifts can pressure institutions to adopt eco-friendly policies. Personal choices, multiplied across populations, can drive meaningful environmental change."
+        },
+        {
+          "name": "Kelly",
+          "text": "Policy reform and corporate accountability are more effective for addressing climate change at scale. Governments can enforce emissions limits, invest in renewable energy, and regulate industries. Corporations control vast resources and supply chains, so their sustainability efforts have global impact. While individual actions matter, systemic change is necessary to meet climate goals."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-71",
+      "code": "GTRT 59 环保方式（三选一）",
+      "title": "GTRT 59 环保方式（三选一）",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "This week, we’re exploring ways people can reduce their environmental impact through daily choices. Consider these specific actions: • Choosing to walk, bike, or take public transportation instead of driving • Buying fewer new items and repairing them instead of replacing them • Reducing energy use by unplugging devices Which of these actions, or another specific environmental action, would be most effective for reducing environmental harm? Support your answer with specific examples of how this action works and what results it might produce."
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I believe reducing energy use is the most important thing we can do to protect the environment. If each person consumes a little bit less energy every day by unplugging devices, the result will be lower carbon emissions overall. Reducing carbon emissions helps combat climate change."
+        },
+        {
+          "name": "Andrew",
+          "text": "Personally, I think the most crucial action people can take to help the environment is to recycle and reuse materials instead of throwing them away in the trash. By minimizing the amount of waste they create, individuals can significantly reduce their environmental footprint and conserve natural resources."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-72",
+      "code": "GTRT 62 Single-use plastics",
+      "title": "GTRT 62 Single-use plastics",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We’ve been discussing the impact of plastic waste on the environment. Plastic pollution is a significant issue affecting marine life and ecosystems. Some experts suggest banning single-use plastics as a solution, while others believe that improving recycling efforts is more effective. What do you think is the best way to address plastic pollution?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "Banning single-use plastics is the best solution. It would drastically reduce the amount of plastic waste generated and force industries to develop more sustainable alternatives. This approach tackles the issue at its source. We can’t rely on the recycling industry to solve a problem it is already struggling to address."
+        },
+        {
+          "name": "Paul",
+          "text": "Improving recycling efforts is a better solution. By enhancing recycling technologies and encouraging proper waste management, we can reduce plastic pollution without disrupting industries or consumer habits. Recycling offers a more practical approach."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-73",
+      "code": "GTRT 63 环保方式（三选一·能源/教育/技术）",
+      "title": "GTRT 63 环保方式（三选一·能源/教育/技术）",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We often hear about environmental problems like air pollution from factories, plastic waste in oceans, and forests being cut down for agriculture. People are trying different solutions: switching from coal and oil to solar and wind energy, teaching communities about recycling and conservation, or developing new technologies to clean contaminated water and soil. Which of these approaches do you think would produce the fastest, most measurable improvements to environmental problems? Why?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe that switching from coal and oil to solar and wind energy sources would produce the fastest environmental improvements. Power plants that burn coal create most of the air pollution and carbon emissions that cause climate change, so replacing them with clean energy would immediately reduce harmful gases entering the atmosphere and improve air quality in cities."
+        },
+        {
+          "name": "Andrew",
+          "text": "In my opinion, teaching communities about recycling, conservation, and environmental protection produces the most lasting improvements. When people understand how their daily choices affect air and water quality, they change their purchasing habits, support environmental policies, and teach these practices to their children, creating long-term behavioral changes across entire communities."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-74",
+      "code": "ways to manage urban growth",
+      "title": "ways to manage urban growth",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "We’ve been discussing strategies for managing urban growth. One approach is to focus on expanding public transportation to reduce traffic congestion and pollution. Another approach is to create more green spaces like parks and gardens to improve residents’ quality of life. Which strategy do you think is more effective in managing urban growth?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "I believe expanding public transportation is the most effective approach. It reduces traffic congestion in growing cities and neighborhoods and provides residents with a convenient way to travel around. For example, in my town, it’s easy to catch a bus or a tram to access shopping and cultural events, and it’s affordable."
+        },
+        {
+          "name": "Paul",
+          "text": "I think creating green spaces is the best response to the harmful side-effects of urban growth. Parks and gardens make urban areas more attractive and livable. My town is currently renovating its park system. Not only are green spaces attractive than busy streets and sidewalks, they are more interesting and pleasant, too."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-75",
+      "code": "5-21 international organizations",
+      "title": "international organizations",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We've been examining the role of international organizations, such as the United Nations, in promoting global peace and security. Some argue that these organizations are essential for maintaining international order, while others believe they are ineffective and should be reformed. What is your opinion on the effectiveness of international organizations in promoting global peace and security?"
+      },
+      "students": [
+        {
+          "name": "Andrew",
+          "text": "I think international organizations like the United Nations are crucial for promoting peace. They provide a platform for dialogue and cooperation between countries and can help mediate conflicts before they escalate."
+        },
+        {
+          "name": "Claire",
+          "text": "In my opinion, international organizations often struggle to enforce their decisions and can be slow to respond to crises. While they have good intentions, they need significant reforms to be more effective in addressing global challenges."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-76",
+      "code": "5-22 government regulations",
+      "title": "government regulations",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Next week we'll examine the role of government regulations in shaping public welfare and economic development. Regulations are laws designed to protect consumers and the environment by limiting or defining what businesses can do. But critics contend that excessive regulation can hinder innovation, reduce competitiveness, and burden small businesses. How should governments balance public protection with economic flexibility? Do you think that more regulation or less regulation is better overall?"
+      },
+      "students": [],
+      "minutes": 10
+    },
+    {
+      "id": "academic-77",
+      "code": "5-23 environmental protection vs social welfare",
+      "title": "environmental protection vs social welfare",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "Today, I'd like to discuss how governments should set priorities for future development. Some people believe that environmental protection should be the main focus because a clean environment is essential for long-term survival. Others argue that governments should place more emphasis on social welfare, such as improving healthcare and education, because these issues affect people's daily lives more directly. In your opinion, which should play a larger role in guiding future development: environmental protection or social welfare? Why?"
+      },
+      "students": [],
+      "minutes": 10
+    },
+    {
+      "id": "academic-78",
+      "code": "5-25 fast fashion",
+      "title": "fast fashion",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "开放式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "Fast fashion refers to the rapid production of inexpensive clothing for mass-market sales. Fast fashion allows consumers to buy trendy items at low prices and provides job opportunities in manufacturing countries. But critics argue that fast fashion leads to vast amounts of pollution in the form of discarded clothing, which harms the environment, and that workers experience poor working conditions. In your view, what would be the most effective solution to the problems associated with fast fashion?"
+      },
+      "students": [
+        {
+          "name": "Andrew",
+          "text": "I believe that laws should be created to hold fashion brands accountable for the problems their products create. This responsibility could push them to innovate and create new, environmentally friendly production methods. These innovations might not only reduce environmental damage but also improve conditions for workers."
+        },
+        {
+          "name": "Kelly",
+          "text": "Based on my experience, today's consumers demand products that are made in environmentally and socially responsible ways. As a result, market forces are effective at getting companies to adopt better practices voluntarily. Consumer demand can encourage positive change without the need for strict accountability being imposed on clothing makers."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-79",
+      "code": "GTRT 12 时尚行业该为环保负责么？",
+      "title": "GTRT 12 时尚行业该为环保负责么？",
+      "category": "政府和环境",
+      "categories": [
+        "政府和环境"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Gupta",
+        "text": "The fashion industry can have significant environmental impacts, such as pollution and resource depletion. Some people argue that fashion companies should take responsibility for the environmental damage they cause, while others think companies should focus primarily on profits and leave environmental issues to governments and regulations. What is your opinion, and why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I believe fashion companies should be responsible for the environmental damage they cause. Taking responsibility can improve public image, encourage sustainable practices, and contribute to a healthier planet for everyone."
+        },
+        {
+          "name": "Paul",
+          "text": "I think fashion companies should focus mainly on profit. Environmental issues are important but governments and regulations should manage them. Companies cannot bear the full responsibility without compromising their business viability."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-80",
       "code": "3—23 maintain a healthy social life while working full-time",
-      "title": "—23 maintain a healthy social life while working full-time",
+      "title": "maintain a healthy social life while working full-time",
       "category": "生活和健康",
+      "categories": [
+        "生活和健康"
+      ],
       "discussionType": "封闭式",
       "professor": {
         "name": "Dr. Gupta",
@@ -1382,23 +3955,151 @@
       "minutes": 10
     },
     {
-      "id": "academic-32",
-      "code": "3-14 cultural globalization",
-      "title": "cultural globalization",
-      "category": "抽象难题和其他",
+      "id": "academic-81",
+      "code": "ZPO4 genetics VS exercise",
+      "title": "genetics VS exercise",
+      "category": "生活和健康",
+      "categories": [
+        "生活和健康"
+      ],
       "discussionType": "封闭式",
       "professor": {
-        "name": "Dr. Gupta",
-        "text": "We've been discussing the impact of cultural globalization on local traditions. Some anthropologists argue that cultural globalization leads to the loss of unique and diverse cultural identities, while others believe it promotes cultural exchange and understanding. What is your perspective on the impact of cultural globalization on local traditions?"
+        "name": "Dr. Diaz",
+        "text": "Today we'll discuss the effects of exercise on mental health. Clearly, regular physical activity can improve mood and reduce stress. On the other hand, some people believe that mental health is primarily influenced by other factors such as genetics and the environment. Which do you believe plays a larger role in mental health? Why? You will have 10 minutes to write."
       },
       "students": [
         {
           "name": "Kelly",
-          "text": "I believe cultural globalization can lead to the loss of unique cultural identities. As global culture becomes more dominant, traditional practices and languages can be forgotten or replaced. It's important to preserve and celebrate local cultures to maintain diversity."
+          "text": "I think regular exercise has a significant positive impact on mental health. It can reduce stress, improve mood, and increase overall well-being by releasing endorphins and promoting a healthy lifestyle."
         },
         {
           "name": "Andrew",
-          "text": "In my opinion, cultural globalization promotes cultural exchange and understanding. It allows people to learn about and appreciate different cultures. This exchange can enrich local traditions and create a more interconnected and tolerant world."
+          "text": "I believe that while exercise is important, other factors like genetics and environment play a larger role in mental health. A supportive environment and good mental health practices are crucial for overall well-being. Your professor is teaching a class on psychology. Write a post responding to the professor's question."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-82",
+      "code": "ZPO9 free will",
+      "title": "free will",
+      "category": "哲学与思辨",
+      "categories": [
+        "哲学与思辨"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We've been discussing the concept of free will inphilosophy. Some argue that free will is an illusionand that our choices are determined by factorsbeyond our control, such as genetics andenvironment. Others believe that individuals havethe ability to make free choices regardless ofexternal influences. What are your thoughts onthe existence of free will?"
+      },
+      "students": [
+        {
+          "name": "Andrew",
+          "text": "I believe that free will is an illusion. Our decisions are heavilyinfluenced by factors such as our upbringing, socialenvironment, and biological predispositions. These factorsshape our choices, leaving little room for true free will."
+        },
+        {
+          "name": "Claire",
+          "text": "I think individuals have the ability to make free choices. Whileexternal influences play a role, people can still exercise theirown judgment and take actions that are not predetermined bytheir circumstances. Free will enables personal responsibilityand autonomy."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-83",
+      "code": "ZPO10 anthropologists",
+      "title": "anthropologists",
+      "category": "哲学与思辨",
+      "categories": [
+        "哲学与思辨"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Professor Henson",
+        "text": "As we have discussed in class, anthropologists are scientists who usually study cultural rituals and traditions to understandthe values and beliefs of different societies. Some believe thatanthropologists should participate in these rituals, while othersargue that they should observe these rituals from a distancerather than participate in them. What is your perspective on this issue? Why?"
+      },
+      "students": [
+        {
+          "name": "Kelly",
+          "text": "l believe that participating in cultural rituals is essential because it helps anthropologists gain deep insights about the community. By actively engagingin these practices, anthropologists can experience firsthand the emotions andsignificance behind them, leading to a more authentic understanding of the culture."
+        },
+        {
+          "name": "Andrew",
+          "text": "l think observation from a distance is sufficient and more ethical.Participating in rituals can sometimes be intrusive and disrespectful to thecommunity. Observing allows anthropologists to study cultural practices while minimizing their impact on the society."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-84",
+      "code": "1-0 nature or nurture",
+      "title": "nature or nurture",
+      "category": "哲学与思辨",
+      "categories": [
+        "哲学与思辨"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Achebe",
+        "text": "We’ve been discussing the role of nature versus nurture in human development. Some experts believe that genetics play the most significant role in shaping who we are, while others argue that our environment and experiences are more important. Which do you think has a greater impact on human development: nature or nurture? Why?"
+      },
+      "students": [
+        {
+          "name": "Claire",
+          "text": "I think nurture has a greater impact on human development. Our environment and experiences shape our beliefs, behaviors, and personalities. While genetics provide a foundation, it is our interactions and experiences that truly define who we become."
+        },
+        {
+          "name": "Paul",
+          "text": "In my opinion, nature has a more significant role. Genetics determine many aspects of our personality, intelligence, and physical abilities. While the environment can influence these traits, our genetic makeup is the primary factor in shaping who we are."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-85",
+      "code": "2-3 shaping history",
+      "title": "shaping history",
+      "category": "哲学与思辨",
+      "categories": [
+        "哲学与思辨"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We’ve been discussing the impact of major historical figures on their respective societies. Some historians argue that individuals like political leaders or influential thinkers shape the course of history more than broader social and economical forces. Others believe social and economical events are the primary drivers of historical change. What do you think has a greater impact on shaping history: individual actions or broader social and economic forces? Why?"
+      },
+      "students": [
+        {
+          "name": "Andrew",
+          "text": "I believe individuals and their actions have a greater impact on shaping history. Leaders and influential thinkers can inspire movements, create significant changes, and leave a lasting legacy. Their decisions and actions often alter the course of events in profound ways."
+        },
+        {
+          "name": "Kelly",
+          "text": "In my opinion, broader social and economic events are more significant in shaping history. While individuals can influence events, it is the underlying conditions and trends that drive major changes. These forces affect large groups of people and create the context in which individuals operate."
+        }
+      ],
+      "minutes": 10
+    },
+    {
+      "id": "academic-86",
+      "code": "3-8 individual actions or broader social and economic forces",
+      "title": "individual actions or broader social and economic forces",
+      "category": "哲学与思辨",
+      "categories": [
+        "哲学与思辨"
+      ],
+      "discussionType": "封闭式",
+      "professor": {
+        "name": "Dr. Diaz",
+        "text": "We’ve been discussing the impact of major historical figures on their respective societies Some historians argue that individuals like leaders or influential thinkers shape the course history more than broader social and economical forces. Others believe social and economical events are the primary drivers of historical change. What do you think has a greater impact on shaping history: individual actions or broader social and economic forces? Why?"
+      },
+      "students": [
+        {
+          "name": "Andrew",
+          "text": "I believe individuals and their actions have a greater impact on shaping history. Leaders and influential thinkers can inspire movements, create significant changes, and leave a lasting legacy. Their decisions and actions often alter the course of events in profound ways."
+        },
+        {
+          "name": "Kelly",
+          "text": "In my opinion, broader social and economic events are more significant in shaping history. While individuals can influence events, it is the underlying conditions and trends that drive major changes. These forces affect large groups of people and create the context in which individuals operate."
         }
       ],
       "minutes": 10

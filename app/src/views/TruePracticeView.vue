@@ -6,6 +6,7 @@ import { db } from "../firebase";
 import { useAuth } from "../composables/useAuth";
 import NavBar from "../components/NavBar.vue";
 import questionBank from "../data/writingQuestions.json";
+import { getGradingJob, retryGradingJob, runGradingJob } from "../services/gradingJobs";
 
 const route = useRoute();
 const router = useRouter();
@@ -14,6 +15,7 @@ const { user, userProfile, guestMode } = useAuth();
 const kind = ref(route.params.kind === "academic" ? "academic" : "email");
 const screen = ref("picker");
 const activeCategory = ref("全部");
+const activeFunction = ref("全部");
 const activeDiscussionType = ref("全部");
 const selectedQuestion = ref(null);
 const answer = ref("");
@@ -29,13 +31,14 @@ const recordSaveError = ref("");
 const submissionId = ref("");
 let timer = null;
 
-const GRADER_API_URL = import.meta.env.VITE_COZE_GRADER_API_URL
-  || "https://toefl-writing-grader.stephaniefeng9.workers.dev/";
-
 const questions = computed(() => kind.value === "email" ? questionBank.email : questionBank.academic);
-const categories = computed(() => ["全部", ...new Set(questions.value.map((item) => item.category))]);
+const categories = computed(() => ["全部", ...new Set(questions.value.flatMap((item) => item.categories || [item.category]))]);
+const functions = computed(() => ["全部", ...new Set(questionBank.email.flatMap((item) => item.functions || []))]);
+const discussionTypes = computed(() => ["全部", ...new Set(questionBank.academic.map((item) => item.discussionType))]);
 const filteredQuestions = computed(() => questions.value.filter((item) => {
-  if (activeCategory.value !== "全部" && item.category !== activeCategory.value) return false;
+  const itemCategories = item.categories || [item.category];
+  if (activeCategory.value !== "全部" && !itemCategories.includes(activeCategory.value)) return false;
+  if (kind.value === "email" && activeFunction.value !== "全部" && !(item.functions || []).includes(activeFunction.value)) return false;
   if (kind.value === "academic" && activeDiscussionType.value !== "全部" && item.discussionType !== activeDiscussionType.value) return false;
   return true;
 }));
@@ -51,6 +54,7 @@ const stopTimer = () => {
 const switchKind = (nextKind) => {
   kind.value = nextKind;
   activeCategory.value = "全部";
+  activeFunction.value = "全部";
   activeDiscussionType.value = "全部";
   selectedQuestion.value = null;
   router.replace(`/true-practice/${nextKind}`);
@@ -106,17 +110,17 @@ const extractScore = (text) => {
 
 const gradeSubmission = async () => {
   if (guestMode.value) return;
+  const jobKey = submissionId.value || `${user.value?.uid || "anonymous"}:${selectedQuestion.value?.id || "practice"}`;
+  const savedJob = getGradingJob(jobKey);
+  if (savedJob?.status === "completed" && savedJob.result) gradingResult.value = savedJob.result;
   grading.value = true;
   gradingError.value = "";
   try {
-    const response = await fetch(GRADER_API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: gradingPayload(), userId: user.value?.uid }),
+    gradingResult.value = await (savedJob?.status === "failed" ? retryGradingJob : runGradingJob)({
+      key: jobKey,
+      prompt: gradingPayload(),
+      userId: user.value?.uid,
     });
-    const data = await response.json().catch(() => ({}));
-    if (!response.ok) throw new Error(data.error || "AI 批改暂时不可用。");
-    gradingResult.value = data.result || "AI 暂未返回批改内容。";
     const gradingFields = {
       aiScore: extractScore(gradingResult.value),
       aiFeedback: gradingResult.value,
@@ -249,14 +253,20 @@ onBeforeUnmount(stopTimer);
     </div>
 
     <section class="true-filter-band">
-      <div class="true-filter-label">情景分类</div>
+      <div class="true-filter-label">{{ kind === 'email' ? '情景分类' : '主题分类' }}</div>
       <div class="true-filter-options">
         <button v-for="category in categories" :key="category" :class="{ active: activeCategory === category }" @click="activeCategory = category">{{ category }}</button>
       </div>
+      <template v-if="kind === 'email'">
+        <div class="true-filter-label">功能分类</div>
+        <div class="true-filter-options">
+          <button v-for="item in functions" :key="item" :class="{ active: activeFunction === item }" @click="activeFunction = item">{{ item }}</button>
+        </div>
+      </template>
       <template v-if="kind === 'academic'">
         <div class="true-filter-label">讨论类型</div>
         <div class="true-filter-options">
-          <button v-for="type in ['全部', '开放式', '封闭式']" :key="type" :class="{ active: activeDiscussionType === type }" @click="activeDiscussionType = type">{{ type }}</button>
+          <button v-for="type in discussionTypes" :key="type" :class="{ active: activeDiscussionType === type }" @click="activeDiscussionType = type">{{ type }}</button>
         </div>
       </template>
     </section>
@@ -266,7 +276,11 @@ onBeforeUnmount(stopTimer);
       <button v-for="question in filteredQuestions" :key="question.id" class="true-question-row" @click="selectQuestion(question)">
         <span class="true-question-code">{{ question.code }}</span>
         <span class="true-question-name">{{ question.title }}</span>
-        <span class="true-question-meta">{{ question.category }}<template v-if="kind === 'academic'"> · {{ question.discussionType }}</template></span>
+        <span class="true-question-meta">
+          {{ (question.categories || [question.category]).join(' / ') }}
+          <template v-if="kind === 'email' && question.functions?.length"> · {{ question.functions.join(' / ') }}</template>
+          <template v-if="kind === 'academic'"> · {{ question.discussionType }}</template>
+        </span>
         <span class="true-question-time">{{ question.minutes }} 分钟</span>
       </button>
     </section>
@@ -274,7 +288,7 @@ onBeforeUnmount(stopTimer);
     <div v-if="selectedQuestion" class="true-preview-overlay" @click.self="selectedQuestion = null">
       <section class="true-preview-dialog">
         <button class="true-preview-close" title="关闭" @click="selectedQuestion = null">×</button>
-        <div class="true-preview-kicker">{{ taskLabel }} · {{ selectedQuestion.category }}</div>
+        <div class="true-preview-kicker">{{ taskLabel }} · {{ (selectedQuestion.categories || [selectedQuestion.category]).join(' / ') }}</div>
         <h2>{{ selectedQuestion.title }}</h2>
         <p>本题限时 {{ selectedQuestion.minutes }} 分钟。点击开始后进入模考界面并启动倒计时。</p>
         <button class="true-start-btn" @click="startQuestion">开始练习</button>
@@ -341,7 +355,7 @@ onBeforeUnmount(stopTimer);
         <div class="true-result-kicker">本次练习已提交</div>
         <h2>{{ selectedQuestion.title }}</h2>
         <p>{{ wordCount }} 词 · 用时 {{ Math.floor((selectedQuestion.minutes * 60 - secondsLeft) / 60) }} 分 {{ (selectedQuestion.minutes * 60 - secondsLeft) % 60 }} 秒</p>
-        <div v-if="grading" class="true-grading-state">AI 正在批改...</div>
+        <div v-if="grading" class="true-grading-state">AI 正在后台批改，可先切换到其他页面，稍后返回查看结果。</div>
         <div v-else-if="gradingError" class="true-grading-error">{{ gradingError }}</div>
         <pre v-else-if="gradingResult" class="true-grading-result">{{ gradingResult }}</pre>
         <p v-else-if="guestMode">访客练习不会保存记录或调用 AI 批改。</p>
