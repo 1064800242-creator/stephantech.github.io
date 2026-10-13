@@ -91,7 +91,6 @@ Rules:
 
 const GRADER_API_URL = import.meta.env.VITE_COZE_GRADER_API_URL
   || "https://toefl-writing-grader.stephaniefeng9.workers.dev/grade";
-const LEGACY_COZE_GRADER_URL = "https://code.coze.cn/web-sdk/7658702600073855030";
 const BUILD_SENTENCE_BASE_URL = `${import.meta.env.BASE_URL}build-sentence/`;
 const BUILD_SENTENCE_QUIZZES = [
   ...Array.from({ length: 23 }, (_, index) => {
@@ -914,14 +913,6 @@ const startAiGrading = async () => {
   graderPayload.value = buildGradingPayload();
   graderResult.value = "";
   graderError.value = "";
-  if (!GRADER_API_URL) {
-    try {
-      await navigator.clipboard.writeText(graderPayload.value);
-    } catch {
-      // The fallback iframe still lets the user copy the payload manually.
-    }
-    return;
-  }
   await runAiGrading();
 };
 
@@ -1667,7 +1658,7 @@ watch(selectedBuildSentenceQuiz, () => {
       <div class="grader-topbar">
         <div>
           <div class="grader-title">AI 批改</div>
-          <div class="grader-subtitle">{{ GRADER_API_URL ? "题目和作文会在本站完成批改，不需要跳转或登录 Coze" : "当前使用临时 Coze 窗口；连接后端后会直接显示批改结果" }}</div>
+          <div class="grader-subtitle">题目和作文会在本站完成批改，不需要跳转或登录其他页面</div>
         </div>
         <button class="grader-close-btn" @click="showCozeGrader = false">关闭</button>
       </div>
@@ -1677,7 +1668,7 @@ watch(selectedBuildSentenceQuiz, () => {
           <textarea class="grader-payload" :value="graderPayload || buildGradingPayload()" readonly></textarea>
           <button class="grader-copy-btn" @click="copyGradingPayload">重新复制</button>
         </div>
-        <div v-if="GRADER_API_URL" class="grader-result-panel">
+        <div class="grader-result-panel">
           <div v-if="graderLoading" class="grader-loading">
             <div class="grader-spinner"></div>
             <div>正在批改，请稍等...</div>
@@ -1685,7 +1676,7 @@ watch(selectedBuildSentenceQuiz, () => {
           <div v-else-if="graderError" class="grader-error">
             <div class="grader-error-title">暂时无法批改</div>
             <p>{{ graderError }}</p>
-            <button v-if="GRADER_API_URL" class="grader-copy-btn" @click="runAiGrading">重试</button>
+            <button class="grader-copy-btn" @click="runAiGrading">重试</button>
           </div>
           <div v-else-if="graderResult" class="grader-result">
             <div class="grader-result-actions">
@@ -1696,15 +1687,6 @@ watch(selectedBuildSentenceQuiz, () => {
             <p v-if="graderSaveNotice" class="grader-save-notice">{{ graderSaveNotice }}</p>
           </div>
           <div v-else class="grader-empty">点击“开始批改”后，结果会显示在这里。</div>
-        </div>
-        <div v-else class="grader-legacy-panel">
-          <div class="grader-fallback-note">后端还没连接，暂时使用原 Coze 窗口。题目和作文已尝试复制，请在窗口中粘贴发送。</div>
-          <iframe
-            class="grader-frame"
-            :src="LEGACY_COZE_GRADER_URL"
-            title="Coze AI grader"
-            allow="clipboard-read; clipboard-write; microphone"
-          ></iframe>
         </div>
       </div>
     </div>
