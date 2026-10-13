@@ -1,6 +1,8 @@
 import { reactive } from "vue";
 
 const STORAGE_KEY = "twi-grading-jobs-v1";
+const GRADER_API_URL = import.meta.env.VITE_COZE_GRADER_API_URL
+  || "https://toefl-writing-grader.stephaniefeng9.workers.dev/grade";
 const jobs = reactive({});
 const running = new Map();
 
@@ -36,7 +38,7 @@ export const runGradingJob = ({ key, prompt, userId }) => {
   };
   persist();
 
-  const task = fetch("/api/grade", {
+  const task = fetch(GRADER_API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ prompt, userId }),

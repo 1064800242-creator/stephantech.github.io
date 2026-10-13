@@ -90,7 +90,7 @@ Rules:
 - Do not use any other markdown.`;
 
 const GRADER_API_URL = import.meta.env.VITE_COZE_GRADER_API_URL
-  || "https://toefl-writing-grader.stephaniefeng9.workers.dev/";
+  || "https://toefl-writing-grader.stephaniefeng9.workers.dev/grade";
 const LEGACY_COZE_GRADER_URL = "https://code.coze.cn/web-sdk/7658702600073855030";
 const BUILD_SENTENCE_BASE_URL = `${import.meta.env.BASE_URL}build-sentence/`;
 const BUILD_SENTENCE_QUIZZES = [
